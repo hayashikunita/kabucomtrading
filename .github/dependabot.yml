@@ -1,0 +1,30 @@
+version: 2
+updates:
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+      day: "friday"
+      time: "12:00"
+    open-pull-requests-limit: 5
+    labels:
+      - "auto-update"
+      - "python"
+    commit-message:
+      prefix: "update"
+      include: "scope"
+    pull-request-branch-name:
+      separator: "_"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+      day: "friday"
+      time: "12:00"
+    open-pull-requests-limit: 3
+    labels:
+      - "auto-update"
+      - "actions"
+    commit-message:
+      prefix:

@@ -1,0 +1,116 @@
+[project]
+name = "kabucomtrading"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.6"
+
+dependencies = [
+    "dict2obj>=1.2.0",
+    "Flask>=1.0.2",
+    "numpy>=1.16.0",
+    "python-dateutil>=2.8.0",
+    "requests>=2.23.0",
+    "SQLAlchemy>=1.3.7",
+    "TA-Lib>=0.4.17",
+    "pyright",
+    "ruff",
+    "pre-commit",
+    "bandit",
+    "pip-audit",
+]
+
+[tool.pyright]
+include = ["app", "kabucom"]
+exclude = [".venv", "**/__pycache__"]
+pythonVersion = "3.12"
+pythonPlatform = "All"
+typeCheckingMode = "off"
+# すべてのレポート系警告を無効化
+reportMissingImports = "none"
+reportMissingModuleSource = "none"
+reportGeneralTypeIssues = "none"
+reportOptionalMemberAccess = "none"
+reportOptionalSubscript = "none"
+reportOptionalCall = "none"
+reportOptionalIterable = "none"
+reportOptionalContextManager = "none"
+reportOptionalOperand = "none"
+reportOptionalStringIndexAssignment = "none"
+reportUnboundVariable = "none"
+reportUndefinedVariable = "none"
+reportUnusedImport = "none"
+reportUnusedClass = "none"
+reportUnusedFunction = "none"
+reportUnusedVariable = "none"
+reportUnusedExpression = "none"
+reportDuplicateImport = "none"
+reportUntypedFunctionDecorator = "none"
+reportUntypedClassDecorator = "none"
+reportUntypedBaseClass = "none"
+reportUntypedNamedTuple = "none"
+reportUntypedDict = "none"
+reportUntypedParameter = "none"
+reportUntypedReturn = "none"
+reportUntypedAssignment = "none"
+reportUntypedCall = "none"
+reportUntypedAttribute = "none"
+reportUntypedClass = "none"
+reportUntypedFunction = "none"
+reportUntypedModule = "none"
+reportUntypedNamedTupleAssignment = "none"
+reportUntypedNamedTupleField = "none"
+reportUntypedNamedTupleMethod = "none"
+reportUntypedNamedTupleProperty = "none"
+reportUntypedNamedTupleType = "none"
+
+[tool.bandit]
+exclude_dirs = ["tests", ".venv"]
+skips = ["B101", "B311", "B404", "B603", "B201", "B301", "B302", "B303", "B304", "B305", "B306", "B307", "B308", "B309", "B310", "B312", "B313", "B314", "B315", "B316", "B317", "B318", "B319", "B320", "B321", "B322", "B323", "B324", "B325", "B401", "B402", "B403", "B405", "B406", "B407", "B408", "B409", "B410", "B411", "B412", "B413", "B501", "B502", "B503", "B504", "B505", "B506", "B507", "B508", "B509", "B601", "B602", "B604", "B605", "B606", "B607", "B608", "B609", "B610", "B611", "B612", "B701", "B702", "B703", "B704"]
+
+[tool.ruff]
+line-length = 120
+indent-width = 4
+target-version = "py312"
+
+[tool.ruff.lint]
+exclude = [".venv", "tests"]
+select = [
+    "I",      # isort
+    "B",      # flake8-bugbear
+    "SIM",    # flake8-simplify
+    "RUF",    # Ruff-specific rules
+    "TCH",    # flake8-type-checking
+    "PTH",    # flake8-use-pathlib
+]
+ignore = [
+    "E",      # pycodestyle errors
+    "W",      # pycodestyle warnings
+    "F",      # pyflakes
+    "PL",     # Pylint
+    "C401",
+    "C408",
+    "F821",
+    "F841",
+    "G004",
+    "T201",
+    "ANN101",
+    "ANN102",
+    "RUF001",
+    "RUF002",
+    "RUF003",
+    "RUF012",
+    "PTH123",
+    "PERF203",
+    "PERF401",
+    "PLW0603",
+    "PLC0206",
+    "PLC2401",
+    "PLR0911",
+    "PLR0912",
+    "PLR0913",
+    "PLR0915",
+    "PLR2004",
+    "PLW2901",
+    "SIM108",
+]
