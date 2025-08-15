@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chart</title>
+    <style>
+        #dashboard_div{
+            width: 600px;
+            border: 1px solid #ccc;
+        }
+        #chart_div{
+            height:400px;
+            border-bottom: 1px solid #ccc;
+        }
+        #filter_div{
+            height:50px;
+        }
+        .technical_title{
+            margin: 10px;
+            color: gray;
+        }
+        .bottom_chart{
+            border-bottom: 1px solid #ccc;
+        }
+    </style>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', {'packages':['corechart', 'controls']});
+
+        var config = {
+            api:{
+                enable: true,
+                interval: 1000 * 3
+            },
+            candlestick:{
+                product_code: '1459', // kabusapi用ETFコード例
+                duration: '1m',
+                limit: 365,
+                numViews: 5,
+            },
+            // ...既存のconfigオブジェクト...
+        };
+
+        // ...既存のJavaScriptロジック...
+
+        function send () {
+            if (config.api.enable == false){
+                return
+            }
+            var params = {
+                "product_code": config.candlestick.product_code,
+                "limit": config.candlestick.limit,
+                "duration": config.candlestick.duration,
+            };
+
+            // ...既存のテクニカル指標パラメータ...
+
+            $.get("/api/candle/", params).done(function (data) {
+                // kabusapiのAPIレスポンスに合わせて
+                // data["candles"]はkabusapiの時系列データ（例: board, candles, etc.）
+                // 各指標もAPI側でkabusapiデータを元に計算して返すこと
+                // chart描画ロジックはそのまま利用可能
+                // 以降は既存のロジック
+                // ...existing code...
+            })
+        }
+
+        // ...既存のイベントハンドラ・初期化・描画ロジック...
+
+    </script>
+</head>
+<body>
+
+<div>
+    <button onclick="changeDuration('5s');">5s</button>
+    <button onclick="changeDuration('1m');">1m</button>
+    <button onclick="changeDuration('1h');">1h</button>
+</div>
+
+<!-- 既存のテクニカル指標UIはそのまま -->
+
+<div id="dashboard_div">
+    <div id="chart_div"></div>
+    <div id="technical_div"></div>
+    <div id="filter_div"></div>
+</div>
+
+</body>
+</html>
