@@ -1,0 +1,50 @@
+{
+  "product_code": "1459",
+  "period_days": 365,
+  "duration": "1m",
+  "timestamp": "2025-11-06T19:31:01.448032",
+  "results": {
+    "optimized_params": {
+      "ema_enable": true,
+      "ema_period_1": 14,
+      "ema_period_2": 12,
+      "bb_enable": false,
+      "bb_n": 15,
+      "bb_k": 1.9,
+      "ichimoku_enable": true,
+      "rsi_enable": true,
+      "rsi_period": 19,
+      "rsi_buy_thread": 29.9,
+      "rsi_sell_thread": 69.9,
+      "macd_enable": false,
+      "macd_fast_period": 13,
+      "macd_slow_period": 20,
+      "macd_signal_period": 14
+    },
+    "ema": {
+      "performance": 10.0,
+      "period_1": 14,
+      "period_2": 12
+    },
+    "bollinger_bands": {
+      "performance": 2.0,
+      "n": 15,
+      "k": 1.9
+    },
+    "ichimoku": {
+      "performance": 4.0
+    },
+    "rsi": {
+      "performance": 10.0,
+      "period": 19,
+      "buy_thread": 29.9,
+      "sell_thread": 69.9
+    },
+    "macd": {
+      "performance": 1.0,
+      "fast_period": 13,
+      "slow_period": 20,
+      "signal_period": 14
+    }
+  }
+}

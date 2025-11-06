@@ -21,7 +21,7 @@ kabu.com証券のAPI（kabusapi）を利用した株式・ETF自動売買シス�
 
 ## 必要要件
 
-- Python 3.6以上（推奨: 3.12）
+- Python 3.9以上（推奨: 3.12）
 - kabu.com証券のAPIトークン
 - TA-Libライブラリ（事前にインストールが必要）
 
@@ -120,9 +120,112 @@ python main.py
 
 ブラウザで `http://localhost:8080` にアクセスすると、チャートとテクニカル指標を確認できます。
 
+#### データソースの切り替え
+
+Webダッシュボードでは、以下の2つのデータソースを切り替えて表示できます：
+
+1. **Yahoo Finance**: Yahoo Financeから過去データを取得して表示（デフォルト）
+   - kabusapi接続不要
+   - 過去データの分析に最適
+   - 1分足は最大7日分、日足は長期間取得可能
+
+2. **kabusapi**: kabu.com証券のAPIからリアルタイムデータを取得
+   - APIトークンと接続が必要
+   - リアルタイムトレーディングに使用
+
+画面上部の「データソース」ボタンで切り替えが可能です。また、時間軸（5秒足/1分足/1時間足）も選択できます。
+
 ### バックテストモード
 
 `settings.ini` で `back_test = True` に設定すると、過去データでの戦略検証を行います。
+
+### Yahoo Financeを使ったバックテスト
+
+Yahoo Financeから過去の株価データを取得してバックテストを実行できます。
+kabusapiへの接続なしで、過去データでの戦略検証が可能です。
+
+#### 1. yfinanceのインストール
+
+```bash
+pip install yfinance
+```
+
+または、プロジェクト全体をインストール：
+
+```bash
+pip install -e .
+```
+
+#### 2. バックテスト実行
+
+```bash
+python backtest_yahoo.py
+```うv
+
+このスクリプトは以下を実行します：
+1. Yahoo Financeから `settings.ini` で指定した銘柄の過去データを取得
+2. 複数のテクニカル指標（EMA, Bollinger Bands, Ichimoku, RSI, MACD）でバックテスト
+3. 各指標の最適パラメータを探索
+4. 結果をコンソールに表示し、`backtest_results.json` に保存
+
+#### 3. 出力例
+
+```
+バックテスト結果サマリー
+============================================================
+銘柄コード: 1459
+期間: 365日
+時間軸: 1m
+------------------------------------------------------------
+
+EMA:
+  パフォーマンス: 1250.50
+  期間1: 7
+  期間2: 14
+
+Bollinger Bands:
+  パフォーマンス: 980.30
+  N: 20
+  K: 2.00
+
+Ichimoku Cloud:
+  パフォーマンス: 1100.75
+
+RSI:
+  パフォーマンス: 850.20
+  期間: 14
+  買いスレッド: 30.00
+  売りスレッド: 70.00
+
+MACD:
+  パフォーマンス: 1050.40
+  Fast期間: 12
+  Slow期間: 26
+  Signal期間: 9
+============================================================
+```
+
+#### 4. Yahoo Financeデータの制限事項
+
+- **1分足**: 最大7日間のデータのみ取得可能
+- **5分足**: 最大60日間のデータのみ取得可能
+- **1時間足/日足**: 長期間のデータ取得可能
+- **5秒足**: Yahoo Financeは対応していないため、1分足で代用
+
+#### 5. カスタマイズ
+
+`backtest_yahoo.py` を編集して、以下をカスタマイズできます：
+- 銘柄コード（デフォルト: `settings.product_code`）
+- 期間（デフォルト: `settings.past_period` 日）
+- 時間軸（デフォルト: `settings.trade_duration`）
+- 市場コード（デフォルト: 'T' = 東証）
+
+例：
+```python
+# 特定の銘柄で実行
+backtest = YahooBacktest('7203', 365, '1d')  # トヨタ自動車、365日、日足
+backtest.run_backtest()
+```
 
 ## アーキテクチャ
 
@@ -189,6 +292,12 @@ kabucomtrading/
 │   │   └── webserver.py      # Flask Webサーバ
 │   │                         # - REST API提供
 │   │                         # - テクニカル指標計算エンドポイント
+│   ├── data/                 # データ取得層
+│   │   ├── __init__.py
+│   │   └── yahoo.py          # Yahoo Financeデータ取得
+│   │                         # - 過去データ取得
+│   │                         # - ティッカー変換
+│   │                         # - 時間軸変換
 │   ├── models/               # データモデル層
 │   │   ├── __init__.py
 │   │   ├── base.py          # SQLAlchemy基底クラス
@@ -230,6 +339,10 @@ kabucomtrading/
 ├── main.py                   # エントリーポイント
 │                            # - マルチスレッド起動
 │                            # - ロギング設定
+├── backtest_yahoo.py         # Yahoo Financeバックテスト
+│                            # - 過去データ取得
+│                            # - 各指標の最適化
+│                            # - 結果レポート生成
 ├── settings.ini              # 設定ファイル
 ├── pyproject.toml            # プロジェクト定義・依存関係
 ├── .pre-commit-config.yaml   # pre-commit設定
@@ -350,6 +463,7 @@ kabucomtrading/
 - **NumPy 1.16.0**: 数値計算
 - **TA-Lib 0.4.17**: テクニカル指標計算
 - **python-dateutil 2.8.0**: 日時処理
+- **yfinance 0.2.0+**: Yahoo Finance データ取得
 
 ### API通信
 - **requests 2.23.0**: HTTP通信

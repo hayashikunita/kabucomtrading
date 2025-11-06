@@ -83,7 +83,42 @@ class KabusBaseCandle1M(BaseCandleMixin, Base):
 class KabusBaseCandle5S(BaseCandleMixin, Base):
     __tablename__ = 'KABUS_1459_5S'
 
+# 動的にテーブルクラスを作成するキャッシュ
+_candle_class_cache = {}
+
+def create_candle_class(product_code, duration):
+    """
+    任意の銘柄コード・時間足のローソク足テーブルクラスを動的に作成
+    
+    Args:
+        product_code: 銘柄コード（例: '1459', '1459.T', 'AAPL'）
+        duration: 時間足（constants.DURATION_1M等）
+    
+    Returns:
+        ローソク足テーブルクラス
+    """
+    # 銘柄コードをテーブル名に使える形式に変換（記号を_に置換）
+    safe_code = product_code.replace('.', '_').replace('-', '_').upper()
+    duration_suffix = duration.upper()
+    cache_key = f'{safe_code}_{duration_suffix}'
+    
+    # キャッシュにあればそれを返す
+    if cache_key in _candle_class_cache:
+        return _candle_class_cache[cache_key]
+    
+    # 新規作成
+    class_name = f'Candle_{cache_key}'
+    table_name = f'CANDLE_{cache_key}'
+    
+    new_class = type(class_name, (BaseCandleMixin, Base), {
+        '__tablename__': table_name
+    })
+    
+    _candle_class_cache[cache_key] = new_class
+    return new_class
+
 def factory_candle_class(product_code, duration):
+    # 既存の1459用クラスとの互換性を保つ
     if product_code == constants.PRODUCT_CODE_USD_JPY:
         if duration == constants.DURATION_5S:
             return KabusBaseCandle5S
@@ -91,6 +126,9 @@ def factory_candle_class(product_code, duration):
             return KabusBaseCandle1M
         if duration == constants.DURATION_1H:
             return KabusBaseCandle1H
+    
+    # 新規銘柄コードは動的にクラスを作成
+    return create_candle_class(product_code, duration)
 
 def create_candle_with_duration(product_code, duration, ticker):
     cls = factory_candle_class(product_code, duration)

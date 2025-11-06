@@ -26,8 +26,20 @@ class StreamData(object):
         self.trade_lock = Lock()
 
     def stream_ingestion_data(self):
-        trade_with_ai = partial(self.trade, ai=self.ai)
-        self.ai.API.get_realtime_ticker(callback=trade_with_ai)  # kabusapiのリアルタイムティッカー取得
+        """
+        ストリーミングデータの取り込み
+        バックテストモードの場合は何もしない
+        """
+        if settings.back_test:
+            logger.info('action=stream_ingestion_data status=skipped reason=back_test_mode')
+            return
+        
+        # リアルタイムモードの場合
+        logger.warning('action=stream_ingestion_data status=not_implemented')
+        logger.warning('リアルタイムティッカー取得機能は未実装です。バックテストモードをご利用ください。')
+        # TODO: kabusapiのWebSocket APIを使ってリアルタイムティッカーを取得する実装
+        # trade_with_ai = partial(self.trade, ai=self.ai)
+        # self.ai.API.get_realtime_ticker(callback=trade_with_ai)
 
     def trade(self, ticker: Ticker, ai: AI):
         logger.info(f'action=trade ticker={ticker.__dict__}')
