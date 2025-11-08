@@ -7,63 +7,137 @@
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
+            background-color: #131722;
+            color: #d1d4dc;
+        }
+        h1 {
+            color: #d1d4dc;
         }
         .controls {
             margin-bottom: 20px;
             padding: 15px;
-            background-color: #f5f5f5;
+            background-color: #1e222d;
             border-radius: 5px;
         }
         .controls button {
             margin: 5px;
             padding: 8px 15px;
             cursor: pointer;
-            border: 1px solid #ccc;
-            background-color: #fff;
+            border: 1px solid #2962ff;
+            background-color: #131722;
+            color: #d1d4dc;
             border-radius: 3px;
         }
         .controls button:hover {
-            background-color: #e0e0e0;
+            background-color: #1e222d;
         }
         .controls button.active {
-            background-color: #4CAF50;
+            background-color: #2962ff;
             color: white;
-            border-color: #4CAF50;
+            border-color: #2962ff;
         }
-        .data-source-group {
+        .data-source-group, .duration-group, .product-code-group, .size-group {
             margin-bottom: 10px;
         }
-        .duration-group {
-            margin-bottom: 10px;
+        .size-group input[type="range"] {
+            width: 200px;
+            margin: 0 10px;
+            vertical-align: middle;
         }
-        .product-code-group {
-            margin-bottom: 10px;
+        .size-group span {
+            margin-left: 5px;
+            color: #787b86;
+            font-size: 0.9em;
         }
-        #dashboard_div{
+        .product-code-group input {
+            padding: 8px;
+            width: 120px;
+            margin-left: 5px;
+            border: 1px solid #2962ff;
+            border-radius: 3px;
+            background-color: #131722;
+            color: #d1d4dc;
+        }
+        .product-code-group span {
+            margin-left: 5px;
+            color: #787b86;
+            font-size: 0.9em;
+        }
+        .update-btn {
+            padding: 8px 15px;
+            background-color: #2962ff;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .update-btn:hover {
+            background-color: #1e53e5;
+        }
+        .backtest-btn {
+            padding: 8px 15px;
+            background-color: #ff9800;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .backtest-btn:hover {
+            background-color: #e68900;
+        }
+        #chart_div {
             width: 100%;
             max-width: 1200px;
-            border: 1px solid #ccc;
-        }
-        #chart_div{
-            height:500px;
-            border-bottom: 1px solid #ccc;
-        }
-        #filter_div{
-            height:50px;
+            height: 600px;
+            margin-top: 20px;
         }
         .status {
             margin: 10px 0;
             padding: 10px;
-            background-color: #e3f2fd;
-            border-left: 4px solid #2196F3;
+            background-color: #1e222d;
+            border-left: 4px solid #2962ff;
             border-radius: 3px;
+            color: #d1d4dc;
+        }
+        #backtest_results {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #1e222d;
+            border-radius: 5px;
+            display: none;
+        }
+        #backtest_results h3 {
+            margin-top: 0;
+            color: #2962ff;
+        }
+        .result-item {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #131722;
+            border-radius: 3px;
+        }
+        .result-item strong {
+            color: #26a69a;
+        }
+        .param-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .param-item {
+            padding: 8px;
+            background-color: #0d1117;
+            border-radius: 3px;
+            font-size: 0.9em;
         }
     </style>
 
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://unpkg.com/lightweight-charts@4.1.3/dist/lightweight-charts.standalone.production.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script type="text/javascript">
-        google.charts.load('current', {'packages':['corechart', 'controls']});
 
         var config = {
             dataSource: 'yahoo',  // 'kabusapi' or 'yahoo'
@@ -75,8 +149,14 @@
                 product_code: '1459',
                 duration: '1m',
                 limit: 365,
+            },
+            chart: {
+                height: 600  // デフォルトの高さ
             }
         };
+
+        var chart = null;
+        var candlestickSeries = null;
 
         function changeDataSource(source) {
             config.dataSource = source;
@@ -120,6 +200,99 @@
             $('#status-message').text(message);
         }
 
+        function changeChartSize() {
+            var newHeight = parseInt($('#chart-height-slider').val());
+            config.chart.height = newHeight;
+            $('#chart-height-value').text(newHeight + 'px');
+            
+            if (chart) {
+                chart.applyOptions({ height: newHeight });
+                updateStatus('チャートサイズを変更しました: ' + newHeight + 'px');
+            }
+        }
+
+        function loadBacktestResults() {
+            updateStatus('バックテスト結果を読み込み中...');
+            
+            $.get('/api/backtest/results/')
+                .done(function(data) {
+                    displayBacktestResults(data);
+                    updateStatus('バックテスト結果を表示しました');
+                })
+                .fail(function(xhr, status, error) {
+                    updateStatus('エラー: バックテスト結果の読み込みに失敗 - ' + error);
+                    console.error('Backtest API Error:', error);
+                });
+        }
+
+        function displayBacktestResults(data) {
+            var resultsDiv = $('#backtest_results');
+            var html = '<h3>バックテスト結果</h3>';
+            
+            html += '<div class="result-item">';
+            html += '<strong>銘柄:</strong> ' + data.product_code + ' | ';
+            html += '<strong>期間:</strong> ' + data.period_days + '日 | ';
+            html += '<strong>時間軸:</strong> ' + data.duration + ' | ';
+            html += '<strong>実行日時:</strong> ' + new Date(data.timestamp).toLocaleString('ja-JP');
+            html += '</div>';
+            
+            if (data.results) {
+                var results = data.results;
+                
+                // 最適化されたパラメータ
+                if (results.optimized_params) {
+                    html += '<div class="result-item">';
+                    html += '<strong>最適化パラメータ:</strong>';
+                    html += '<div class="param-grid">';
+                    
+                    var params = results.optimized_params;
+                    if (params.ema_enable) {
+                        html += '<div class="param-item">✓ EMA: ' + params.ema_period_1 + ', ' + params.ema_period_2 + '</div>';
+                    }
+                    if (params.bb_enable) {
+                        html += '<div class="param-item">✓ Bollinger Bands: N=' + params.bb_n + ', K=' + params.bb_k + '</div>';
+                    }
+                    if (params.ichimoku_enable) {
+                        html += '<div class="param-item">✓ 一目均衡表</div>';
+                    }
+                    if (params.rsi_enable) {
+                        html += '<div class="param-item">✓ RSI: Period=' + params.rsi_period + ', 買=' + params.rsi_buy_thread + ', 売=' + params.rsi_sell_thread + '</div>';
+                    }
+                    if (params.macd_enable) {
+                        html += '<div class="param-item">✓ MACD: Fast=' + params.macd_fast_period + ', Slow=' + params.macd_slow_period + ', Signal=' + params.macd_signal_period + '</div>';
+                    }
+                    
+                    html += '</div></div>';
+                }
+                
+                // 各指標のパフォーマンス
+                html += '<div class="result-item">';
+                html += '<strong>指標別パフォーマンス:</strong>';
+                html += '<div class="param-grid">';
+                
+                if (results.ema) {
+                    html += '<div class="param-item"><strong>EMA:</strong> ' + results.ema.performance + '%</div>';
+                }
+                if (results.bollinger_bands) {
+                    html += '<div class="param-item"><strong>Bollinger Bands:</strong> ' + results.bollinger_bands.performance + '%</div>';
+                }
+                if (results.ichimoku) {
+                    html += '<div class="param-item"><strong>一目均衡表:</strong> ' + results.ichimoku.performance + '%</div>';
+                }
+                if (results.rsi) {
+                    html += '<div class="param-item"><strong>RSI:</strong> ' + results.rsi.performance + '%</div>';
+                }
+                if (results.macd) {
+                    html += '<div class="param-item"><strong>MACD:</strong> ' + results.macd.performance + '%</div>';
+                }
+                
+                html += '</div></div>';
+            }
+            
+            resultsDiv.html(html);
+            resultsDiv.show();
+        }
+
         function fetchAndDrawChart() {
             if (!config.api.enable) {
                 return;
@@ -156,52 +329,130 @@
                 });
         }
 
+        function initChart() {
+            try {
+                console.log('initChart called');
+                
+                if (chart) {
+                    console.log('Removing existing chart');
+                    chart.remove();
+                    chart = null;
+                    candlestickSeries = null;
+                }
+                
+                const chartElement = document.getElementById('chart_div');
+                if (!chartElement) {
+                    console.error('Chart element not found');
+                    updateStatus('エラー: チャート要素が見つかりません');
+                    return;
+                }
+                
+                console.log('Creating chart with width:', chartElement.clientWidth);
+                console.log('LightweightCharts object:', LightweightCharts);
+                
+                chart = LightweightCharts.createChart(chartElement, {
+                    width: chartElement.clientWidth,
+                    height: config.chart.height,
+                    layout: {
+                        background: { color: '#131722' },
+                        textColor: '#d1d4dc',
+                    },
+                    grid: {
+                        vertLines: { color: '#1e222d' },
+                        horzLines: { color: '#1e222d' },
+                    },
+                    crosshair: {
+                        mode: LightweightCharts.CrosshairMode.Normal,
+                    },
+                    rightPriceScale: {
+                        borderColor: '#2962ff',
+                    },
+                    timeScale: {
+                        borderColor: '#2962ff',
+                        timeVisible: true,
+                        secondsVisible: false,
+                    },
+                });
+
+                console.log('Chart created:', chart);
+                console.log('Chart methods:', Object.keys(chart));
+                console.log('Adding candlestick series...');
+                
+                // addCandlestickSeries または addSeries を試す
+                if (typeof chart.addCandlestickSeries === 'function') {
+                    candlestickSeries = chart.addCandlestickSeries({
+                        upColor: '#26a69a',
+                        downColor: '#ef5350',
+                        borderVisible: false,
+                        wickUpColor: '#26a69a',
+                        wickDownColor: '#ef5350',
+                    });
+                } else if (typeof chart.addSeries === 'function') {
+                    // 新しいAPIの場合
+                    candlestickSeries = chart.addSeries('Candlestick', {
+                        upColor: '#26a69a',
+                        downColor: '#ef5350',
+                        borderVisible: false,
+                        wickUpColor: '#26a69a',
+                        wickDownColor: '#ef5350',
+                    });
+                } else {
+                    console.error('No candlestick series method found');
+                }
+
+                console.log('Chart initialized successfully, series:', candlestickSeries);
+
+                // ウィンドウリサイズ対応
+                window.addEventListener('resize', () => {
+                    if (chart) {
+                        chart.applyOptions({ width: chartElement.clientWidth });
+                    }
+                });
+            } catch (e) {
+                console.error('Error initializing chart:', e);
+                updateStatus('エラー: チャート初期化失敗 - ' + e.message);
+            }
+        }
+
         function drawChart(data) {
             console.log('Drawing chart with data:', data);
             
-            // Google ChartsでシンプルなOHLCチャートを描画
-            var chartData = new google.visualization.DataTable();
-            chartData.addColumn('string', 'Time');
-            chartData.addColumn('number', 'Low');
-            chartData.addColumn('number', 'Open');
-            chartData.addColumn('number', 'Close');
-            chartData.addColumn('number', 'High');
-
-            // データ行を追加
-            for (var i = 0; i < data.candles.length; i++) {
-                var candle = data.candles[i];
-                var timeStr = new Date(candle.time).toLocaleString('ja-JP');
-                
-                chartData.addRow([
-                    timeStr,
-                    candle.low,
-                    candle.open,
-                    candle.close,
-                    candle.high
-                ]);
-            }
-
-            var options = {
-                legend: 'none',
-                candlestick: {
-                    fallingColor: { strokeWidth: 0, fill: '#a52714'},
-                    risingColor: { strokeWidth: 0, fill: '#0f9d58'}
-                },
-                hAxis: {
-                    slantedText: true,
-                    slantedTextAngle: 45
-                },
-                chartArea: {
-                    width: '80%',
-                    height: '70%'
-                }
-            };
-
-            var chart = new google.visualization.CandlestickChart(document.getElementById('chart_div'));
-            
             try {
-                chart.draw(chartData, options);
-                console.log('Chart drawn successfully');
+                if (!chart || !candlestickSeries) {
+                    console.log('Initializing chart...');
+                    initChart();
+                    
+                    // 初期化後、再度nullチェック
+                    if (!candlestickSeries) {
+                        console.error('Failed to initialize candlestickSeries');
+                        updateStatus('エラー: チャート初期化に失敗しました');
+                        return;
+                    }
+                }
+
+                // Lightweight Charts用のデータ形式に変換
+                const candleData = data.candles.map(candle => {
+                    return {
+                        time: Math.floor(new Date(candle.time).getTime() / 1000), // Unix timestamp (秒)
+                        open: parseFloat(candle.open),
+                        high: parseFloat(candle.high),
+                        low: parseFloat(candle.low),
+                        close: parseFloat(candle.close)
+                    };
+                });
+
+                // データをソート（古い順）
+                candleData.sort((a, b) => a.time - b.time);
+
+                console.log('Setting data to chart, items:', candleData.length);
+                
+                // チャートにデータをセット
+                candlestickSeries.setData(candleData);
+                
+                // チャートを自動フィット
+                chart.timeScale().fitContent();
+                
+                console.log('Chart drawn successfully with', candleData.length, 'candles');
             } catch (e) {
                 console.error('Error drawing chart:', e);
                 updateStatus('エラー: チャート描画失敗 - ' + e.message);
@@ -209,7 +460,7 @@
         }
 
         // ページ読み込み時の初期化
-        google.charts.setOnLoadCallback(function() {
+        $(document).ready(function() {
             // 初期状態のボタンをアクティブに
             $('#btn-' + config.dataSource).addClass('active');
             $('#btn-duration-' + config.candlestick.duration).addClass('active');
@@ -220,6 +471,9 @@
                     updateProductCode();
                 }
             });
+            
+            // チャート初期化
+            initChart();
             
             // 初回データ取得
             fetchAndDrawChart();
@@ -245,9 +499,10 @@
     
     <div class="product-code-group">
         <strong>銘柄コード:</strong>
-        <input type="text" id="product-code-input" value="1459" style="padding: 8px; width: 120px; margin-left: 5px; border: 1px solid #ccc; border-radius: 3px;">
-        <span style="margin-left: 5px; color: #666; font-size: 0.9em;">(例: 1459, 7203, 9984)</span>
-        <button onclick="updateProductCode()" style="padding: 8px 15px; background-color: #4CAF50; color: white; border: none; border-radius: 3px; cursor: pointer; margin-left: 10px;">チャート更新</button>
+        <input type="text" id="product-code-input" value="1459">
+        <span>(例: 1459, 7203, 9984)</span>
+        <button onclick="updateProductCode()" class="update-btn">チャート更新</button>
+        <button onclick="loadBacktestResults()" class="backtest-btn">バックテスト結果表示</button>
     </div>
     
     <div class="duration-group">
@@ -256,15 +511,21 @@
         <button id="btn-duration-1m" class="duration-btn" onclick="changeDuration('1m')">1分足</button>
         <button id="btn-duration-1h" class="duration-btn" onclick="changeDuration('1h')">1時間足</button>
     </div>
+    
+    <div class="size-group">
+        <strong>チャート高さ:</strong>
+        <input type="range" id="chart-height-slider" min="300" max="1200" step="50" value="600" oninput="changeChartSize()">
+        <span id="chart-height-value">600px</span>
+    </div>
 </div>
 
 <div class="status" id="status-message">
     初期化中...
 </div>
 
-<div id="dashboard_div">
-    <div id="chart_div"></div>
-</div>
+<div id="backtest_results"></div>
+
+<div id="chart_div"></div>
 
 </body>
 </html>
