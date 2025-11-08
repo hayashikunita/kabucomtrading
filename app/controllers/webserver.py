@@ -255,6 +255,25 @@ def api_yahoo_handler():
     return jsonify(df.value), 200
 
 
+@app.route('/api/backtest/results/', methods=['GET'])
+def api_backtest_results():
+    """バックテスト結果を取得するエンドポイント"""
+    import json
+    import os
+    
+    results_file = 'backtest_results.json'
+    
+    if not os.path.exists(results_file):
+        return jsonify({'error': 'No backtest results found'}), 404
+    
+    try:
+        with open(results_file, 'r', encoding='utf-8') as f:
+            results = json.load(f)
+        return jsonify(results), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 def start():
     # app.run(host='127.0.0.1', port=settings.web_port, threaded=True)
     app.run(host='0.0.0.0', port=settings.web_port, threaded=True)
