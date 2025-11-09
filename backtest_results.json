@@ -2,49 +2,5565 @@
   "product_code": "1459",
   "period_days": 365,
   "duration": "1m",
-  "timestamp": "2025-11-06T19:31:01.448032",
+  "timestamp": "2025-11-09T15:46:26.682799",
   "results": {
-    "optimized_params": {
-      "ema_enable": true,
-      "ema_period_1": 14,
-      "ema_period_2": 12,
-      "bb_enable": false,
-      "bb_n": 15,
-      "bb_k": 1.9,
-      "ichimoku_enable": true,
-      "rsi_enable": true,
-      "rsi_period": 19,
-      "rsi_buy_thread": 29.9,
-      "rsi_sell_thread": 69.9,
-      "macd_enable": false,
-      "macd_fast_period": 13,
-      "macd_slow_period": 20,
-      "macd_signal_period": 14
-    },
     "ema": {
-      "performance": 10.0,
-      "period_1": 14,
-      "period_2": 12
+      "period1": 23,
+      "period2": 48,
+      "performance": 27.0
     },
     "bollinger_bands": {
-      "performance": 2.0,
-      "n": 15,
-      "k": 1.9
-    },
-    "ichimoku": {
-      "performance": 4.0
+      "n": 10,
+      "k": 3.0,
+      "performance": 18.0
     },
     "rsi": {
-      "performance": 10.0,
-      "period": 19,
-      "buy_thread": 29.9,
-      "sell_thread": 69.9
+      "period": 12,
+      "buy_threshold": 25,
+      "sell_threshold": 80,
+      "performance": 24.0
     },
     "macd": {
-      "performance": 1.0,
-      "fast_period": 13,
-      "slow_period": 20,
-      "signal_period": 14
+      "fast_period": 12,
+      "slow_period": 24,
+      "signal_period": 11,
+      "performance": 3.0
+    },
+    "ichimoku": {
+      "performance": 29.0
+    }
+  },
+  "detailed_results": {
+    "ema": {
+      "all_results": [
+        {
+          "period1": 5,
+          "period2": 10,
+          "performance": -28.0
+        },
+        {
+          "period1": 5,
+          "period2": 12,
+          "performance": -18.0
+        },
+        {
+          "period1": 5,
+          "period2": 14,
+          "performance": -12.0
+        },
+        {
+          "period1": 5,
+          "period2": 16,
+          "performance": -9.0
+        },
+        {
+          "period1": 5,
+          "period2": 18,
+          "performance": -6.0
+        },
+        {
+          "period1": 5,
+          "period2": 20,
+          "performance": -4.0
+        },
+        {
+          "period1": 5,
+          "period2": 22,
+          "performance": -2.0
+        },
+        {
+          "period1": 5,
+          "period2": 24,
+          "performance": -2.0
+        },
+        {
+          "period1": 5,
+          "period2": 26,
+          "performance": -3.0
+        },
+        {
+          "period1": 5,
+          "period2": 28,
+          "performance": -3.0
+        },
+        {
+          "period1": 5,
+          "period2": 30,
+          "performance": -2.0
+        },
+        {
+          "period1": 5,
+          "period2": 32,
+          "performance": 2.0
+        },
+        {
+          "period1": 5,
+          "period2": 34,
+          "performance": 3.0
+        },
+        {
+          "period1": 5,
+          "period2": 36,
+          "performance": 6.0
+        },
+        {
+          "period1": 5,
+          "period2": 38,
+          "performance": 7.0
+        },
+        {
+          "period1": 5,
+          "period2": 40,
+          "performance": 12.0
+        },
+        {
+          "period1": 5,
+          "period2": 42,
+          "performance": 13.0
+        },
+        {
+          "period1": 5,
+          "period2": 44,
+          "performance": 15.0
+        },
+        {
+          "period1": 5,
+          "period2": 46,
+          "performance": 13.0
+        },
+        {
+          "period1": 5,
+          "period2": 48,
+          "performance": 13.0
+        },
+        {
+          "period1": 6,
+          "period2": 10,
+          "performance": -20.0
+        },
+        {
+          "period1": 6,
+          "period2": 12,
+          "performance": -12.0
+        },
+        {
+          "period1": 6,
+          "period2": 14,
+          "performance": -8.0
+        },
+        {
+          "period1": 6,
+          "period2": 16,
+          "performance": -3.0
+        },
+        {
+          "period1": 6,
+          "period2": 18,
+          "performance": -2.0
+        },
+        {
+          "period1": 6,
+          "period2": 20,
+          "performance": 0
+        },
+        {
+          "period1": 6,
+          "period2": 22,
+          "performance": 4.0
+        },
+        {
+          "period1": 6,
+          "period2": 24,
+          "performance": 2.0
+        },
+        {
+          "period1": 6,
+          "period2": 26,
+          "performance": -1.0
+        },
+        {
+          "period1": 6,
+          "period2": 28,
+          "performance": 0
+        },
+        {
+          "period1": 6,
+          "period2": 30,
+          "performance": 1.0
+        },
+        {
+          "period1": 6,
+          "period2": 32,
+          "performance": 3.0
+        },
+        {
+          "period1": 6,
+          "period2": 34,
+          "performance": 3.0
+        },
+        {
+          "period1": 6,
+          "period2": 36,
+          "performance": 6.0
+        },
+        {
+          "period1": 6,
+          "period2": 38,
+          "performance": 9.0
+        },
+        {
+          "period1": 6,
+          "period2": 40,
+          "performance": 13.0
+        },
+        {
+          "period1": 6,
+          "period2": 42,
+          "performance": 14.0
+        },
+        {
+          "period1": 6,
+          "period2": 44,
+          "performance": 14.0
+        },
+        {
+          "period1": 6,
+          "period2": 46,
+          "performance": 15.0
+        },
+        {
+          "period1": 6,
+          "period2": 48,
+          "performance": 19.0
+        },
+        {
+          "period1": 7,
+          "period2": 10,
+          "performance": -14.0
+        },
+        {
+          "period1": 7,
+          "period2": 12,
+          "performance": -6.0
+        },
+        {
+          "period1": 7,
+          "period2": 14,
+          "performance": -2.0
+        },
+        {
+          "period1": 7,
+          "period2": 16,
+          "performance": -1.0
+        },
+        {
+          "period1": 7,
+          "period2": 18,
+          "performance": 3.0
+        },
+        {
+          "period1": 7,
+          "period2": 20,
+          "performance": 6.0
+        },
+        {
+          "period1": 7,
+          "period2": 22,
+          "performance": 3.0
+        },
+        {
+          "period1": 7,
+          "period2": 24,
+          "performance": 3.0
+        },
+        {
+          "period1": 7,
+          "period2": 26,
+          "performance": 2.0
+        },
+        {
+          "period1": 7,
+          "period2": 28,
+          "performance": 1.0
+        },
+        {
+          "period1": 7,
+          "period2": 30,
+          "performance": 2.0
+        },
+        {
+          "period1": 7,
+          "period2": 32,
+          "performance": 8.0
+        },
+        {
+          "period1": 7,
+          "period2": 34,
+          "performance": 9.0
+        },
+        {
+          "period1": 7,
+          "period2": 36,
+          "performance": 7.0
+        },
+        {
+          "period1": 7,
+          "period2": 38,
+          "performance": 11.0
+        },
+        {
+          "period1": 7,
+          "period2": 40,
+          "performance": 13.0
+        },
+        {
+          "period1": 7,
+          "period2": 42,
+          "performance": 15.0
+        },
+        {
+          "period1": 7,
+          "period2": 44,
+          "performance": 20.0
+        },
+        {
+          "period1": 7,
+          "period2": 46,
+          "performance": 21.0
+        },
+        {
+          "period1": 7,
+          "period2": 48,
+          "performance": 18.0
+        },
+        {
+          "period1": 8,
+          "period2": 10,
+          "performance": -9.0
+        },
+        {
+          "period1": 8,
+          "period2": 12,
+          "performance": -7.0
+        },
+        {
+          "period1": 8,
+          "period2": 14,
+          "performance": -4.0
+        },
+        {
+          "period1": 8,
+          "period2": 16,
+          "performance": -1.0
+        },
+        {
+          "period1": 8,
+          "period2": 18,
+          "performance": 7.0
+        },
+        {
+          "period1": 8,
+          "period2": 20,
+          "performance": 3.0
+        },
+        {
+          "period1": 8,
+          "period2": 22,
+          "performance": 3.0
+        },
+        {
+          "period1": 8,
+          "period2": 24,
+          "performance": 3.0
+        },
+        {
+          "period1": 8,
+          "period2": 26,
+          "performance": 2.0
+        },
+        {
+          "period1": 8,
+          "period2": 28,
+          "performance": 2.0
+        },
+        {
+          "period1": 8,
+          "period2": 30,
+          "performance": 6.0
+        },
+        {
+          "period1": 8,
+          "period2": 32,
+          "performance": 8.0
+        },
+        {
+          "period1": 8,
+          "period2": 34,
+          "performance": 8.0
+        },
+        {
+          "period1": 8,
+          "period2": 36,
+          "performance": 11.0
+        },
+        {
+          "period1": 8,
+          "period2": 38,
+          "performance": 13.0
+        },
+        {
+          "period1": 8,
+          "period2": 40,
+          "performance": 19.0
+        },
+        {
+          "period1": 8,
+          "period2": 42,
+          "performance": 21.0
+        },
+        {
+          "period1": 8,
+          "period2": 44,
+          "performance": 20.0
+        },
+        {
+          "period1": 8,
+          "period2": 46,
+          "performance": 20.0
+        },
+        {
+          "period1": 8,
+          "period2": 48,
+          "performance": 18.0
+        },
+        {
+          "period1": 9,
+          "period2": 10,
+          "performance": -8.0
+        },
+        {
+          "period1": 9,
+          "period2": 12,
+          "performance": -4.0
+        },
+        {
+          "period1": 9,
+          "period2": 14,
+          "performance": -1.0
+        },
+        {
+          "period1": 9,
+          "period2": 16,
+          "performance": 0
+        },
+        {
+          "period1": 9,
+          "period2": 18,
+          "performance": 3.0
+        },
+        {
+          "period1": 9,
+          "period2": 20,
+          "performance": 2.0
+        },
+        {
+          "period1": 9,
+          "period2": 22,
+          "performance": 3.0
+        },
+        {
+          "period1": 9,
+          "period2": 24,
+          "performance": 3.0
+        },
+        {
+          "period1": 9,
+          "period2": 26,
+          "performance": 4.0
+        },
+        {
+          "period1": 9,
+          "period2": 28,
+          "performance": 4.0
+        },
+        {
+          "period1": 9,
+          "period2": 30,
+          "performance": 5.0
+        },
+        {
+          "period1": 9,
+          "period2": 32,
+          "performance": 11.0
+        },
+        {
+          "period1": 9,
+          "period2": 34,
+          "performance": 13.0
+        },
+        {
+          "period1": 9,
+          "period2": 36,
+          "performance": 15.0
+        },
+        {
+          "period1": 9,
+          "period2": 38,
+          "performance": 20.0
+        },
+        {
+          "period1": 9,
+          "period2": 40,
+          "performance": 20.0
+        },
+        {
+          "period1": 9,
+          "period2": 42,
+          "performance": 19.0
+        },
+        {
+          "period1": 9,
+          "period2": 44,
+          "performance": 19.0
+        },
+        {
+          "period1": 9,
+          "period2": 46,
+          "performance": 17.0
+        },
+        {
+          "period1": 9,
+          "period2": 48,
+          "performance": 18.0
+        },
+        {
+          "period1": 10,
+          "period2": 12,
+          "performance": -4.0
+        },
+        {
+          "period1": 10,
+          "period2": 14,
+          "performance": 2.0
+        },
+        {
+          "period1": 10,
+          "period2": 16,
+          "performance": -2.0
+        },
+        {
+          "period1": 10,
+          "period2": 18,
+          "performance": 4.0
+        },
+        {
+          "period1": 10,
+          "period2": 20,
+          "performance": 3.0
+        },
+        {
+          "period1": 10,
+          "period2": 22,
+          "performance": 3.0
+        },
+        {
+          "period1": 10,
+          "period2": 24,
+          "performance": 2.0
+        },
+        {
+          "period1": 10,
+          "period2": 26,
+          "performance": 5.0
+        },
+        {
+          "period1": 10,
+          "period2": 28,
+          "performance": 7.0
+        },
+        {
+          "period1": 10,
+          "period2": 30,
+          "performance": 8.0
+        },
+        {
+          "period1": 10,
+          "period2": 32,
+          "performance": 11.0
+        },
+        {
+          "period1": 10,
+          "period2": 34,
+          "performance": 16.0
+        },
+        {
+          "period1": 10,
+          "period2": 36,
+          "performance": 19.0
+        },
+        {
+          "period1": 10,
+          "period2": 38,
+          "performance": 22.0
+        },
+        {
+          "period1": 10,
+          "period2": 40,
+          "performance": 20.0
+        },
+        {
+          "period1": 10,
+          "period2": 42,
+          "performance": 19.0
+        },
+        {
+          "period1": 10,
+          "period2": 44,
+          "performance": 19.0
+        },
+        {
+          "period1": 10,
+          "period2": 46,
+          "performance": 19.0
+        },
+        {
+          "period1": 10,
+          "period2": 48,
+          "performance": 20.0
+        },
+        {
+          "period1": 11,
+          "period2": 12,
+          "performance": 1.0
+        },
+        {
+          "period1": 11,
+          "period2": 14,
+          "performance": -1.0
+        },
+        {
+          "period1": 11,
+          "period2": 16,
+          "performance": -2.0
+        },
+        {
+          "period1": 11,
+          "period2": 18,
+          "performance": 3.0
+        },
+        {
+          "period1": 11,
+          "period2": 20,
+          "performance": 2.0
+        },
+        {
+          "period1": 11,
+          "period2": 22,
+          "performance": 3.0
+        },
+        {
+          "period1": 11,
+          "period2": 24,
+          "performance": 4.0
+        },
+        {
+          "period1": 11,
+          "period2": 26,
+          "performance": 6.0
+        },
+        {
+          "period1": 11,
+          "period2": 28,
+          "performance": 8.0
+        },
+        {
+          "period1": 11,
+          "period2": 30,
+          "performance": 9.0
+        },
+        {
+          "period1": 11,
+          "period2": 32,
+          "performance": 15.0
+        },
+        {
+          "period1": 11,
+          "period2": 34,
+          "performance": 20.0
+        },
+        {
+          "period1": 11,
+          "period2": 36,
+          "performance": 19.0
+        },
+        {
+          "period1": 11,
+          "period2": 38,
+          "performance": 21.0
+        },
+        {
+          "period1": 11,
+          "period2": 40,
+          "performance": 19.0
+        },
+        {
+          "period1": 11,
+          "period2": 42,
+          "performance": 19.0
+        },
+        {
+          "period1": 11,
+          "period2": 44,
+          "performance": 20.0
+        },
+        {
+          "period1": 11,
+          "period2": 46,
+          "performance": 19.0
+        },
+        {
+          "period1": 11,
+          "period2": 48,
+          "performance": 20.0
+        },
+        {
+          "period1": 12,
+          "period2": 14,
+          "performance": -1.0
+        },
+        {
+          "period1": 12,
+          "period2": 16,
+          "performance": -3.0
+        },
+        {
+          "period1": 12,
+          "period2": 18,
+          "performance": 2.0
+        },
+        {
+          "period1": 12,
+          "period2": 20,
+          "performance": 3.0
+        },
+        {
+          "period1": 12,
+          "period2": 22,
+          "performance": 4.0
+        },
+        {
+          "period1": 12,
+          "period2": 24,
+          "performance": 5.0
+        },
+        {
+          "period1": 12,
+          "period2": 26,
+          "performance": 8.0
+        },
+        {
+          "period1": 12,
+          "period2": 28,
+          "performance": 8.0
+        },
+        {
+          "period1": 12,
+          "period2": 30,
+          "performance": 11.0
+        },
+        {
+          "period1": 12,
+          "period2": 32,
+          "performance": 18.0
+        },
+        {
+          "period1": 12,
+          "period2": 34,
+          "performance": 17.0
+        },
+        {
+          "period1": 12,
+          "period2": 36,
+          "performance": 21.0
+        },
+        {
+          "period1": 12,
+          "period2": 38,
+          "performance": 21.0
+        },
+        {
+          "period1": 12,
+          "period2": 40,
+          "performance": 19.0
+        },
+        {
+          "period1": 12,
+          "period2": 42,
+          "performance": 21.0
+        },
+        {
+          "period1": 12,
+          "period2": 44,
+          "performance": 19.0
+        },
+        {
+          "period1": 12,
+          "period2": 46,
+          "performance": 19.0
+        },
+        {
+          "period1": 12,
+          "period2": 48,
+          "performance": 21.0
+        },
+        {
+          "period1": 13,
+          "period2": 14,
+          "performance": -3.0
+        },
+        {
+          "period1": 13,
+          "period2": 16,
+          "performance": 2.0
+        },
+        {
+          "period1": 13,
+          "period2": 18,
+          "performance": 4.0
+        },
+        {
+          "period1": 13,
+          "period2": 20,
+          "performance": 4.0
+        },
+        {
+          "period1": 13,
+          "period2": 22,
+          "performance": 5.0
+        },
+        {
+          "period1": 13,
+          "period2": 24,
+          "performance": 6.0
+        },
+        {
+          "period1": 13,
+          "period2": 26,
+          "performance": 10.0
+        },
+        {
+          "period1": 13,
+          "period2": 28,
+          "performance": 9.0
+        },
+        {
+          "period1": 13,
+          "period2": 30,
+          "performance": 18.0
+        },
+        {
+          "period1": 13,
+          "period2": 32,
+          "performance": 18.0
+        },
+        {
+          "period1": 13,
+          "period2": 34,
+          "performance": 19.0
+        },
+        {
+          "period1": 13,
+          "period2": 36,
+          "performance": 21.0
+        },
+        {
+          "period1": 13,
+          "period2": 38,
+          "performance": 20.0
+        },
+        {
+          "period1": 13,
+          "period2": 40,
+          "performance": 21.0
+        },
+        {
+          "period1": 13,
+          "period2": 42,
+          "performance": 19.0
+        },
+        {
+          "period1": 13,
+          "period2": 44,
+          "performance": 21.0
+        },
+        {
+          "period1": 13,
+          "period2": 46,
+          "performance": 21.0
+        },
+        {
+          "period1": 13,
+          "period2": 48,
+          "performance": 23.0
+        },
+        {
+          "period1": 14,
+          "period2": 16,
+          "performance": 2.0
+        },
+        {
+          "period1": 14,
+          "period2": 18,
+          "performance": 5.0
+        },
+        {
+          "period1": 14,
+          "period2": 20,
+          "performance": 4.0
+        },
+        {
+          "period1": 14,
+          "period2": 22,
+          "performance": 6.0
+        },
+        {
+          "period1": 14,
+          "period2": 24,
+          "performance": 9.0
+        },
+        {
+          "period1": 14,
+          "period2": 26,
+          "performance": 8.0
+        },
+        {
+          "period1": 14,
+          "period2": 28,
+          "performance": 14.0
+        },
+        {
+          "period1": 14,
+          "period2": 30,
+          "performance": 17.0
+        },
+        {
+          "period1": 14,
+          "period2": 32,
+          "performance": 20.0
+        },
+        {
+          "period1": 14,
+          "period2": 34,
+          "performance": 21.0
+        },
+        {
+          "period1": 14,
+          "period2": 36,
+          "performance": 19.0
+        },
+        {
+          "period1": 14,
+          "period2": 38,
+          "performance": 20.0
+        },
+        {
+          "period1": 14,
+          "period2": 40,
+          "performance": 23.0
+        },
+        {
+          "period1": 14,
+          "period2": 42,
+          "performance": 21.0
+        },
+        {
+          "period1": 14,
+          "period2": 44,
+          "performance": 21.0
+        },
+        {
+          "period1": 14,
+          "period2": 46,
+          "performance": 22.0
+        },
+        {
+          "period1": 14,
+          "period2": 48,
+          "performance": 22.0
+        },
+        {
+          "period1": 15,
+          "period2": 16,
+          "performance": 4.0
+        },
+        {
+          "period1": 15,
+          "period2": 18,
+          "performance": 3.0
+        },
+        {
+          "period1": 15,
+          "period2": 20,
+          "performance": 6.0
+        },
+        {
+          "period1": 15,
+          "period2": 22,
+          "performance": 6.0
+        },
+        {
+          "period1": 15,
+          "period2": 24,
+          "performance": 9.0
+        },
+        {
+          "period1": 15,
+          "period2": 26,
+          "performance": 11.0
+        },
+        {
+          "period1": 15,
+          "period2": 28,
+          "performance": 17.0
+        },
+        {
+          "period1": 15,
+          "period2": 30,
+          "performance": 20.0
+        },
+        {
+          "period1": 15,
+          "period2": 32,
+          "performance": 23.0
+        },
+        {
+          "period1": 15,
+          "period2": 34,
+          "performance": 19.0
+        },
+        {
+          "period1": 15,
+          "period2": 36,
+          "performance": 19.0
+        },
+        {
+          "period1": 15,
+          "period2": 38,
+          "performance": 23.0
+        },
+        {
+          "period1": 15,
+          "period2": 40,
+          "performance": 21.0
+        },
+        {
+          "period1": 15,
+          "period2": 42,
+          "performance": 21.0
+        },
+        {
+          "period1": 15,
+          "period2": 44,
+          "performance": 22.0
+        },
+        {
+          "period1": 15,
+          "period2": 46,
+          "performance": 21.0
+        },
+        {
+          "period1": 15,
+          "period2": 48,
+          "performance": 25.0
+        },
+        {
+          "period1": 16,
+          "period2": 18,
+          "performance": 5.0
+        },
+        {
+          "period1": 16,
+          "period2": 20,
+          "performance": 5.0
+        },
+        {
+          "period1": 16,
+          "period2": 22,
+          "performance": 9.0
+        },
+        {
+          "period1": 16,
+          "period2": 24,
+          "performance": 10.0
+        },
+        {
+          "period1": 16,
+          "period2": 26,
+          "performance": 13.0
+        },
+        {
+          "period1": 16,
+          "period2": 28,
+          "performance": 19.0
+        },
+        {
+          "period1": 16,
+          "period2": 30,
+          "performance": 22.0
+        },
+        {
+          "period1": 16,
+          "period2": 32,
+          "performance": 23.0
+        },
+        {
+          "period1": 16,
+          "period2": 34,
+          "performance": 22.0
+        },
+        {
+          "period1": 16,
+          "period2": 36,
+          "performance": 24.0
+        },
+        {
+          "period1": 16,
+          "period2": 38,
+          "performance": 22.0
+        },
+        {
+          "period1": 16,
+          "period2": 40,
+          "performance": 21.0
+        },
+        {
+          "period1": 16,
+          "period2": 42,
+          "performance": 22.0
+        },
+        {
+          "period1": 16,
+          "period2": 44,
+          "performance": 22.0
+        },
+        {
+          "period1": 16,
+          "period2": 46,
+          "performance": 24.0
+        },
+        {
+          "period1": 16,
+          "period2": 48,
+          "performance": 24.0
+        },
+        {
+          "period1": 17,
+          "period2": 18,
+          "performance": 6.0
+        },
+        {
+          "period1": 17,
+          "period2": 20,
+          "performance": 6.0
+        },
+        {
+          "period1": 17,
+          "period2": 22,
+          "performance": 9.0
+        },
+        {
+          "period1": 17,
+          "period2": 24,
+          "performance": 11.0
+        },
+        {
+          "period1": 17,
+          "period2": 26,
+          "performance": 17.0
+        },
+        {
+          "period1": 17,
+          "period2": 28,
+          "performance": 22.0
+        },
+        {
+          "period1": 17,
+          "period2": 30,
+          "performance": 24.0
+        },
+        {
+          "period1": 17,
+          "period2": 32,
+          "performance": 22.0
+        },
+        {
+          "period1": 17,
+          "period2": 34,
+          "performance": 22.0
+        },
+        {
+          "period1": 17,
+          "period2": 36,
+          "performance": 22.0
+        },
+        {
+          "period1": 17,
+          "period2": 38,
+          "performance": 22.0
+        },
+        {
+          "period1": 17,
+          "period2": 40,
+          "performance": 22.0
+        },
+        {
+          "period1": 17,
+          "period2": 42,
+          "performance": 22.0
+        },
+        {
+          "period1": 17,
+          "period2": 44,
+          "performance": 23.0
+        },
+        {
+          "period1": 17,
+          "period2": 46,
+          "performance": 23.0
+        },
+        {
+          "period1": 17,
+          "period2": 48,
+          "performance": 25.0
+        },
+        {
+          "period1": 18,
+          "period2": 20,
+          "performance": 8.0
+        },
+        {
+          "period1": 18,
+          "period2": 22,
+          "performance": 11.0
+        },
+        {
+          "period1": 18,
+          "period2": 24,
+          "performance": 14.0
+        },
+        {
+          "period1": 18,
+          "period2": 26,
+          "performance": 20.0
+        },
+        {
+          "period1": 18,
+          "period2": 28,
+          "performance": 23.0
+        },
+        {
+          "period1": 18,
+          "period2": 30,
+          "performance": 24.0
+        },
+        {
+          "period1": 18,
+          "period2": 32,
+          "performance": 22.0
+        },
+        {
+          "period1": 18,
+          "period2": 34,
+          "performance": 23.0
+        },
+        {
+          "period1": 18,
+          "period2": 36,
+          "performance": 22.0
+        },
+        {
+          "period1": 18,
+          "period2": 38,
+          "performance": 22.0
+        },
+        {
+          "period1": 18,
+          "period2": 40,
+          "performance": 22.0
+        },
+        {
+          "period1": 18,
+          "period2": 42,
+          "performance": 23.0
+        },
+        {
+          "period1": 18,
+          "period2": 44,
+          "performance": 23.0
+        },
+        {
+          "period1": 18,
+          "period2": 46,
+          "performance": 23.0
+        },
+        {
+          "period1": 18,
+          "period2": 48,
+          "performance": 24.0
+        },
+        {
+          "period1": 19,
+          "period2": 20,
+          "performance": 9.0
+        },
+        {
+          "period1": 19,
+          "period2": 22,
+          "performance": 13.0
+        },
+        {
+          "period1": 19,
+          "period2": 24,
+          "performance": 16.0
+        },
+        {
+          "period1": 19,
+          "period2": 26,
+          "performance": 23.0
+        },
+        {
+          "period1": 19,
+          "period2": 28,
+          "performance": 22.0
+        },
+        {
+          "period1": 19,
+          "period2": 30,
+          "performance": 24.0
+        },
+        {
+          "period1": 19,
+          "period2": 32,
+          "performance": 23.0
+        },
+        {
+          "period1": 19,
+          "period2": 34,
+          "performance": 22.0
+        },
+        {
+          "period1": 19,
+          "period2": 36,
+          "performance": 23.0
+        },
+        {
+          "period1": 19,
+          "period2": 38,
+          "performance": 22.0
+        },
+        {
+          "period1": 19,
+          "period2": 40,
+          "performance": 21.0
+        },
+        {
+          "period1": 19,
+          "period2": 42,
+          "performance": 22.0
+        },
+        {
+          "period1": 19,
+          "period2": 44,
+          "performance": 22.0
+        },
+        {
+          "period1": 19,
+          "period2": 46,
+          "performance": 26.0
+        },
+        {
+          "period1": 19,
+          "period2": 48,
+          "performance": 25.0
+        },
+        {
+          "period1": 20,
+          "period2": 22,
+          "performance": 15.0
+        },
+        {
+          "period1": 20,
+          "period2": 24,
+          "performance": 23.0
+        },
+        {
+          "period1": 20,
+          "period2": 26,
+          "performance": 24.0
+        },
+        {
+          "period1": 20,
+          "period2": 28,
+          "performance": 24.0
+        },
+        {
+          "period1": 20,
+          "period2": 30,
+          "performance": 23.0
+        },
+        {
+          "period1": 20,
+          "period2": 32,
+          "performance": 23.0
+        },
+        {
+          "period1": 20,
+          "period2": 34,
+          "performance": 23.0
+        },
+        {
+          "period1": 20,
+          "period2": 36,
+          "performance": 22.0
+        },
+        {
+          "period1": 20,
+          "period2": 38,
+          "performance": 21.0
+        },
+        {
+          "period1": 20,
+          "period2": 40,
+          "performance": 21.0
+        },
+        {
+          "period1": 20,
+          "period2": 42,
+          "performance": 23.0
+        },
+        {
+          "period1": 20,
+          "period2": 44,
+          "performance": 24.0
+        },
+        {
+          "period1": 20,
+          "period2": 46,
+          "performance": 25.0
+        },
+        {
+          "period1": 20,
+          "period2": 48,
+          "performance": 25.0
+        },
+        {
+          "period1": 21,
+          "period2": 22,
+          "performance": 16.0
+        },
+        {
+          "period1": 21,
+          "period2": 24,
+          "performance": 23.0
+        },
+        {
+          "period1": 21,
+          "period2": 26,
+          "performance": 24.0
+        },
+        {
+          "period1": 21,
+          "period2": 28,
+          "performance": 24.0
+        },
+        {
+          "period1": 21,
+          "period2": 30,
+          "performance": 23.0
+        },
+        {
+          "period1": 21,
+          "period2": 32,
+          "performance": 24.0
+        },
+        {
+          "period1": 21,
+          "period2": 34,
+          "performance": 23.0
+        },
+        {
+          "period1": 21,
+          "period2": 36,
+          "performance": 21.0
+        },
+        {
+          "period1": 21,
+          "period2": 38,
+          "performance": 22.0
+        },
+        {
+          "period1": 21,
+          "period2": 40,
+          "performance": 23.0
+        },
+        {
+          "period1": 21,
+          "period2": 42,
+          "performance": 24.0
+        },
+        {
+          "period1": 21,
+          "period2": 44,
+          "performance": 26.0
+        },
+        {
+          "period1": 21,
+          "period2": 46,
+          "performance": 25.0
+        },
+        {
+          "period1": 21,
+          "period2": 48,
+          "performance": 25.0
+        },
+        {
+          "period1": 22,
+          "period2": 24,
+          "performance": 24.0
+        },
+        {
+          "period1": 22,
+          "period2": 26,
+          "performance": 24.0
+        },
+        {
+          "period1": 22,
+          "period2": 28,
+          "performance": 23.0
+        },
+        {
+          "period1": 22,
+          "period2": 30,
+          "performance": 23.0
+        },
+        {
+          "period1": 22,
+          "period2": 32,
+          "performance": 24.0
+        },
+        {
+          "period1": 22,
+          "period2": 34,
+          "performance": 21.0
+        },
+        {
+          "period1": 22,
+          "period2": 36,
+          "performance": 22.0
+        },
+        {
+          "period1": 22,
+          "period2": 38,
+          "performance": 22.0
+        },
+        {
+          "period1": 22,
+          "period2": 40,
+          "performance": 24.0
+        },
+        {
+          "period1": 22,
+          "period2": 42,
+          "performance": 25.0
+        },
+        {
+          "period1": 22,
+          "period2": 44,
+          "performance": 25.0
+        },
+        {
+          "period1": 22,
+          "period2": 46,
+          "performance": 24.0
+        },
+        {
+          "period1": 22,
+          "period2": 48,
+          "performance": 26.0
+        },
+        {
+          "period1": 23,
+          "period2": 24,
+          "performance": 24.0
+        },
+        {
+          "period1": 23,
+          "period2": 26,
+          "performance": 24.0
+        },
+        {
+          "period1": 23,
+          "period2": 28,
+          "performance": 22.0
+        },
+        {
+          "period1": 23,
+          "period2": 30,
+          "performance": 24.0
+        },
+        {
+          "period1": 23,
+          "period2": 32,
+          "performance": 23.0
+        },
+        {
+          "period1": 23,
+          "period2": 34,
+          "performance": 22.0
+        },
+        {
+          "period1": 23,
+          "period2": 36,
+          "performance": 22.0
+        },
+        {
+          "period1": 23,
+          "period2": 38,
+          "performance": 24.0
+        },
+        {
+          "period1": 23,
+          "period2": 40,
+          "performance": 24.0
+        },
+        {
+          "period1": 23,
+          "period2": 42,
+          "performance": 26.0
+        },
+        {
+          "period1": 23,
+          "period2": 44,
+          "performance": 24.0
+        },
+        {
+          "period1": 23,
+          "period2": 46,
+          "performance": 26.0
+        },
+        {
+          "period1": 23,
+          "period2": 48,
+          "performance": 27.0
+        },
+        {
+          "period1": 24,
+          "period2": 26,
+          "performance": 23.0
+        },
+        {
+          "period1": 24,
+          "period2": 28,
+          "performance": 24.0
+        },
+        {
+          "period1": 24,
+          "period2": 30,
+          "performance": 24.0
+        },
+        {
+          "period1": 24,
+          "period2": 32,
+          "performance": 23.0
+        },
+        {
+          "period1": 24,
+          "period2": 34,
+          "performance": 22.0
+        },
+        {
+          "period1": 24,
+          "period2": 36,
+          "performance": 24.0
+        },
+        {
+          "period1": 24,
+          "period2": 38,
+          "performance": 24.0
+        },
+        {
+          "period1": 24,
+          "period2": 40,
+          "performance": 25.0
+        },
+        {
+          "period1": 24,
+          "period2": 42,
+          "performance": 24.0
+        },
+        {
+          "period1": 24,
+          "period2": 44,
+          "performance": 26.0
+        },
+        {
+          "period1": 24,
+          "period2": 46,
+          "performance": 25.0
+        },
+        {
+          "period1": 24,
+          "period2": 48,
+          "performance": 26.0
+        },
+        {
+          "period1": 25,
+          "period2": 26,
+          "performance": 22.0
+        },
+        {
+          "period1": 25,
+          "period2": 28,
+          "performance": 24.0
+        },
+        {
+          "period1": 25,
+          "period2": 30,
+          "performance": 23.0
+        },
+        {
+          "period1": 25,
+          "period2": 32,
+          "performance": 22.0
+        },
+        {
+          "period1": 25,
+          "period2": 34,
+          "performance": 22.0
+        },
+        {
+          "period1": 25,
+          "period2": 36,
+          "performance": 24.0
+        },
+        {
+          "period1": 25,
+          "period2": 38,
+          "performance": 24.0
+        },
+        {
+          "period1": 25,
+          "period2": 40,
+          "performance": 25.0
+        },
+        {
+          "period1": 25,
+          "period2": 42,
+          "performance": 23.0
+        },
+        {
+          "period1": 25,
+          "period2": 44,
+          "performance": 25.0
+        },
+        {
+          "period1": 25,
+          "period2": 46,
+          "performance": 25.0
+        },
+        {
+          "period1": 25,
+          "period2": 48,
+          "performance": 26.0
+        },
+        {
+          "period1": 26,
+          "period2": 28,
+          "performance": 23.0
+        },
+        {
+          "period1": 26,
+          "period2": 30,
+          "performance": 23.0
+        },
+        {
+          "period1": 26,
+          "period2": 32,
+          "performance": 22.0
+        },
+        {
+          "period1": 26,
+          "period2": 34,
+          "performance": 24.0
+        },
+        {
+          "period1": 26,
+          "period2": 36,
+          "performance": 24.0
+        },
+        {
+          "period1": 26,
+          "period2": 38,
+          "performance": 24.0
+        },
+        {
+          "period1": 26,
+          "period2": 40,
+          "performance": 23.0
+        },
+        {
+          "period1": 26,
+          "period2": 42,
+          "performance": 23.0
+        },
+        {
+          "period1": 26,
+          "period2": 44,
+          "performance": 25.0
+        },
+        {
+          "period1": 26,
+          "period2": 46,
+          "performance": 26.0
+        },
+        {
+          "period1": 26,
+          "period2": 48,
+          "performance": 25.0
+        },
+        {
+          "period1": 27,
+          "period2": 28,
+          "performance": 24.0
+        },
+        {
+          "period1": 27,
+          "period2": 30,
+          "performance": 22.0
+        },
+        {
+          "period1": 27,
+          "period2": 32,
+          "performance": 22.0
+        },
+        {
+          "period1": 27,
+          "period2": 34,
+          "performance": 24.0
+        },
+        {
+          "period1": 27,
+          "period2": 36,
+          "performance": 23.0
+        },
+        {
+          "period1": 27,
+          "period2": 38,
+          "performance": 23.0
+        },
+        {
+          "period1": 27,
+          "period2": 40,
+          "performance": 25.0
+        },
+        {
+          "period1": 27,
+          "period2": 42,
+          "performance": 25.0
+        },
+        {
+          "period1": 27,
+          "period2": 44,
+          "performance": 26.0
+        },
+        {
+          "period1": 27,
+          "period2": 46,
+          "performance": 26.0
+        },
+        {
+          "period1": 27,
+          "period2": 48,
+          "performance": 24.0
+        },
+        {
+          "period1": 28,
+          "period2": 30,
+          "performance": 22.0
+        },
+        {
+          "period1": 28,
+          "period2": 32,
+          "performance": 23.0
+        },
+        {
+          "period1": 28,
+          "period2": 34,
+          "performance": 24.0
+        },
+        {
+          "period1": 28,
+          "period2": 36,
+          "performance": 24.0
+        },
+        {
+          "period1": 28,
+          "period2": 38,
+          "performance": 23.0
+        },
+        {
+          "period1": 28,
+          "period2": 40,
+          "performance": 23.0
+        },
+        {
+          "period1": 28,
+          "period2": 42,
+          "performance": 25.0
+        },
+        {
+          "period1": 28,
+          "period2": 44,
+          "performance": 26.0
+        },
+        {
+          "period1": 28,
+          "period2": 46,
+          "performance": 25.0
+        },
+        {
+          "period1": 28,
+          "period2": 48,
+          "performance": 23.0
+        },
+        {
+          "period1": 29,
+          "period2": 30,
+          "performance": 22.0
+        },
+        {
+          "period1": 29,
+          "period2": 32,
+          "performance": 24.0
+        },
+        {
+          "period1": 29,
+          "period2": 34,
+          "performance": 23.0
+        },
+        {
+          "period1": 29,
+          "period2": 36,
+          "performance": 23.0
+        },
+        {
+          "period1": 29,
+          "period2": 38,
+          "performance": 25.0
+        },
+        {
+          "period1": 29,
+          "period2": 40,
+          "performance": 25.0
+        },
+        {
+          "period1": 29,
+          "period2": 42,
+          "performance": 26.0
+        },
+        {
+          "period1": 29,
+          "period2": 44,
+          "performance": 25.0
+        },
+        {
+          "period1": 29,
+          "period2": 46,
+          "performance": 24.0
+        },
+        {
+          "period1": 29,
+          "period2": 48,
+          "performance": 24.0
+        }
+      ],
+      "best_performance": 27.0,
+      "best_params": {
+        "period1": 23,
+        "period2": 48,
+        "performance": 27.0
+      }
+    },
+    "bollinger_bands": {
+      "all_results": [
+        {
+          "n": 10,
+          "k": 1.0,
+          "performance": -9.0
+        },
+        {
+          "n": 10,
+          "k": 1.5,
+          "performance": -4.0
+        },
+        {
+          "n": 10,
+          "k": 2.0,
+          "performance": -14.0
+        },
+        {
+          "n": 10,
+          "k": 2.5,
+          "performance": -1.0
+        },
+        {
+          "n": 10,
+          "k": 3.0,
+          "performance": 18.0
+        },
+        {
+          "n": 15,
+          "k": 1.0,
+          "performance": -4.0
+        },
+        {
+          "n": 15,
+          "k": 1.5,
+          "performance": -3.0
+        },
+        {
+          "n": 15,
+          "k": 2.0,
+          "performance": 2.0
+        },
+        {
+          "n": 15,
+          "k": 2.5,
+          "performance": -5.0
+        },
+        {
+          "n": 15,
+          "k": 3.0,
+          "performance": -12.0
+        },
+        {
+          "n": 20,
+          "k": 1.0,
+          "performance": -4.0
+        },
+        {
+          "n": 20,
+          "k": 1.5,
+          "performance": -4.0
+        },
+        {
+          "n": 20,
+          "k": 2.0,
+          "performance": -4.0
+        },
+        {
+          "n": 20,
+          "k": 2.5,
+          "performance": 9.0
+        },
+        {
+          "n": 20,
+          "k": 3.0,
+          "performance": -6.0
+        },
+        {
+          "n": 25,
+          "k": 1.0,
+          "performance": -8.0
+        },
+        {
+          "n": 25,
+          "k": 1.5,
+          "performance": -3.0
+        },
+        {
+          "n": 25,
+          "k": 2.0,
+          "performance": 0
+        },
+        {
+          "n": 25,
+          "k": 2.5,
+          "performance": 2.0
+        },
+        {
+          "n": 25,
+          "k": 3.0,
+          "performance": -12.0
+        },
+        {
+          "n": 30,
+          "k": 1.0,
+          "performance": -9.0
+        },
+        {
+          "n": 30,
+          "k": 1.5,
+          "performance": -4.0
+        },
+        {
+          "n": 30,
+          "k": 2.0,
+          "performance": -1.0
+        },
+        {
+          "n": 30,
+          "k": 2.5,
+          "performance": -2.0
+        },
+        {
+          "n": 30,
+          "k": 3.0,
+          "performance": 18.0
+        },
+        {
+          "n": 35,
+          "k": 1.0,
+          "performance": 0
+        },
+        {
+          "n": 35,
+          "k": 1.5,
+          "performance": -3.0
+        },
+        {
+          "n": 35,
+          "k": 2.0,
+          "performance": 0
+        },
+        {
+          "n": 35,
+          "k": 2.5,
+          "performance": 14.0
+        },
+        {
+          "n": 35,
+          "k": 3.0,
+          "performance": 9.0
+        },
+        {
+          "n": 40,
+          "k": 1.0,
+          "performance": 3.0
+        },
+        {
+          "n": 40,
+          "k": 1.5,
+          "performance": -1.0
+        },
+        {
+          "n": 40,
+          "k": 2.0,
+          "performance": -8.0
+        },
+        {
+          "n": 40,
+          "k": 2.5,
+          "performance": 2.0
+        },
+        {
+          "n": 40,
+          "k": 3.0,
+          "performance": -3.0
+        },
+        {
+          "n": 45,
+          "k": 1.0,
+          "performance": 3.0
+        },
+        {
+          "n": 45,
+          "k": 1.5,
+          "performance": -3.0
+        },
+        {
+          "n": 45,
+          "k": 2.0,
+          "performance": -9.0
+        },
+        {
+          "n": 45,
+          "k": 2.5,
+          "performance": -7.0
+        },
+        {
+          "n": 45,
+          "k": 3.0,
+          "performance": -2.0
+        }
+      ],
+      "best_performance": 18.0,
+      "best_params": {
+        "n": 10,
+        "k": 3.0,
+        "performance": 18.0
+      }
+    },
+    "rsi": {
+      "all_results": [
+        {
+          "period": 7,
+          "buy_threshold": 20,
+          "sell_threshold": 60,
+          "performance": 7.0
+        },
+        {
+          "period": 7,
+          "buy_threshold": 20,
+          "sell_threshold": 65,
+          "performance": 7.0
+        },
+        {
+          "period": 7,
+          "buy_threshold": 20,
+          "sell_threshold": 70,
+          "performance": 7.0
+        },
+        {
+          "period": 7,
+          "buy_threshold": 20,
+          "sell_threshold": 75,
+          "performance": 9.0
+        },
+        {
+          "period": 7,
+          "buy_threshold": 20,
+          "sell_threshold": 80,
+          "performance": 12.0
+        },
+        {
+          "period": 7,
+          "buy_threshold": 25,
+          "sell_threshold": 60,
+          "performance": 7.0
+        },
+        {
+          "period": 7,
+          "buy_threshold": 25,
+          "sell_threshold": 65,
+          "performance": 7.0
+        },
+        {
+          "period": 7,
+          "buy_threshold": 25,
+          "sell_threshold": 70,
+          "performance": 6.0
+        },
+        {
+          "period": 7,
+          "buy_threshold": 25,
+          "sell_threshold": 75,
+          "performance": 8.0
+        },
+        {
+          "period": 7,
+          "buy_threshold": 25,
+          "sell_threshold": 80,
+          "performance": 13.0
+        },
+        {
+          "period": 7,
+          "buy_threshold": 30,
+          "sell_threshold": 60,
+          "performance": -6.0
+        },
+        {
+          "period": 7,
+          "buy_threshold": 30,
+          "sell_threshold": 65,
+          "performance": -6.0
+        },
+        {
+          "period": 7,
+          "buy_threshold": 30,
+          "sell_threshold": 70,
+          "performance": -8.0
+        },
+        {
+          "period": 7,
+          "buy_threshold": 30,
+          "sell_threshold": 75,
+          "performance": -6.0
+        },
+        {
+          "period": 7,
+          "buy_threshold": 30,
+          "sell_threshold": 80,
+          "performance": 0
+        },
+        {
+          "period": 7,
+          "buy_threshold": 35,
+          "sell_threshold": 60,
+          "performance": -9.0
+        },
+        {
+          "period": 7,
+          "buy_threshold": 35,
+          "sell_threshold": 65,
+          "performance": -6.0
+        },
+        {
+          "period": 7,
+          "buy_threshold": 35,
+          "sell_threshold": 70,
+          "performance": -7.0
+        },
+        {
+          "period": 7,
+          "buy_threshold": 35,
+          "sell_threshold": 75,
+          "performance": -5.0
+        },
+        {
+          "period": 7,
+          "buy_threshold": 35,
+          "sell_threshold": 80,
+          "performance": 2.0
+        },
+        {
+          "period": 8,
+          "buy_threshold": 20,
+          "sell_threshold": 60,
+          "performance": 5.0
+        },
+        {
+          "period": 8,
+          "buy_threshold": 20,
+          "sell_threshold": 65,
+          "performance": 5.0
+        },
+        {
+          "period": 8,
+          "buy_threshold": 20,
+          "sell_threshold": 70,
+          "performance": 5.0
+        },
+        {
+          "period": 8,
+          "buy_threshold": 20,
+          "sell_threshold": 75,
+          "performance": 10.0
+        },
+        {
+          "period": 8,
+          "buy_threshold": 20,
+          "sell_threshold": 80,
+          "performance": 0
+        },
+        {
+          "period": 8,
+          "buy_threshold": 25,
+          "sell_threshold": 60,
+          "performance": 6.0
+        },
+        {
+          "period": 8,
+          "buy_threshold": 25,
+          "sell_threshold": 65,
+          "performance": 5.0
+        },
+        {
+          "period": 8,
+          "buy_threshold": 25,
+          "sell_threshold": 70,
+          "performance": 5.0
+        },
+        {
+          "period": 8,
+          "buy_threshold": 25,
+          "sell_threshold": 75,
+          "performance": 12.0
+        },
+        {
+          "period": 8,
+          "buy_threshold": 25,
+          "sell_threshold": 80,
+          "performance": 2.0
+        },
+        {
+          "period": 8,
+          "buy_threshold": 30,
+          "sell_threshold": 60,
+          "performance": -4.0
+        },
+        {
+          "period": 8,
+          "buy_threshold": 30,
+          "sell_threshold": 65,
+          "performance": -4.0
+        },
+        {
+          "period": 8,
+          "buy_threshold": 30,
+          "sell_threshold": 70,
+          "performance": -4.0
+        },
+        {
+          "period": 8,
+          "buy_threshold": 30,
+          "sell_threshold": 75,
+          "performance": 3.0
+        },
+        {
+          "period": 8,
+          "buy_threshold": 30,
+          "sell_threshold": 80,
+          "performance": 4.0
+        },
+        {
+          "period": 8,
+          "buy_threshold": 35,
+          "sell_threshold": 60,
+          "performance": -8.0
+        },
+        {
+          "period": 8,
+          "buy_threshold": 35,
+          "sell_threshold": 65,
+          "performance": -7.0
+        },
+        {
+          "period": 8,
+          "buy_threshold": 35,
+          "sell_threshold": 70,
+          "performance": -7.0
+        },
+        {
+          "period": 8,
+          "buy_threshold": 35,
+          "sell_threshold": 75,
+          "performance": 2.0
+        },
+        {
+          "period": 8,
+          "buy_threshold": 35,
+          "sell_threshold": 80,
+          "performance": 3.0
+        },
+        {
+          "period": 9,
+          "buy_threshold": 20,
+          "sell_threshold": 60,
+          "performance": 3.0
+        },
+        {
+          "period": 9,
+          "buy_threshold": 20,
+          "sell_threshold": 65,
+          "performance": 3.0
+        },
+        {
+          "period": 9,
+          "buy_threshold": 20,
+          "sell_threshold": 70,
+          "performance": 5.0
+        },
+        {
+          "period": 9,
+          "buy_threshold": 20,
+          "sell_threshold": 75,
+          "performance": 9.0
+        },
+        {
+          "period": 9,
+          "buy_threshold": 20,
+          "sell_threshold": 80,
+          "performance": 9.0
+        },
+        {
+          "period": 9,
+          "buy_threshold": 25,
+          "sell_threshold": 60,
+          "performance": 2.0
+        },
+        {
+          "period": 9,
+          "buy_threshold": 25,
+          "sell_threshold": 65,
+          "performance": 2.0
+        },
+        {
+          "period": 9,
+          "buy_threshold": 25,
+          "sell_threshold": 70,
+          "performance": 4.0
+        },
+        {
+          "period": 9,
+          "buy_threshold": 25,
+          "sell_threshold": 75,
+          "performance": 7.0
+        },
+        {
+          "period": 9,
+          "buy_threshold": 25,
+          "sell_threshold": 80,
+          "performance": -3.0
+        },
+        {
+          "period": 9,
+          "buy_threshold": 30,
+          "sell_threshold": 60,
+          "performance": 4.0
+        },
+        {
+          "period": 9,
+          "buy_threshold": 30,
+          "sell_threshold": 65,
+          "performance": 3.0
+        },
+        {
+          "period": 9,
+          "buy_threshold": 30,
+          "sell_threshold": 70,
+          "performance": 6.0
+        },
+        {
+          "period": 9,
+          "buy_threshold": 30,
+          "sell_threshold": 75,
+          "performance": 12.0
+        },
+        {
+          "period": 9,
+          "buy_threshold": 30,
+          "sell_threshold": 80,
+          "performance": 4.0
+        },
+        {
+          "period": 9,
+          "buy_threshold": 35,
+          "sell_threshold": 60,
+          "performance": -7.0
+        },
+        {
+          "period": 9,
+          "buy_threshold": 35,
+          "sell_threshold": 65,
+          "performance": -9.0
+        },
+        {
+          "period": 9,
+          "buy_threshold": 35,
+          "sell_threshold": 70,
+          "performance": -7.0
+        },
+        {
+          "period": 9,
+          "buy_threshold": 35,
+          "sell_threshold": 75,
+          "performance": 1.0
+        },
+        {
+          "period": 9,
+          "buy_threshold": 35,
+          "sell_threshold": 80,
+          "performance": 1.0
+        },
+        {
+          "period": 10,
+          "buy_threshold": 20,
+          "sell_threshold": 60,
+          "performance": 2.0
+        },
+        {
+          "period": 10,
+          "buy_threshold": 20,
+          "sell_threshold": 65,
+          "performance": 2.0
+        },
+        {
+          "period": 10,
+          "buy_threshold": 20,
+          "sell_threshold": 70,
+          "performance": 2.0
+        },
+        {
+          "period": 10,
+          "buy_threshold": 20,
+          "sell_threshold": 75,
+          "performance": 1.0
+        },
+        {
+          "period": 10,
+          "buy_threshold": 20,
+          "sell_threshold": 80,
+          "performance": 8.0
+        },
+        {
+          "period": 10,
+          "buy_threshold": 25,
+          "sell_threshold": 60,
+          "performance": 2.0
+        },
+        {
+          "period": 10,
+          "buy_threshold": 25,
+          "sell_threshold": 65,
+          "performance": 2.0
+        },
+        {
+          "period": 10,
+          "buy_threshold": 25,
+          "sell_threshold": 70,
+          "performance": 2.0
+        },
+        {
+          "period": 10,
+          "buy_threshold": 25,
+          "sell_threshold": 75,
+          "performance": -3.0
+        },
+        {
+          "period": 10,
+          "buy_threshold": 25,
+          "sell_threshold": 80,
+          "performance": 4.0
+        },
+        {
+          "period": 10,
+          "buy_threshold": 30,
+          "sell_threshold": 60,
+          "performance": 3.0
+        },
+        {
+          "period": 10,
+          "buy_threshold": 30,
+          "sell_threshold": 65,
+          "performance": 3.0
+        },
+        {
+          "period": 10,
+          "buy_threshold": 30,
+          "sell_threshold": 70,
+          "performance": 5.0
+        },
+        {
+          "period": 10,
+          "buy_threshold": 30,
+          "sell_threshold": 75,
+          "performance": 2.0
+        },
+        {
+          "period": 10,
+          "buy_threshold": 30,
+          "sell_threshold": 80,
+          "performance": 4.0
+        },
+        {
+          "period": 10,
+          "buy_threshold": 35,
+          "sell_threshold": 60,
+          "performance": -6.0
+        },
+        {
+          "period": 10,
+          "buy_threshold": 35,
+          "sell_threshold": 65,
+          "performance": -7.0
+        },
+        {
+          "period": 10,
+          "buy_threshold": 35,
+          "sell_threshold": 70,
+          "performance": -4.0
+        },
+        {
+          "period": 10,
+          "buy_threshold": 35,
+          "sell_threshold": 75,
+          "performance": 2.0
+        },
+        {
+          "period": 10,
+          "buy_threshold": 35,
+          "sell_threshold": 80,
+          "performance": 3.0
+        },
+        {
+          "period": 11,
+          "buy_threshold": 20,
+          "sell_threshold": 60,
+          "performance": 2.0
+        },
+        {
+          "period": 11,
+          "buy_threshold": 20,
+          "sell_threshold": 65,
+          "performance": 2.0
+        },
+        {
+          "period": 11,
+          "buy_threshold": 20,
+          "sell_threshold": 70,
+          "performance": 1.0
+        },
+        {
+          "period": 11,
+          "buy_threshold": 20,
+          "sell_threshold": 75,
+          "performance": 8.0
+        },
+        {
+          "period": 11,
+          "buy_threshold": 20,
+          "sell_threshold": 80,
+          "performance": 8.0
+        },
+        {
+          "period": 11,
+          "buy_threshold": 25,
+          "sell_threshold": 60,
+          "performance": 3.0
+        },
+        {
+          "period": 11,
+          "buy_threshold": 25,
+          "sell_threshold": 65,
+          "performance": 5.0
+        },
+        {
+          "period": 11,
+          "buy_threshold": 25,
+          "sell_threshold": 70,
+          "performance": 8.0
+        },
+        {
+          "period": 11,
+          "buy_threshold": 25,
+          "sell_threshold": 75,
+          "performance": 7.0
+        },
+        {
+          "period": 11,
+          "buy_threshold": 25,
+          "sell_threshold": 80,
+          "performance": 7.0
+        },
+        {
+          "period": 11,
+          "buy_threshold": 30,
+          "sell_threshold": 60,
+          "performance": 0
+        },
+        {
+          "period": 11,
+          "buy_threshold": 30,
+          "sell_threshold": 65,
+          "performance": 2.0
+        },
+        {
+          "period": 11,
+          "buy_threshold": 30,
+          "sell_threshold": 70,
+          "performance": 5.0
+        },
+        {
+          "period": 11,
+          "buy_threshold": 30,
+          "sell_threshold": 75,
+          "performance": 4.0
+        },
+        {
+          "period": 11,
+          "buy_threshold": 30,
+          "sell_threshold": 80,
+          "performance": 4.0
+        },
+        {
+          "period": 11,
+          "buy_threshold": 35,
+          "sell_threshold": 60,
+          "performance": 0
+        },
+        {
+          "period": 11,
+          "buy_threshold": 35,
+          "sell_threshold": 65,
+          "performance": 1.0
+        },
+        {
+          "period": 11,
+          "buy_threshold": 35,
+          "sell_threshold": 70,
+          "performance": 8.0
+        },
+        {
+          "period": 11,
+          "buy_threshold": 35,
+          "sell_threshold": 75,
+          "performance": 2.0
+        },
+        {
+          "period": 11,
+          "buy_threshold": 35,
+          "sell_threshold": 80,
+          "performance": 1.0
+        },
+        {
+          "period": 12,
+          "buy_threshold": 20,
+          "sell_threshold": 60,
+          "performance": 2.0
+        },
+        {
+          "period": 12,
+          "buy_threshold": 20,
+          "sell_threshold": 65,
+          "performance": 2.0
+        },
+        {
+          "period": 12,
+          "buy_threshold": 20,
+          "sell_threshold": 70,
+          "performance": 1.0
+        },
+        {
+          "period": 12,
+          "buy_threshold": 20,
+          "sell_threshold": 75,
+          "performance": 8.0
+        },
+        {
+          "period": 12,
+          "buy_threshold": 20,
+          "sell_threshold": 80,
+          "performance": 8.0
+        },
+        {
+          "period": 12,
+          "buy_threshold": 25,
+          "sell_threshold": 60,
+          "performance": 1.0
+        },
+        {
+          "period": 12,
+          "buy_threshold": 25,
+          "sell_threshold": 65,
+          "performance": 3.0
+        },
+        {
+          "period": 12,
+          "buy_threshold": 25,
+          "sell_threshold": 70,
+          "performance": 7.0
+        },
+        {
+          "period": 12,
+          "buy_threshold": 25,
+          "sell_threshold": 75,
+          "performance": 14.0
+        },
+        {
+          "period": 12,
+          "buy_threshold": 25,
+          "sell_threshold": 80,
+          "performance": 24.0
+        },
+        {
+          "period": 12,
+          "buy_threshold": 30,
+          "sell_threshold": 60,
+          "performance": 0
+        },
+        {
+          "period": 12,
+          "buy_threshold": 30,
+          "sell_threshold": 65,
+          "performance": 0
+        },
+        {
+          "period": 12,
+          "buy_threshold": 30,
+          "sell_threshold": 70,
+          "performance": 5.0
+        },
+        {
+          "period": 12,
+          "buy_threshold": 30,
+          "sell_threshold": 75,
+          "performance": 4.0
+        },
+        {
+          "period": 12,
+          "buy_threshold": 30,
+          "sell_threshold": 80,
+          "performance": 14.0
+        },
+        {
+          "period": 12,
+          "buy_threshold": 35,
+          "sell_threshold": 60,
+          "performance": 3.0
+        },
+        {
+          "period": 12,
+          "buy_threshold": 35,
+          "sell_threshold": 65,
+          "performance": 4.0
+        },
+        {
+          "period": 12,
+          "buy_threshold": 35,
+          "sell_threshold": 70,
+          "performance": 11.0
+        },
+        {
+          "period": 12,
+          "buy_threshold": 35,
+          "sell_threshold": 75,
+          "performance": 1.0
+        },
+        {
+          "period": 12,
+          "buy_threshold": 35,
+          "sell_threshold": 80,
+          "performance": 11.0
+        },
+        {
+          "period": 13,
+          "buy_threshold": 20,
+          "sell_threshold": 60,
+          "performance": 2.0
+        },
+        {
+          "period": 13,
+          "buy_threshold": 20,
+          "sell_threshold": 65,
+          "performance": 3.0
+        },
+        {
+          "period": 13,
+          "buy_threshold": 20,
+          "sell_threshold": 70,
+          "performance": 1.0
+        },
+        {
+          "period": 13,
+          "buy_threshold": 20,
+          "sell_threshold": 75,
+          "performance": 8.0
+        },
+        {
+          "period": 13,
+          "buy_threshold": 20,
+          "sell_threshold": 80,
+          "performance": 8.0
+        },
+        {
+          "period": 13,
+          "buy_threshold": 25,
+          "sell_threshold": 60,
+          "performance": 0
+        },
+        {
+          "period": 13,
+          "buy_threshold": 25,
+          "sell_threshold": 65,
+          "performance": 1.0
+        },
+        {
+          "period": 13,
+          "buy_threshold": 25,
+          "sell_threshold": 70,
+          "performance": -1.0
+        },
+        {
+          "period": 13,
+          "buy_threshold": 25,
+          "sell_threshold": 75,
+          "performance": 6.0
+        },
+        {
+          "period": 13,
+          "buy_threshold": 25,
+          "sell_threshold": 80,
+          "performance": 6.0
+        },
+        {
+          "period": 13,
+          "buy_threshold": 30,
+          "sell_threshold": 60,
+          "performance": 0
+        },
+        {
+          "period": 13,
+          "buy_threshold": 30,
+          "sell_threshold": 65,
+          "performance": 2.0
+        },
+        {
+          "period": 13,
+          "buy_threshold": 30,
+          "sell_threshold": 70,
+          "performance": -3.0
+        },
+        {
+          "period": 13,
+          "buy_threshold": 30,
+          "sell_threshold": 75,
+          "performance": 4.0
+        },
+        {
+          "period": 13,
+          "buy_threshold": 30,
+          "sell_threshold": 80,
+          "performance": 14.0
+        },
+        {
+          "period": 13,
+          "buy_threshold": 35,
+          "sell_threshold": 60,
+          "performance": 4.0
+        },
+        {
+          "period": 13,
+          "buy_threshold": 35,
+          "sell_threshold": 65,
+          "performance": 7.0
+        },
+        {
+          "period": 13,
+          "buy_threshold": 35,
+          "sell_threshold": 70,
+          "performance": 2.0
+        },
+        {
+          "period": 13,
+          "buy_threshold": 35,
+          "sell_threshold": 75,
+          "performance": 1.0
+        },
+        {
+          "period": 13,
+          "buy_threshold": 35,
+          "sell_threshold": 80,
+          "performance": 11.0
+        },
+        {
+          "period": 14,
+          "buy_threshold": 20,
+          "sell_threshold": 60,
+          "performance": 2.0
+        },
+        {
+          "period": 14,
+          "buy_threshold": 20,
+          "sell_threshold": 65,
+          "performance": 4.0
+        },
+        {
+          "period": 14,
+          "buy_threshold": 20,
+          "sell_threshold": 70,
+          "performance": 7.0
+        },
+        {
+          "period": 14,
+          "buy_threshold": 20,
+          "sell_threshold": 75,
+          "performance": 8.0
+        },
+        {
+          "period": 14,
+          "buy_threshold": 20,
+          "sell_threshold": 80,
+          "performance": 8.0
+        },
+        {
+          "period": 14,
+          "buy_threshold": 25,
+          "sell_threshold": 60,
+          "performance": 0
+        },
+        {
+          "period": 14,
+          "buy_threshold": 25,
+          "sell_threshold": 65,
+          "performance": 2.0
+        },
+        {
+          "period": 14,
+          "buy_threshold": 25,
+          "sell_threshold": 70,
+          "performance": 5.0
+        },
+        {
+          "period": 14,
+          "buy_threshold": 25,
+          "sell_threshold": 75,
+          "performance": 6.0
+        },
+        {
+          "period": 14,
+          "buy_threshold": 25,
+          "sell_threshold": 80,
+          "performance": 6.0
+        },
+        {
+          "period": 14,
+          "buy_threshold": 30,
+          "sell_threshold": 60,
+          "performance": -1.0
+        },
+        {
+          "period": 14,
+          "buy_threshold": 30,
+          "sell_threshold": 65,
+          "performance": 3.0
+        },
+        {
+          "period": 14,
+          "buy_threshold": 30,
+          "sell_threshold": 70,
+          "performance": 3.0
+        },
+        {
+          "period": 14,
+          "buy_threshold": 30,
+          "sell_threshold": 75,
+          "performance": 4.0
+        },
+        {
+          "period": 14,
+          "buy_threshold": 30,
+          "sell_threshold": 80,
+          "performance": 14.0
+        },
+        {
+          "period": 14,
+          "buy_threshold": 35,
+          "sell_threshold": 60,
+          "performance": -1.0
+        },
+        {
+          "period": 14,
+          "buy_threshold": 35,
+          "sell_threshold": 65,
+          "performance": 4.0
+        },
+        {
+          "period": 14,
+          "buy_threshold": 35,
+          "sell_threshold": 70,
+          "performance": 4.0
+        },
+        {
+          "period": 14,
+          "buy_threshold": 35,
+          "sell_threshold": 75,
+          "performance": 1.0
+        },
+        {
+          "period": 14,
+          "buy_threshold": 35,
+          "sell_threshold": 80,
+          "performance": 11.0
+        },
+        {
+          "period": 15,
+          "buy_threshold": 20,
+          "sell_threshold": 60,
+          "performance": 2.0
+        },
+        {
+          "period": 15,
+          "buy_threshold": 20,
+          "sell_threshold": 65,
+          "performance": 4.0
+        },
+        {
+          "period": 15,
+          "buy_threshold": 20,
+          "sell_threshold": 70,
+          "performance": 7.0
+        },
+        {
+          "period": 15,
+          "buy_threshold": 20,
+          "sell_threshold": 75,
+          "performance": 8.0
+        },
+        {
+          "period": 15,
+          "buy_threshold": 20,
+          "sell_threshold": 80,
+          "performance": 8.0
+        },
+        {
+          "period": 15,
+          "buy_threshold": 25,
+          "sell_threshold": 60,
+          "performance": 0
+        },
+        {
+          "period": 15,
+          "buy_threshold": 25,
+          "sell_threshold": 65,
+          "performance": 2.0
+        },
+        {
+          "period": 15,
+          "buy_threshold": 25,
+          "sell_threshold": 70,
+          "performance": 5.0
+        },
+        {
+          "period": 15,
+          "buy_threshold": 25,
+          "sell_threshold": 75,
+          "performance": 6.0
+        },
+        {
+          "period": 15,
+          "buy_threshold": 25,
+          "sell_threshold": 80,
+          "performance": 6.0
+        },
+        {
+          "period": 15,
+          "buy_threshold": 30,
+          "sell_threshold": 60,
+          "performance": 3.0
+        },
+        {
+          "period": 15,
+          "buy_threshold": 30,
+          "sell_threshold": 65,
+          "performance": 6.0
+        },
+        {
+          "period": 15,
+          "buy_threshold": 30,
+          "sell_threshold": 70,
+          "performance": 6.0
+        },
+        {
+          "period": 15,
+          "buy_threshold": 30,
+          "sell_threshold": 75,
+          "performance": 17.0
+        },
+        {
+          "period": 15,
+          "buy_threshold": 30,
+          "sell_threshold": 80,
+          "performance": 17.0
+        },
+        {
+          "period": 15,
+          "buy_threshold": 35,
+          "sell_threshold": 60,
+          "performance": -1.0
+        },
+        {
+          "period": 15,
+          "buy_threshold": 35,
+          "sell_threshold": 65,
+          "performance": 3.0
+        },
+        {
+          "period": 15,
+          "buy_threshold": 35,
+          "sell_threshold": 70,
+          "performance": 3.0
+        },
+        {
+          "period": 15,
+          "buy_threshold": 35,
+          "sell_threshold": 75,
+          "performance": 14.0
+        },
+        {
+          "period": 15,
+          "buy_threshold": 35,
+          "sell_threshold": 80,
+          "performance": 14.0
+        },
+        {
+          "period": 16,
+          "buy_threshold": 20,
+          "sell_threshold": 60,
+          "performance": 3.0
+        },
+        {
+          "period": 16,
+          "buy_threshold": 20,
+          "sell_threshold": 65,
+          "performance": 1.0
+        },
+        {
+          "period": 16,
+          "buy_threshold": 20,
+          "sell_threshold": 70,
+          "performance": 7.0
+        },
+        {
+          "period": 16,
+          "buy_threshold": 20,
+          "sell_threshold": 75,
+          "performance": 8.0
+        },
+        {
+          "period": 16,
+          "buy_threshold": 20,
+          "sell_threshold": 80,
+          "performance": 8.0
+        },
+        {
+          "period": 16,
+          "buy_threshold": 25,
+          "sell_threshold": 60,
+          "performance": 1.0
+        },
+        {
+          "period": 16,
+          "buy_threshold": 25,
+          "sell_threshold": 65,
+          "performance": -1.0
+        },
+        {
+          "period": 16,
+          "buy_threshold": 25,
+          "sell_threshold": 70,
+          "performance": 5.0
+        },
+        {
+          "period": 16,
+          "buy_threshold": 25,
+          "sell_threshold": 75,
+          "performance": 6.0
+        },
+        {
+          "period": 16,
+          "buy_threshold": 25,
+          "sell_threshold": 80,
+          "performance": 6.0
+        },
+        {
+          "period": 16,
+          "buy_threshold": 30,
+          "sell_threshold": 60,
+          "performance": 4.0
+        },
+        {
+          "period": 16,
+          "buy_threshold": 30,
+          "sell_threshold": 65,
+          "performance": 8.0
+        },
+        {
+          "period": 16,
+          "buy_threshold": 30,
+          "sell_threshold": 70,
+          "performance": 6.0
+        },
+        {
+          "period": 16,
+          "buy_threshold": 30,
+          "sell_threshold": 75,
+          "performance": 17.0
+        },
+        {
+          "period": 16,
+          "buy_threshold": 30,
+          "sell_threshold": 80,
+          "performance": 17.0
+        },
+        {
+          "period": 16,
+          "buy_threshold": 35,
+          "sell_threshold": 60,
+          "performance": 1.0
+        },
+        {
+          "period": 16,
+          "buy_threshold": 35,
+          "sell_threshold": 65,
+          "performance": 5.0
+        },
+        {
+          "period": 16,
+          "buy_threshold": 35,
+          "sell_threshold": 70,
+          "performance": 3.0
+        },
+        {
+          "period": 16,
+          "buy_threshold": 35,
+          "sell_threshold": 75,
+          "performance": 14.0
+        },
+        {
+          "period": 16,
+          "buy_threshold": 35,
+          "sell_threshold": 80,
+          "performance": 14.0
+        },
+        {
+          "period": 17,
+          "buy_threshold": 20,
+          "sell_threshold": 60,
+          "performance": 3.0
+        },
+        {
+          "period": 17,
+          "buy_threshold": 20,
+          "sell_threshold": 65,
+          "performance": 7.0
+        },
+        {
+          "period": 17,
+          "buy_threshold": 20,
+          "sell_threshold": 70,
+          "performance": 7.0
+        },
+        {
+          "period": 17,
+          "buy_threshold": 20,
+          "sell_threshold": 75,
+          "performance": 8.0
+        },
+        {
+          "period": 17,
+          "buy_threshold": 20,
+          "sell_threshold": 80,
+          "performance": 8.0
+        },
+        {
+          "period": 17,
+          "buy_threshold": 25,
+          "sell_threshold": 60,
+          "performance": 1.0
+        },
+        {
+          "period": 17,
+          "buy_threshold": 25,
+          "sell_threshold": 65,
+          "performance": 5.0
+        },
+        {
+          "period": 17,
+          "buy_threshold": 25,
+          "sell_threshold": 70,
+          "performance": 5.0
+        },
+        {
+          "period": 17,
+          "buy_threshold": 25,
+          "sell_threshold": 75,
+          "performance": 6.0
+        },
+        {
+          "period": 17,
+          "buy_threshold": 25,
+          "sell_threshold": 80,
+          "performance": 6.0
+        },
+        {
+          "period": 17,
+          "buy_threshold": 30,
+          "sell_threshold": 60,
+          "performance": 4.0
+        },
+        {
+          "period": 17,
+          "buy_threshold": 30,
+          "sell_threshold": 65,
+          "performance": 13.0
+        },
+        {
+          "period": 17,
+          "buy_threshold": 30,
+          "sell_threshold": 70,
+          "performance": 13.0
+        },
+        {
+          "period": 17,
+          "buy_threshold": 30,
+          "sell_threshold": 75,
+          "performance": 24.0
+        },
+        {
+          "period": 17,
+          "buy_threshold": 30,
+          "sell_threshold": 80,
+          "performance": 24.0
+        },
+        {
+          "period": 17,
+          "buy_threshold": 35,
+          "sell_threshold": 60,
+          "performance": 2.0
+        },
+        {
+          "period": 17,
+          "buy_threshold": 35,
+          "sell_threshold": 65,
+          "performance": 3.0
+        },
+        {
+          "period": 17,
+          "buy_threshold": 35,
+          "sell_threshold": 70,
+          "performance": 3.0
+        },
+        {
+          "period": 17,
+          "buy_threshold": 35,
+          "sell_threshold": 75,
+          "performance": 14.0
+        },
+        {
+          "period": 17,
+          "buy_threshold": 35,
+          "sell_threshold": 80,
+          "performance": 14.0
+        },
+        {
+          "period": 18,
+          "buy_threshold": 20,
+          "sell_threshold": 60,
+          "performance": 3.0
+        },
+        {
+          "period": 18,
+          "buy_threshold": 20,
+          "sell_threshold": 65,
+          "performance": 7.0
+        },
+        {
+          "period": 18,
+          "buy_threshold": 20,
+          "sell_threshold": 70,
+          "performance": 7.0
+        },
+        {
+          "period": 18,
+          "buy_threshold": 20,
+          "sell_threshold": 75,
+          "performance": 8.0
+        },
+        {
+          "period": 18,
+          "buy_threshold": 20,
+          "sell_threshold": 80,
+          "performance": 8.0
+        },
+        {
+          "period": 18,
+          "buy_threshold": 25,
+          "sell_threshold": 60,
+          "performance": 1.0
+        },
+        {
+          "period": 18,
+          "buy_threshold": 25,
+          "sell_threshold": 65,
+          "performance": 5.0
+        },
+        {
+          "period": 18,
+          "buy_threshold": 25,
+          "sell_threshold": 70,
+          "performance": 5.0
+        },
+        {
+          "period": 18,
+          "buy_threshold": 25,
+          "sell_threshold": 75,
+          "performance": 6.0
+        },
+        {
+          "period": 18,
+          "buy_threshold": 25,
+          "sell_threshold": 80,
+          "performance": 6.0
+        },
+        {
+          "period": 18,
+          "buy_threshold": 30,
+          "sell_threshold": 60,
+          "performance": 1.0
+        },
+        {
+          "period": 18,
+          "buy_threshold": 30,
+          "sell_threshold": 65,
+          "performance": 5.0
+        },
+        {
+          "period": 18,
+          "buy_threshold": 30,
+          "sell_threshold": 70,
+          "performance": 5.0
+        },
+        {
+          "period": 18,
+          "buy_threshold": 30,
+          "sell_threshold": 75,
+          "performance": 6.0
+        },
+        {
+          "period": 18,
+          "buy_threshold": 30,
+          "sell_threshold": 80,
+          "performance": 6.0
+        },
+        {
+          "period": 18,
+          "buy_threshold": 35,
+          "sell_threshold": 60,
+          "performance": 2.0
+        },
+        {
+          "period": 18,
+          "buy_threshold": 35,
+          "sell_threshold": 65,
+          "performance": 3.0
+        },
+        {
+          "period": 18,
+          "buy_threshold": 35,
+          "sell_threshold": 70,
+          "performance": 3.0
+        },
+        {
+          "period": 18,
+          "buy_threshold": 35,
+          "sell_threshold": 75,
+          "performance": 14.0
+        },
+        {
+          "period": 18,
+          "buy_threshold": 35,
+          "sell_threshold": 80,
+          "performance": 14.0
+        },
+        {
+          "period": 19,
+          "buy_threshold": 20,
+          "sell_threshold": 60,
+          "performance": 3.0
+        },
+        {
+          "period": 19,
+          "buy_threshold": 20,
+          "sell_threshold": 65,
+          "performance": 7.0
+        },
+        {
+          "period": 19,
+          "buy_threshold": 20,
+          "sell_threshold": 70,
+          "performance": 7.0
+        },
+        {
+          "period": 19,
+          "buy_threshold": 20,
+          "sell_threshold": 75,
+          "performance": 8.0
+        },
+        {
+          "period": 19,
+          "buy_threshold": 20,
+          "sell_threshold": 80,
+          "performance": 8.0
+        },
+        {
+          "period": 19,
+          "buy_threshold": 25,
+          "sell_threshold": 60,
+          "performance": 1.0
+        },
+        {
+          "period": 19,
+          "buy_threshold": 25,
+          "sell_threshold": 65,
+          "performance": 5.0
+        },
+        {
+          "period": 19,
+          "buy_threshold": 25,
+          "sell_threshold": 70,
+          "performance": 5.0
+        },
+        {
+          "period": 19,
+          "buy_threshold": 25,
+          "sell_threshold": 75,
+          "performance": 6.0
+        },
+        {
+          "period": 19,
+          "buy_threshold": 25,
+          "sell_threshold": 80,
+          "performance": 6.0
+        },
+        {
+          "period": 19,
+          "buy_threshold": 30,
+          "sell_threshold": 60,
+          "performance": 1.0
+        },
+        {
+          "period": 19,
+          "buy_threshold": 30,
+          "sell_threshold": 65,
+          "performance": 5.0
+        },
+        {
+          "period": 19,
+          "buy_threshold": 30,
+          "sell_threshold": 70,
+          "performance": 5.0
+        },
+        {
+          "period": 19,
+          "buy_threshold": 30,
+          "sell_threshold": 75,
+          "performance": 6.0
+        },
+        {
+          "period": 19,
+          "buy_threshold": 30,
+          "sell_threshold": 80,
+          "performance": 6.0
+        },
+        {
+          "period": 19,
+          "buy_threshold": 35,
+          "sell_threshold": 60,
+          "performance": 2.0
+        },
+        {
+          "period": 19,
+          "buy_threshold": 35,
+          "sell_threshold": 65,
+          "performance": 3.0
+        },
+        {
+          "period": 19,
+          "buy_threshold": 35,
+          "sell_threshold": 70,
+          "performance": 13.0
+        },
+        {
+          "period": 19,
+          "buy_threshold": 35,
+          "sell_threshold": 75,
+          "performance": 14.0
+        },
+        {
+          "period": 19,
+          "buy_threshold": 35,
+          "sell_threshold": 80,
+          "performance": 14.0
+        },
+        {
+          "period": 20,
+          "buy_threshold": 20,
+          "sell_threshold": 60,
+          "performance": 3.0
+        },
+        {
+          "period": 20,
+          "buy_threshold": 20,
+          "sell_threshold": 65,
+          "performance": 7.0
+        },
+        {
+          "period": 20,
+          "buy_threshold": 20,
+          "sell_threshold": 70,
+          "performance": 7.0
+        },
+        {
+          "period": 20,
+          "buy_threshold": 20,
+          "sell_threshold": 75,
+          "performance": 8.0
+        },
+        {
+          "period": 20,
+          "buy_threshold": 20,
+          "sell_threshold": 80,
+          "performance": 8.0
+        },
+        {
+          "period": 20,
+          "buy_threshold": 25,
+          "sell_threshold": 60,
+          "performance": 3.0
+        },
+        {
+          "period": 20,
+          "buy_threshold": 25,
+          "sell_threshold": 65,
+          "performance": 7.0
+        },
+        {
+          "period": 20,
+          "buy_threshold": 25,
+          "sell_threshold": 70,
+          "performance": 7.0
+        },
+        {
+          "period": 20,
+          "buy_threshold": 25,
+          "sell_threshold": 75,
+          "performance": 8.0
+        },
+        {
+          "period": 20,
+          "buy_threshold": 25,
+          "sell_threshold": 80,
+          "performance": 8.0
+        },
+        {
+          "period": 20,
+          "buy_threshold": 30,
+          "sell_threshold": 60,
+          "performance": 1.0
+        },
+        {
+          "period": 20,
+          "buy_threshold": 30,
+          "sell_threshold": 65,
+          "performance": 5.0
+        },
+        {
+          "period": 20,
+          "buy_threshold": 30,
+          "sell_threshold": 70,
+          "performance": 5.0
+        },
+        {
+          "period": 20,
+          "buy_threshold": 30,
+          "sell_threshold": 75,
+          "performance": 6.0
+        },
+        {
+          "period": 20,
+          "buy_threshold": 30,
+          "sell_threshold": 80,
+          "performance": 6.0
+        },
+        {
+          "period": 20,
+          "buy_threshold": 35,
+          "sell_threshold": 60,
+          "performance": 2.0
+        },
+        {
+          "period": 20,
+          "buy_threshold": 35,
+          "sell_threshold": 65,
+          "performance": 3.0
+        },
+        {
+          "period": 20,
+          "buy_threshold": 35,
+          "sell_threshold": 70,
+          "performance": 13.0
+        },
+        {
+          "period": 20,
+          "buy_threshold": 35,
+          "sell_threshold": 75,
+          "performance": 14.0
+        },
+        {
+          "period": 20,
+          "buy_threshold": 35,
+          "sell_threshold": 80,
+          "performance": 14.0
+        },
+        {
+          "period": 21,
+          "buy_threshold": 20,
+          "sell_threshold": 60,
+          "performance": 4.0
+        },
+        {
+          "period": 21,
+          "buy_threshold": 20,
+          "sell_threshold": 65,
+          "performance": 7.0
+        },
+        {
+          "period": 21,
+          "buy_threshold": 20,
+          "sell_threshold": 70,
+          "performance": 8.0
+        },
+        {
+          "period": 21,
+          "buy_threshold": 20,
+          "sell_threshold": 75,
+          "performance": 8.0
+        },
+        {
+          "period": 21,
+          "buy_threshold": 20,
+          "sell_threshold": 80,
+          "performance": 0
+        },
+        {
+          "period": 21,
+          "buy_threshold": 25,
+          "sell_threshold": 60,
+          "performance": 4.0
+        },
+        {
+          "period": 21,
+          "buy_threshold": 25,
+          "sell_threshold": 65,
+          "performance": 7.0
+        },
+        {
+          "period": 21,
+          "buy_threshold": 25,
+          "sell_threshold": 70,
+          "performance": 8.0
+        },
+        {
+          "period": 21,
+          "buy_threshold": 25,
+          "sell_threshold": 75,
+          "performance": 8.0
+        },
+        {
+          "period": 21,
+          "buy_threshold": 25,
+          "sell_threshold": 80,
+          "performance": 0
+        },
+        {
+          "period": 21,
+          "buy_threshold": 30,
+          "sell_threshold": 60,
+          "performance": 2.0
+        },
+        {
+          "period": 21,
+          "buy_threshold": 30,
+          "sell_threshold": 65,
+          "performance": 5.0
+        },
+        {
+          "period": 21,
+          "buy_threshold": 30,
+          "sell_threshold": 70,
+          "performance": 6.0
+        },
+        {
+          "period": 21,
+          "buy_threshold": 30,
+          "sell_threshold": 75,
+          "performance": 6.0
+        },
+        {
+          "period": 21,
+          "buy_threshold": 30,
+          "sell_threshold": 80,
+          "performance": 0
+        },
+        {
+          "period": 21,
+          "buy_threshold": 35,
+          "sell_threshold": 60,
+          "performance": 6.0
+        },
+        {
+          "period": 21,
+          "buy_threshold": 35,
+          "sell_threshold": 65,
+          "performance": 6.0
+        },
+        {
+          "period": 21,
+          "buy_threshold": 35,
+          "sell_threshold": 70,
+          "performance": 17.0
+        },
+        {
+          "period": 21,
+          "buy_threshold": 35,
+          "sell_threshold": 75,
+          "performance": 17.0
+        },
+        {
+          "period": 21,
+          "buy_threshold": 35,
+          "sell_threshold": 80,
+          "performance": 18.0
+        },
+        {
+          "period": 22,
+          "buy_threshold": 20,
+          "sell_threshold": 60,
+          "performance": 4.0
+        },
+        {
+          "period": 22,
+          "buy_threshold": 20,
+          "sell_threshold": 65,
+          "performance": 7.0
+        },
+        {
+          "period": 22,
+          "buy_threshold": 20,
+          "sell_threshold": 70,
+          "performance": 8.0
+        },
+        {
+          "period": 22,
+          "buy_threshold": 20,
+          "sell_threshold": 75,
+          "performance": 8.0
+        },
+        {
+          "period": 22,
+          "buy_threshold": 20,
+          "sell_threshold": 80,
+          "performance": 0
+        },
+        {
+          "period": 22,
+          "buy_threshold": 25,
+          "sell_threshold": 60,
+          "performance": 4.0
+        },
+        {
+          "period": 22,
+          "buy_threshold": 25,
+          "sell_threshold": 65,
+          "performance": 7.0
+        },
+        {
+          "period": 22,
+          "buy_threshold": 25,
+          "sell_threshold": 70,
+          "performance": 8.0
+        },
+        {
+          "period": 22,
+          "buy_threshold": 25,
+          "sell_threshold": 75,
+          "performance": 8.0
+        },
+        {
+          "period": 22,
+          "buy_threshold": 25,
+          "sell_threshold": 80,
+          "performance": 0
+        },
+        {
+          "period": 22,
+          "buy_threshold": 30,
+          "sell_threshold": 60,
+          "performance": 2.0
+        },
+        {
+          "period": 22,
+          "buy_threshold": 30,
+          "sell_threshold": 65,
+          "performance": 5.0
+        },
+        {
+          "period": 22,
+          "buy_threshold": 30,
+          "sell_threshold": 70,
+          "performance": 6.0
+        },
+        {
+          "period": 22,
+          "buy_threshold": 30,
+          "sell_threshold": 75,
+          "performance": 6.0
+        },
+        {
+          "period": 22,
+          "buy_threshold": 30,
+          "sell_threshold": 80,
+          "performance": 0
+        },
+        {
+          "period": 22,
+          "buy_threshold": 35,
+          "sell_threshold": 60,
+          "performance": 6.0
+        },
+        {
+          "period": 22,
+          "buy_threshold": 35,
+          "sell_threshold": 65,
+          "performance": 6.0
+        },
+        {
+          "period": 22,
+          "buy_threshold": 35,
+          "sell_threshold": 70,
+          "performance": 17.0
+        },
+        {
+          "period": 22,
+          "buy_threshold": 35,
+          "sell_threshold": 75,
+          "performance": 17.0
+        },
+        {
+          "period": 22,
+          "buy_threshold": 35,
+          "sell_threshold": 80,
+          "performance": 18.0
+        },
+        {
+          "period": 23,
+          "buy_threshold": 20,
+          "sell_threshold": 60,
+          "performance": 5.0
+        },
+        {
+          "period": 23,
+          "buy_threshold": 20,
+          "sell_threshold": 65,
+          "performance": 8.0
+        },
+        {
+          "period": 23,
+          "buy_threshold": 20,
+          "sell_threshold": 70,
+          "performance": 9.0
+        },
+        {
+          "period": 23,
+          "buy_threshold": 20,
+          "sell_threshold": 75,
+          "performance": 9.0
+        },
+        {
+          "period": 23,
+          "buy_threshold": 20,
+          "sell_threshold": 80,
+          "performance": 0
+        },
+        {
+          "period": 23,
+          "buy_threshold": 25,
+          "sell_threshold": 60,
+          "performance": 4.0
+        },
+        {
+          "period": 23,
+          "buy_threshold": 25,
+          "sell_threshold": 65,
+          "performance": 7.0
+        },
+        {
+          "period": 23,
+          "buy_threshold": 25,
+          "sell_threshold": 70,
+          "performance": 8.0
+        },
+        {
+          "period": 23,
+          "buy_threshold": 25,
+          "sell_threshold": 75,
+          "performance": 8.0
+        },
+        {
+          "period": 23,
+          "buy_threshold": 25,
+          "sell_threshold": 80,
+          "performance": 0
+        },
+        {
+          "period": 23,
+          "buy_threshold": 30,
+          "sell_threshold": 60,
+          "performance": 2.0
+        },
+        {
+          "period": 23,
+          "buy_threshold": 30,
+          "sell_threshold": 65,
+          "performance": 5.0
+        },
+        {
+          "period": 23,
+          "buy_threshold": 30,
+          "sell_threshold": 70,
+          "performance": 6.0
+        },
+        {
+          "period": 23,
+          "buy_threshold": 30,
+          "sell_threshold": 75,
+          "performance": 6.0
+        },
+        {
+          "period": 23,
+          "buy_threshold": 30,
+          "sell_threshold": 80,
+          "performance": 0
+        },
+        {
+          "period": 23,
+          "buy_threshold": 35,
+          "sell_threshold": 60,
+          "performance": 6.0
+        },
+        {
+          "period": 23,
+          "buy_threshold": 35,
+          "sell_threshold": 65,
+          "performance": 6.0
+        },
+        {
+          "period": 23,
+          "buy_threshold": 35,
+          "sell_threshold": 70,
+          "performance": 17.0
+        },
+        {
+          "period": 23,
+          "buy_threshold": 35,
+          "sell_threshold": 75,
+          "performance": 17.0
+        },
+        {
+          "period": 23,
+          "buy_threshold": 35,
+          "sell_threshold": 80,
+          "performance": 18.0
+        },
+        {
+          "period": 24,
+          "buy_threshold": 20,
+          "sell_threshold": 60,
+          "performance": 5.0
+        },
+        {
+          "period": 24,
+          "buy_threshold": 20,
+          "sell_threshold": 65,
+          "performance": 8.0
+        },
+        {
+          "period": 24,
+          "buy_threshold": 20,
+          "sell_threshold": 70,
+          "performance": 9.0
+        },
+        {
+          "period": 24,
+          "buy_threshold": 20,
+          "sell_threshold": 75,
+          "performance": 9.0
+        },
+        {
+          "period": 24,
+          "buy_threshold": 20,
+          "sell_threshold": 80,
+          "performance": 0
+        },
+        {
+          "period": 24,
+          "buy_threshold": 25,
+          "sell_threshold": 60,
+          "performance": 4.0
+        },
+        {
+          "period": 24,
+          "buy_threshold": 25,
+          "sell_threshold": 65,
+          "performance": 7.0
+        },
+        {
+          "period": 24,
+          "buy_threshold": 25,
+          "sell_threshold": 70,
+          "performance": 8.0
+        },
+        {
+          "period": 24,
+          "buy_threshold": 25,
+          "sell_threshold": 75,
+          "performance": 8.0
+        },
+        {
+          "period": 24,
+          "buy_threshold": 25,
+          "sell_threshold": 80,
+          "performance": 0
+        },
+        {
+          "period": 24,
+          "buy_threshold": 30,
+          "sell_threshold": 60,
+          "performance": 2.0
+        },
+        {
+          "period": 24,
+          "buy_threshold": 30,
+          "sell_threshold": 65,
+          "performance": 5.0
+        },
+        {
+          "period": 24,
+          "buy_threshold": 30,
+          "sell_threshold": 70,
+          "performance": 6.0
+        },
+        {
+          "period": 24,
+          "buy_threshold": 30,
+          "sell_threshold": 75,
+          "performance": 6.0
+        },
+        {
+          "period": 24,
+          "buy_threshold": 30,
+          "sell_threshold": 80,
+          "performance": 0
+        },
+        {
+          "period": 24,
+          "buy_threshold": 35,
+          "sell_threshold": 60,
+          "performance": -2.0
+        },
+        {
+          "period": 24,
+          "buy_threshold": 35,
+          "sell_threshold": 65,
+          "performance": 6.0
+        },
+        {
+          "period": 24,
+          "buy_threshold": 35,
+          "sell_threshold": 70,
+          "performance": 17.0
+        },
+        {
+          "period": 24,
+          "buy_threshold": 35,
+          "sell_threshold": 75,
+          "performance": 17.0
+        },
+        {
+          "period": 24,
+          "buy_threshold": 35,
+          "sell_threshold": 80,
+          "performance": 18.0
+        },
+        {
+          "period": 25,
+          "buy_threshold": 20,
+          "sell_threshold": 60,
+          "performance": 9.0
+        },
+        {
+          "period": 25,
+          "buy_threshold": 20,
+          "sell_threshold": 65,
+          "performance": 8.0
+        },
+        {
+          "period": 25,
+          "buy_threshold": 20,
+          "sell_threshold": 70,
+          "performance": 9.0
+        },
+        {
+          "period": 25,
+          "buy_threshold": 20,
+          "sell_threshold": 75,
+          "performance": 9.0
+        },
+        {
+          "period": 25,
+          "buy_threshold": 20,
+          "sell_threshold": 80,
+          "performance": 0
+        },
+        {
+          "period": 25,
+          "buy_threshold": 25,
+          "sell_threshold": 60,
+          "performance": 8.0
+        },
+        {
+          "period": 25,
+          "buy_threshold": 25,
+          "sell_threshold": 65,
+          "performance": 7.0
+        },
+        {
+          "period": 25,
+          "buy_threshold": 25,
+          "sell_threshold": 70,
+          "performance": 8.0
+        },
+        {
+          "period": 25,
+          "buy_threshold": 25,
+          "sell_threshold": 75,
+          "performance": 8.0
+        },
+        {
+          "period": 25,
+          "buy_threshold": 25,
+          "sell_threshold": 80,
+          "performance": 0
+        },
+        {
+          "period": 25,
+          "buy_threshold": 30,
+          "sell_threshold": 60,
+          "performance": 6.0
+        },
+        {
+          "period": 25,
+          "buy_threshold": 30,
+          "sell_threshold": 65,
+          "performance": 5.0
+        },
+        {
+          "period": 25,
+          "buy_threshold": 30,
+          "sell_threshold": 70,
+          "performance": 6.0
+        },
+        {
+          "period": 25,
+          "buy_threshold": 30,
+          "sell_threshold": 75,
+          "performance": 6.0
+        },
+        {
+          "period": 25,
+          "buy_threshold": 30,
+          "sell_threshold": 80,
+          "performance": 0
+        },
+        {
+          "period": 25,
+          "buy_threshold": 35,
+          "sell_threshold": 60,
+          "performance": 2.0
+        },
+        {
+          "period": 25,
+          "buy_threshold": 35,
+          "sell_threshold": 65,
+          "performance": 6.0
+        },
+        {
+          "period": 25,
+          "buy_threshold": 35,
+          "sell_threshold": 70,
+          "performance": 17.0
+        },
+        {
+          "period": 25,
+          "buy_threshold": 35,
+          "sell_threshold": 75,
+          "performance": 17.0
+        },
+        {
+          "period": 25,
+          "buy_threshold": 35,
+          "sell_threshold": 80,
+          "performance": 18.0
+        },
+        {
+          "period": 26,
+          "buy_threshold": 20,
+          "sell_threshold": 60,
+          "performance": 9.0
+        },
+        {
+          "period": 26,
+          "buy_threshold": 20,
+          "sell_threshold": 65,
+          "performance": 8.0
+        },
+        {
+          "period": 26,
+          "buy_threshold": 20,
+          "sell_threshold": 70,
+          "performance": 9.0
+        },
+        {
+          "period": 26,
+          "buy_threshold": 20,
+          "sell_threshold": 75,
+          "performance": 9.0
+        },
+        {
+          "period": 26,
+          "buy_threshold": 20,
+          "sell_threshold": 80,
+          "performance": 0
+        },
+        {
+          "period": 26,
+          "buy_threshold": 25,
+          "sell_threshold": 60,
+          "performance": 8.0
+        },
+        {
+          "period": 26,
+          "buy_threshold": 25,
+          "sell_threshold": 65,
+          "performance": 7.0
+        },
+        {
+          "period": 26,
+          "buy_threshold": 25,
+          "sell_threshold": 70,
+          "performance": 8.0
+        },
+        {
+          "period": 26,
+          "buy_threshold": 25,
+          "sell_threshold": 75,
+          "performance": 8.0
+        },
+        {
+          "period": 26,
+          "buy_threshold": 25,
+          "sell_threshold": 80,
+          "performance": 0
+        },
+        {
+          "period": 26,
+          "buy_threshold": 30,
+          "sell_threshold": 60,
+          "performance": 6.0
+        },
+        {
+          "period": 26,
+          "buy_threshold": 30,
+          "sell_threshold": 65,
+          "performance": 5.0
+        },
+        {
+          "period": 26,
+          "buy_threshold": 30,
+          "sell_threshold": 70,
+          "performance": 6.0
+        },
+        {
+          "period": 26,
+          "buy_threshold": 30,
+          "sell_threshold": 75,
+          "performance": 6.0
+        },
+        {
+          "period": 26,
+          "buy_threshold": 30,
+          "sell_threshold": 80,
+          "performance": 0
+        },
+        {
+          "period": 26,
+          "buy_threshold": 35,
+          "sell_threshold": 60,
+          "performance": 6.0
+        },
+        {
+          "period": 26,
+          "buy_threshold": 35,
+          "sell_threshold": 65,
+          "performance": 5.0
+        },
+        {
+          "period": 26,
+          "buy_threshold": 35,
+          "sell_threshold": 70,
+          "performance": 6.0
+        },
+        {
+          "period": 26,
+          "buy_threshold": 35,
+          "sell_threshold": 75,
+          "performance": 6.0
+        },
+        {
+          "period": 26,
+          "buy_threshold": 35,
+          "sell_threshold": 80,
+          "performance": 0
+        },
+        {
+          "period": 27,
+          "buy_threshold": 20,
+          "sell_threshold": 60,
+          "performance": 9.0
+        },
+        {
+          "period": 27,
+          "buy_threshold": 20,
+          "sell_threshold": 65,
+          "performance": 8.0
+        },
+        {
+          "period": 27,
+          "buy_threshold": 20,
+          "sell_threshold": 70,
+          "performance": 9.0
+        },
+        {
+          "period": 27,
+          "buy_threshold": 20,
+          "sell_threshold": 75,
+          "performance": 9.0
+        },
+        {
+          "period": 27,
+          "buy_threshold": 20,
+          "sell_threshold": 80,
+          "performance": 0
+        },
+        {
+          "period": 27,
+          "buy_threshold": 25,
+          "sell_threshold": 60,
+          "performance": 8.0
+        },
+        {
+          "period": 27,
+          "buy_threshold": 25,
+          "sell_threshold": 65,
+          "performance": 7.0
+        },
+        {
+          "period": 27,
+          "buy_threshold": 25,
+          "sell_threshold": 70,
+          "performance": 8.0
+        },
+        {
+          "period": 27,
+          "buy_threshold": 25,
+          "sell_threshold": 75,
+          "performance": 8.0
+        },
+        {
+          "period": 27,
+          "buy_threshold": 25,
+          "sell_threshold": 80,
+          "performance": 0
+        },
+        {
+          "period": 27,
+          "buy_threshold": 30,
+          "sell_threshold": 60,
+          "performance": 6.0
+        },
+        {
+          "period": 27,
+          "buy_threshold": 30,
+          "sell_threshold": 65,
+          "performance": 5.0
+        },
+        {
+          "period": 27,
+          "buy_threshold": 30,
+          "sell_threshold": 70,
+          "performance": 6.0
+        },
+        {
+          "period": 27,
+          "buy_threshold": 30,
+          "sell_threshold": 75,
+          "performance": 6.0
+        },
+        {
+          "period": 27,
+          "buy_threshold": 30,
+          "sell_threshold": 80,
+          "performance": 0
+        },
+        {
+          "period": 27,
+          "buy_threshold": 35,
+          "sell_threshold": 60,
+          "performance": 6.0
+        },
+        {
+          "period": 27,
+          "buy_threshold": 35,
+          "sell_threshold": 65,
+          "performance": 5.0
+        },
+        {
+          "period": 27,
+          "buy_threshold": 35,
+          "sell_threshold": 70,
+          "performance": 6.0
+        },
+        {
+          "period": 27,
+          "buy_threshold": 35,
+          "sell_threshold": 75,
+          "performance": 6.0
+        },
+        {
+          "period": 27,
+          "buy_threshold": 35,
+          "sell_threshold": 80,
+          "performance": 0
+        },
+        {
+          "period": 28,
+          "buy_threshold": 20,
+          "sell_threshold": 60,
+          "performance": 9.0
+        },
+        {
+          "period": 28,
+          "buy_threshold": 20,
+          "sell_threshold": 65,
+          "performance": 8.0
+        },
+        {
+          "period": 28,
+          "buy_threshold": 20,
+          "sell_threshold": 70,
+          "performance": 9.0
+        },
+        {
+          "period": 28,
+          "buy_threshold": 20,
+          "sell_threshold": 75,
+          "performance": 9.0
+        },
+        {
+          "period": 28,
+          "buy_threshold": 20,
+          "sell_threshold": 80,
+          "performance": 0
+        },
+        {
+          "period": 28,
+          "buy_threshold": 25,
+          "sell_threshold": 60,
+          "performance": 8.0
+        },
+        {
+          "period": 28,
+          "buy_threshold": 25,
+          "sell_threshold": 65,
+          "performance": 7.0
+        },
+        {
+          "period": 28,
+          "buy_threshold": 25,
+          "sell_threshold": 70,
+          "performance": 8.0
+        },
+        {
+          "period": 28,
+          "buy_threshold": 25,
+          "sell_threshold": 75,
+          "performance": 8.0
+        },
+        {
+          "period": 28,
+          "buy_threshold": 25,
+          "sell_threshold": 80,
+          "performance": 0
+        },
+        {
+          "period": 28,
+          "buy_threshold": 30,
+          "sell_threshold": 60,
+          "performance": 6.0
+        },
+        {
+          "period": 28,
+          "buy_threshold": 30,
+          "sell_threshold": 65,
+          "performance": 5.0
+        },
+        {
+          "period": 28,
+          "buy_threshold": 30,
+          "sell_threshold": 70,
+          "performance": 6.0
+        },
+        {
+          "period": 28,
+          "buy_threshold": 30,
+          "sell_threshold": 75,
+          "performance": 6.0
+        },
+        {
+          "period": 28,
+          "buy_threshold": 30,
+          "sell_threshold": 80,
+          "performance": 0
+        },
+        {
+          "period": 28,
+          "buy_threshold": 35,
+          "sell_threshold": 60,
+          "performance": 6.0
+        },
+        {
+          "period": 28,
+          "buy_threshold": 35,
+          "sell_threshold": 65,
+          "performance": 5.0
+        },
+        {
+          "period": 28,
+          "buy_threshold": 35,
+          "sell_threshold": 70,
+          "performance": 6.0
+        },
+        {
+          "period": 28,
+          "buy_threshold": 35,
+          "sell_threshold": 75,
+          "performance": 6.0
+        },
+        {
+          "period": 28,
+          "buy_threshold": 35,
+          "sell_threshold": 80,
+          "performance": 0
+        },
+        {
+          "period": 29,
+          "buy_threshold": 20,
+          "sell_threshold": 60,
+          "performance": 9.0
+        },
+        {
+          "period": 29,
+          "buy_threshold": 20,
+          "sell_threshold": 65,
+          "performance": 8.0
+        },
+        {
+          "period": 29,
+          "buy_threshold": 20,
+          "sell_threshold": 70,
+          "performance": 9.0
+        },
+        {
+          "period": 29,
+          "buy_threshold": 20,
+          "sell_threshold": 75,
+          "performance": 0
+        },
+        {
+          "period": 29,
+          "buy_threshold": 20,
+          "sell_threshold": 80,
+          "performance": 0
+        },
+        {
+          "period": 29,
+          "buy_threshold": 25,
+          "sell_threshold": 60,
+          "performance": 8.0
+        },
+        {
+          "period": 29,
+          "buy_threshold": 25,
+          "sell_threshold": 65,
+          "performance": 7.0
+        },
+        {
+          "period": 29,
+          "buy_threshold": 25,
+          "sell_threshold": 70,
+          "performance": 8.0
+        },
+        {
+          "period": 29,
+          "buy_threshold": 25,
+          "sell_threshold": 75,
+          "performance": 0
+        },
+        {
+          "period": 29,
+          "buy_threshold": 25,
+          "sell_threshold": 80,
+          "performance": 0
+        },
+        {
+          "period": 29,
+          "buy_threshold": 30,
+          "sell_threshold": 60,
+          "performance": 6.0
+        },
+        {
+          "period": 29,
+          "buy_threshold": 30,
+          "sell_threshold": 65,
+          "performance": 5.0
+        },
+        {
+          "period": 29,
+          "buy_threshold": 30,
+          "sell_threshold": 70,
+          "performance": 6.0
+        },
+        {
+          "period": 29,
+          "buy_threshold": 30,
+          "sell_threshold": 75,
+          "performance": 0
+        },
+        {
+          "period": 29,
+          "buy_threshold": 30,
+          "sell_threshold": 80,
+          "performance": 0
+        },
+        {
+          "period": 29,
+          "buy_threshold": 35,
+          "sell_threshold": 60,
+          "performance": 6.0
+        },
+        {
+          "period": 29,
+          "buy_threshold": 35,
+          "sell_threshold": 65,
+          "performance": 5.0
+        },
+        {
+          "period": 29,
+          "buy_threshold": 35,
+          "sell_threshold": 70,
+          "performance": 6.0
+        },
+        {
+          "period": 29,
+          "buy_threshold": 35,
+          "sell_threshold": 75,
+          "performance": 0
+        },
+        {
+          "period": 29,
+          "buy_threshold": 35,
+          "sell_threshold": 80,
+          "performance": 0
+        }
+      ],
+      "best_performance": 24.0,
+      "best_params": {
+        "period": 12,
+        "buy_threshold": 25,
+        "sell_threshold": 80,
+        "performance": 24.0
+      }
+    },
+    "macd": {
+      "all_results": [
+        {
+          "fast_period": 8,
+          "slow_period": 20,
+          "signal_period": 5,
+          "performance": -10.0
+        },
+        {
+          "fast_period": 8,
+          "slow_period": 20,
+          "signal_period": 7,
+          "performance": -7.0
+        },
+        {
+          "fast_period": 8,
+          "slow_period": 20,
+          "signal_period": 9,
+          "performance": -9.0
+        },
+        {
+          "fast_period": 8,
+          "slow_period": 20,
+          "signal_period": 11,
+          "performance": -1.0
+        },
+        {
+          "fast_period": 8,
+          "slow_period": 22,
+          "signal_period": 5,
+          "performance": -9.0
+        },
+        {
+          "fast_period": 8,
+          "slow_period": 22,
+          "signal_period": 7,
+          "performance": -8.0
+        },
+        {
+          "fast_period": 8,
+          "slow_period": 22,
+          "signal_period": 9,
+          "performance": -2.0
+        },
+        {
+          "fast_period": 8,
+          "slow_period": 22,
+          "signal_period": 11,
+          "performance": -2.0
+        },
+        {
+          "fast_period": 8,
+          "slow_period": 24,
+          "signal_period": 5,
+          "performance": -8.0
+        },
+        {
+          "fast_period": 8,
+          "slow_period": 24,
+          "signal_period": 7,
+          "performance": -9.0
+        },
+        {
+          "fast_period": 8,
+          "slow_period": 24,
+          "signal_period": 9,
+          "performance": -2.0
+        },
+        {
+          "fast_period": 8,
+          "slow_period": 24,
+          "signal_period": 11,
+          "performance": -2.0
+        },
+        {
+          "fast_period": 8,
+          "slow_period": 26,
+          "signal_period": 5,
+          "performance": -8.0
+        },
+        {
+          "fast_period": 8,
+          "slow_period": 26,
+          "signal_period": 7,
+          "performance": -10.0
+        },
+        {
+          "fast_period": 8,
+          "slow_period": 26,
+          "signal_period": 9,
+          "performance": -2.0
+        },
+        {
+          "fast_period": 8,
+          "slow_period": 26,
+          "signal_period": 11,
+          "performance": -1.0
+        },
+        {
+          "fast_period": 8,
+          "slow_period": 28,
+          "signal_period": 5,
+          "performance": -9.0
+        },
+        {
+          "fast_period": 8,
+          "slow_period": 28,
+          "signal_period": 7,
+          "performance": -4.0
+        },
+        {
+          "fast_period": 8,
+          "slow_period": 28,
+          "signal_period": 9,
+          "performance": -2.0
+        },
+        {
+          "fast_period": 8,
+          "slow_period": 28,
+          "signal_period": 11,
+          "performance": 0
+        },
+        {
+          "fast_period": 8,
+          "slow_period": 30,
+          "signal_period": 5,
+          "performance": -8.0
+        },
+        {
+          "fast_period": 8,
+          "slow_period": 30,
+          "signal_period": 7,
+          "performance": -3.0
+        },
+        {
+          "fast_period": 8,
+          "slow_period": 30,
+          "signal_period": 9,
+          "performance": -1.0
+        },
+        {
+          "fast_period": 8,
+          "slow_period": 30,
+          "signal_period": 11,
+          "performance": 0
+        },
+        {
+          "fast_period": 10,
+          "slow_period": 20,
+          "signal_period": 5,
+          "performance": -8.0
+        },
+        {
+          "fast_period": 10,
+          "slow_period": 20,
+          "signal_period": 7,
+          "performance": -9.0
+        },
+        {
+          "fast_period": 10,
+          "slow_period": 20,
+          "signal_period": 9,
+          "performance": -1.0
+        },
+        {
+          "fast_period": 10,
+          "slow_period": 20,
+          "signal_period": 11,
+          "performance": 1.0
+        },
+        {
+          "fast_period": 10,
+          "slow_period": 22,
+          "signal_period": 5,
+          "performance": -7.0
+        },
+        {
+          "fast_period": 10,
+          "slow_period": 22,
+          "signal_period": 7,
+          "performance": -9.0
+        },
+        {
+          "fast_period": 10,
+          "slow_period": 22,
+          "signal_period": 9,
+          "performance": -2.0
+        },
+        {
+          "fast_period": 10,
+          "slow_period": 22,
+          "signal_period": 11,
+          "performance": 2.0
+        },
+        {
+          "fast_period": 10,
+          "slow_period": 24,
+          "signal_period": 5,
+          "performance": -8.0
+        },
+        {
+          "fast_period": 10,
+          "slow_period": 24,
+          "signal_period": 7,
+          "performance": -3.0
+        },
+        {
+          "fast_period": 10,
+          "slow_period": 24,
+          "signal_period": 9,
+          "performance": -1.0
+        },
+        {
+          "fast_period": 10,
+          "slow_period": 24,
+          "signal_period": 11,
+          "performance": 1.0
+        },
+        {
+          "fast_period": 10,
+          "slow_period": 26,
+          "signal_period": 5,
+          "performance": -9.0
+        },
+        {
+          "fast_period": 10,
+          "slow_period": 26,
+          "signal_period": 7,
+          "performance": -2.0
+        },
+        {
+          "fast_period": 10,
+          "slow_period": 26,
+          "signal_period": 9,
+          "performance": 2.0
+        },
+        {
+          "fast_period": 10,
+          "slow_period": 26,
+          "signal_period": 11,
+          "performance": 2.0
+        },
+        {
+          "fast_period": 10,
+          "slow_period": 28,
+          "signal_period": 5,
+          "performance": -10.0
+        },
+        {
+          "fast_period": 10,
+          "slow_period": 28,
+          "signal_period": 7,
+          "performance": -2.0
+        },
+        {
+          "fast_period": 10,
+          "slow_period": 28,
+          "signal_period": 9,
+          "performance": 0
+        },
+        {
+          "fast_period": 10,
+          "slow_period": 28,
+          "signal_period": 11,
+          "performance": -1.0
+        },
+        {
+          "fast_period": 10,
+          "slow_period": 30,
+          "signal_period": 5,
+          "performance": -3.0
+        },
+        {
+          "fast_period": 10,
+          "slow_period": 30,
+          "signal_period": 7,
+          "performance": -1.0
+        },
+        {
+          "fast_period": 10,
+          "slow_period": 30,
+          "signal_period": 9,
+          "performance": 0
+        },
+        {
+          "fast_period": 10,
+          "slow_period": 30,
+          "signal_period": 11,
+          "performance": 1.0
+        },
+        {
+          "fast_period": 12,
+          "slow_period": 20,
+          "signal_period": 5,
+          "performance": -8.0
+        },
+        {
+          "fast_period": 12,
+          "slow_period": 20,
+          "signal_period": 7,
+          "performance": -1.0
+        },
+        {
+          "fast_period": 12,
+          "slow_period": 20,
+          "signal_period": 9,
+          "performance": -1.0
+        },
+        {
+          "fast_period": 12,
+          "slow_period": 20,
+          "signal_period": 11,
+          "performance": 1.0
+        },
+        {
+          "fast_period": 12,
+          "slow_period": 22,
+          "signal_period": 5,
+          "performance": -9.0
+        },
+        {
+          "fast_period": 12,
+          "slow_period": 22,
+          "signal_period": 7,
+          "performance": -2.0
+        },
+        {
+          "fast_period": 12,
+          "slow_period": 22,
+          "signal_period": 9,
+          "performance": 2.0
+        },
+        {
+          "fast_period": 12,
+          "slow_period": 22,
+          "signal_period": 11,
+          "performance": 1.0
+        },
+        {
+          "fast_period": 12,
+          "slow_period": 24,
+          "signal_period": 5,
+          "performance": -4.0
+        },
+        {
+          "fast_period": 12,
+          "slow_period": 24,
+          "signal_period": 7,
+          "performance": -2.0
+        },
+        {
+          "fast_period": 12,
+          "slow_period": 24,
+          "signal_period": 9,
+          "performance": 1.0
+        },
+        {
+          "fast_period": 12,
+          "slow_period": 24,
+          "signal_period": 11,
+          "performance": 3.0
+        },
+        {
+          "fast_period": 12,
+          "slow_period": 26,
+          "signal_period": 5,
+          "performance": -4.0
+        },
+        {
+          "fast_period": 12,
+          "slow_period": 26,
+          "signal_period": 7,
+          "performance": 0
+        },
+        {
+          "fast_period": 12,
+          "slow_period": 26,
+          "signal_period": 9,
+          "performance": 2.0
+        },
+        {
+          "fast_period": 12,
+          "slow_period": 26,
+          "signal_period": 11,
+          "performance": 0
+        },
+        {
+          "fast_period": 12,
+          "slow_period": 28,
+          "signal_period": 5,
+          "performance": -2.0
+        },
+        {
+          "fast_period": 12,
+          "slow_period": 28,
+          "signal_period": 7,
+          "performance": 0
+        },
+        {
+          "fast_period": 12,
+          "slow_period": 28,
+          "signal_period": 9,
+          "performance": -1.0
+        },
+        {
+          "fast_period": 12,
+          "slow_period": 28,
+          "signal_period": 11,
+          "performance": 0
+        },
+        {
+          "fast_period": 12,
+          "slow_period": 30,
+          "signal_period": 5,
+          "performance": -2.0
+        },
+        {
+          "fast_period": 12,
+          "slow_period": 30,
+          "signal_period": 7,
+          "performance": 1.0
+        },
+        {
+          "fast_period": 12,
+          "slow_period": 30,
+          "signal_period": 9,
+          "performance": 1.0
+        },
+        {
+          "fast_period": 12,
+          "slow_period": 30,
+          "signal_period": 11,
+          "performance": 0
+        },
+        {
+          "fast_period": 14,
+          "slow_period": 20,
+          "signal_period": 5,
+          "performance": -10.0
+        },
+        {
+          "fast_period": 14,
+          "slow_period": 20,
+          "signal_period": 7,
+          "performance": -2.0
+        },
+        {
+          "fast_period": 14,
+          "slow_period": 20,
+          "signal_period": 9,
+          "performance": 1.0
+        },
+        {
+          "fast_period": 14,
+          "slow_period": 20,
+          "signal_period": 11,
+          "performance": 2.0
+        },
+        {
+          "fast_period": 14,
+          "slow_period": 22,
+          "signal_period": 5,
+          "performance": -3.0
+        },
+        {
+          "fast_period": 14,
+          "slow_period": 22,
+          "signal_period": 7,
+          "performance": 1.0
+        },
+        {
+          "fast_period": 14,
+          "slow_period": 22,
+          "signal_period": 9,
+          "performance": 1.0
+        },
+        {
+          "fast_period": 14,
+          "slow_period": 22,
+          "signal_period": 11,
+          "performance": 2.0
+        },
+        {
+          "fast_period": 14,
+          "slow_period": 24,
+          "signal_period": 5,
+          "performance": -3.0
+        },
+        {
+          "fast_period": 14,
+          "slow_period": 24,
+          "signal_period": 7,
+          "performance": 2.0
+        },
+        {
+          "fast_period": 14,
+          "slow_period": 24,
+          "signal_period": 9,
+          "performance": 1.0
+        },
+        {
+          "fast_period": 14,
+          "slow_period": 24,
+          "signal_period": 11,
+          "performance": 0
+        },
+        {
+          "fast_period": 14,
+          "slow_period": 26,
+          "signal_period": 5,
+          "performance": -1.0
+        },
+        {
+          "fast_period": 14,
+          "slow_period": 26,
+          "signal_period": 7,
+          "performance": 1.0
+        },
+        {
+          "fast_period": 14,
+          "slow_period": 26,
+          "signal_period": 9,
+          "performance": 1.0
+        },
+        {
+          "fast_period": 14,
+          "slow_period": 26,
+          "signal_period": 11,
+          "performance": 1.0
+        },
+        {
+          "fast_period": 14,
+          "slow_period": 28,
+          "signal_period": 5,
+          "performance": 1.0
+        },
+        {
+          "fast_period": 14,
+          "slow_period": 28,
+          "signal_period": 7,
+          "performance": 0
+        },
+        {
+          "fast_period": 14,
+          "slow_period": 28,
+          "signal_period": 9,
+          "performance": 0
+        },
+        {
+          "fast_period": 14,
+          "slow_period": 28,
+          "signal_period": 11,
+          "performance": 1.0
+        },
+        {
+          "fast_period": 14,
+          "slow_period": 30,
+          "signal_period": 5,
+          "performance": -1.0
+        },
+        {
+          "fast_period": 14,
+          "slow_period": 30,
+          "signal_period": 7,
+          "performance": -1.0
+        },
+        {
+          "fast_period": 14,
+          "slow_period": 30,
+          "signal_period": 9,
+          "performance": 0
+        },
+        {
+          "fast_period": 14,
+          "slow_period": 30,
+          "signal_period": 11,
+          "performance": 1.0
+        }
+      ],
+      "best_performance": 3.0,
+      "best_params": {
+        "fast_period": 12,
+        "slow_period": 24,
+        "signal_period": 11,
+        "performance": 3.0
+      }
+    },
+    "ichimoku": {
+      "performance": 29.0
     }
   }
 }

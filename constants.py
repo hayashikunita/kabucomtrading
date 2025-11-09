@@ -1,28 +1,34 @@
-DURATION_5S = '5s'
-DURATION_1M = '1m'
-DURATION_1H = '1h'
-DURATIONS = [DURATION_5S, DURATION_1M, DURATION_1H]
+DURATION_5S = "5s"
+DURATION_1M = "1m"
+DURATION_1H = "1h"
+DURATION_1D = "1d"
+DURATIONS = [DURATION_5S, DURATION_1M, DURATION_1H, DURATION_1D]
 
-GRANULARITY_5S = '0'   # kabusapi: 0=Tick
-GRANULARITY_1M = '1'   # kabusapi: 1=1分足
-GRANULARITY_1H = '2'   # kabusapi: 2=日足や時間足（用途に応じて変更）
+GRANULARITY_5S = "0"  # kabusapi: 0=Tick
+GRANULARITY_1M = "1"  # kabusapi: 1=1分足
+GRANULARITY_1H = "2"  # kabusapi: 2=日足や時間足（用途に応じて変更）
+GRANULARITY_1D = "3"  # kabusapi: 3=日足
 
 TRADE_MAP = {
     DURATION_5S: {
-        'duration': DURATION_5S,
-        'granularity': GRANULARITY_5S,
+        "duration": DURATION_5S,
+        "granularity": GRANULARITY_5S,
     },
     DURATION_1M: {
-        'duration': DURATION_1M,
-        'granularity': GRANULARITY_1M,
+        "duration": DURATION_1M,
+        "granularity": GRANULARITY_1M,
     },
     DURATION_1H: {
-        'duration': DURATION_1H,
-        'granularity': GRANULARITY_1H,
-    }
+        "duration": DURATION_1H,
+        "granularity": GRANULARITY_1H,
+    },
+    DURATION_1D: {
+        "duration": DURATION_1D,
+        "granularity": GRANULARITY_1D,
+    },
 }
 
-BUY = '2'   # kabusapi: 2=買い
-SELL = '1'  # kabusapi: 1=売り
+BUY = "2"  # kabusapi: 2=買い
+SELL = "1"  # kabusapi: 1=売り
 
-PRODUCT_CODE_USD_JPY = '1459'  # kabusapi用の銘柄コード例（ETF: 1459）
+PRODUCT_CODE_USD_JPY = "1459"  # kabusapi用の銘柄コード例（ETF: 1459）

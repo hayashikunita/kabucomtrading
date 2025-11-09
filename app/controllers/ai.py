@@ -5,14 +5,13 @@ import time
 import numpy as np
 import talib
 
+import constants
+import settings
 from app.models.candle import factory_candle_class
 from app.models.dfcandle import DataFrameCandle
 from app.models.events import SignalEvents
 from kabucom.kabucom import KabusApiClient, Order  # kabusapi用に変更
 from tradingalgo.algo import ichimoku_cloud
-
-import constants
-import settings
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +28,6 @@ def duration_seconds(duration: str) -> int:
 
 
 class AI(object):
-
     def __init__(self, product_code, use_percent, duration, past_period, stop_limit_percent, back_test):
         self.API = KabusApiClient(settings.token, settings.url)  # kabusapi用に変更
 
@@ -51,13 +49,13 @@ class AI(object):
         self.update_optimize_params(False)
 
     def update_optimize_params(self, is_continue: bool):
-        logger.info('action=update_optimize_params status=run')
+        logger.info("action=update_optimize_params status=run")
         df = DataFrameCandle(self.product_code, self.duration)
         df.set_all_candles(self.past_period)
         if df.candles:
             self.optimized_trade_params = df.optimize_params()
         if self.optimized_trade_params is not None:
-            logger.info(f'action=update_optimize_params params={self.optimized_trade_params.__dict__}')
+            logger.info(f"action=update_optimize_params params={self.optimized_trade_params.__dict__}")
 
         if is_continue and self.optimized_trade_params is None:
             time.sleep(10 * duration_seconds(self.duration))
@@ -69,11 +67,11 @@ class AI(object):
             return could_buy
 
         if self.start_trade > candle.time:
-            logger.warning('action=buy status=false error=old_time')
+            logger.warning("action=buy status=false error=old_time")
             return False
 
         if not self.signal_events.can_buy(candle.time):
-            logger.warning('action=buy status=false error=previous_was_buy')
+            logger.warning("action=buy status=false error=previous_was_buy")
             return False
 
         balance = self.API.get_balance()
@@ -89,11 +87,11 @@ class AI(object):
             return could_sell
 
         if self.start_trade > candle.time:
-            logger.warning('action=sell status=false error=old_time')
+            logger.warning("action=sell status=false error=old_time")
             return False
 
         if not self.signal_events.can_sell(candle.time):
-            logger.warning('action=sell status=false error=previous_was_sell')
+            logger.warning("action=sell status=false error=previous_was_sell")
             return False
 
         trades = self.API.get_open_trade()
@@ -104,11 +102,13 @@ class AI(object):
             sum_price += closed_trade.price * abs(closed_trade.qty)
             units += abs(closed_trade.qty)
 
-        could_sell = self.signal_events.sell(self.product_code, candle.time, sum_price/units if units else 0, units, save=True)
+        could_sell = self.signal_events.sell(
+            self.product_code, candle.time, sum_price / units if units else 0, units, save=True
+        )
         return could_sell
 
     def trade(self):
-        logger.info('action=trade status=run')
+        logger.info("action=trade status=run")
         params = self.optimized_trade_params
         if params is None:
             return
@@ -130,7 +130,9 @@ class AI(object):
             rsi_values = talib.RSI(np.array(df.closes), params.rsi_period)
 
         if params.macd_enable:
-            macd, macd_signal, _ = talib.MACD(np.array(df.closes), params.macd_fast_period, params.macd_slow_period, params.macd_signal_period)
+            macd, macd_signal, _ = talib.MACD(
+                np.array(df.closes), params.macd_fast_period, params.macd_slow_period, params.macd_signal_period
+            )
 
         for i in range(1, len(df.candles)):
             buy_point, sell_point = 0, 0
@@ -150,32 +152,46 @@ class AI(object):
                     sell_point += 1
 
             if params.ichimoku_enable:
-                if (chikou[i-1] < df.candles[i-1].high and
-                        chikou[i] >= df.candles[i].high and
-                        senkou_a[i] < df.candles[i].low and
-                        senkou_b[i] < df.candles[i].low and
-                        tenkan[i] > kijun[i]):
+                if (
+                    chikou[i - 1] < df.candles[i - 1].high
+                    and chikou[i] >= df.candles[i].high
+                    and senkou_a[i] < df.candles[i].low
+                    and senkou_b[i] < df.candles[i].low
+                    and tenkan[i] > kijun[i]
+                ):
                     buy_point += 1
 
-                if (chikou[i - 1] > df.candles[i - 1].low and
-                        chikou[i] <= df.candles[i].low and
-                        senkou_a[i] > df.candles[i].high and
-                        senkou_b[i] > df.candles[i].high and
-                        tenkan[i] < kijun[i]):
+                if (
+                    chikou[i - 1] > df.candles[i - 1].low
+                    and chikou[i] <= df.candles[i].low
+                    and senkou_a[i] > df.candles[i].high
+                    and senkou_b[i] > df.candles[i].high
+                    and tenkan[i] < kijun[i]
+                ):
                     sell_point += 1
 
             if params.macd_enable:
-                if macd[i] < 0 and macd_signal[i] < 0 and macd[i - 1] < macd_signal[i - 1] and macd[i] >= macd_signal[i]:
+                if (
+                    macd[i] < 0
+                    and macd_signal[i] < 0
+                    and macd[i - 1] < macd_signal[i - 1]
+                    and macd[i] >= macd_signal[i]
+                ):
                     buy_point += 1
 
-                if macd[i] > 0 and macd_signal[i] > 0 and macd[i-1] > macd_signal[i - 1] and macd[i] <= macd_signal[i]:
+                if (
+                    macd[i] > 0
+                    and macd_signal[i] > 0
+                    and macd[i - 1] > macd_signal[i - 1]
+                    and macd[i] <= macd_signal[i]
+                ):
                     sell_point += 1
 
-            if params.rsi_enable and rsi_values[i-1] != 0 and rsi_values[i-1] != 100:
-                if rsi_values[i-1] < params.rsi_buy_thread and rsi_values[i] >= params.rsi_buy_thread:
+            if params.rsi_enable and rsi_values[i - 1] != 0 and rsi_values[i - 1] != 100:
+                if rsi_values[i - 1] < params.rsi_buy_thread and rsi_values[i] >= params.rsi_buy_thread:
                     buy_point += 1
 
-                if rsi_values[i-1] > params.rsi_sell_thread and rsi_values[i] <= params.rsi_sell_thread:
+                if rsi_values[i - 1] > params.rsi_sell_thread and rsi_values[i] <= params.rsi_sell_thread:
                     sell_point += 1
 
             if buy_point > 0:
