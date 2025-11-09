@@ -21,15 +21,15 @@ def ichimoku_cloud(in_real):
     chikou = [0] * min(26, length)
     for i in range(len(in_real)):
         if i >= 9:
-            min_val, max_val = min_max(in_real[i-9:i])
+            min_val, max_val = min_max(in_real[i - 9 : i])
             tenkan.append((min_val + max_val) / 2)
         if i >= 26:
-            min_val, max_val = min_max(in_real[i-26:i])
+            min_val, max_val = min_max(in_real[i - 26 : i])
             kijun.append((min_val + max_val) / 2)
             senkou_a.append((tenkan[i] + kijun[i]) / 2)
-            chikou.append(in_real[i-26])
+            chikou.append(in_real[i - 26])
         if i >= 52:
-            min_val, max_val = min_max(in_real[i-52:i])
+            min_val, max_val = min_max(in_real[i - 52 : i])
             senkou_b.append((min_val + max_val) / 2)
 
     senkou_a = ([0] * 26) + senkou_a[:-26]

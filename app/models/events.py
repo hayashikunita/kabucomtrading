@@ -1,19 +1,14 @@
 import datetime
 
-from sqlalchemy import Column
-from sqlalchemy import desc
-from sqlalchemy import DateTime
-from sqlalchemy import Float
-from sqlalchemy import Integer
-from sqlalchemy import String
+from sqlalchemy import Column, DateTime, Float, Integer, String, desc
 
-from app.models.base import session_scope
-from app.models.base import Base
 import constants
 import settings
+from app.models.base import Base, session_scope
+
 
 class SignalEvent(Base):
-    __tablename__ = 'signal_event'
+    __tablename__ = "signal_event"
 
     time = Column(DateTime, primary_key=True, nullable=False)
     product_code = Column(String)
@@ -27,12 +22,12 @@ class SignalEvent(Base):
 
     @property
     def value(self):
-        dict_values = {  # omitemptyを使わずNone除外
-            'time': self.time,
-            'product_code': self.product_code,
-            'side': self.side,
-            'price': self.price,
-            'units': self.units,
+        dict_values = {  # omitempty繧剃ｽｿ繧上★None髯､螟・
+            "time": self.time,
+            "product_code": self.product_code,
+            "side": self.side,
+            "price": self.price,
+            "units": self.units,
         }
         dict_values = {k: v for k, v in dict_values.items() if v is not None}
         if not dict_values:
@@ -42,7 +37,9 @@ class SignalEvent(Base):
     @classmethod
     def get_signal_events_by_count(cls, count, prduct_code=settings.product_code):
         with session_scope() as session:
-            rows = session.query(cls).filter(cls.product_code == prduct_code).order_by(desc(cls.time)).limit(count).all()
+            rows = (
+                session.query(cls).filter(cls.product_code == prduct_code).order_by(desc(cls.time)).limit(count).all()
+            )
             if rows is None:
                 return []
             rows.reverse()
@@ -56,6 +53,7 @@ class SignalEvent(Base):
                 return []
             return rows
 
+
 class SignalEvents(object):
     def __init__(self, signals=None):
         if signals is None:
@@ -68,27 +66,20 @@ class SignalEvents(object):
             return True
 
         last_signal = self.signals[-1]
-        if last_signal.side == constants.SELL and last_signal.time < time:
-            return True
-
-        return False
+        return last_signal.side == constants.SELL and last_signal.time < time
 
     def can_sell(self, time):
         if len(self.signals) == 0:
             return False
 
         last_signal = self.signals[-1]
-        if last_signal.side == constants.BUY and last_signal.time < time:
-            return True
-
-        return False
+        return last_signal.side == constants.BUY and last_signal.time < time
 
     def buy(self, product_code, time, price, units, save):
         if not self.can_buy(time):
             return False
 
-        signal_event = SignalEvent(
-            time=time, product_code=product_code, side=constants.BUY, price=price, units=units)
+        signal_event = SignalEvent(time=time, product_code=product_code, side=constants.BUY, price=price, units=units)
         if save:
             signal_event.save()
 
@@ -99,8 +90,7 @@ class SignalEvents(object):
         if not self.can_sell(time):
             return False
 
-        signal_event = SignalEvent(
-            time=time, product_code=product_code, side=constants.SELL, price=price, units=units)
+        signal_event = SignalEvent(time=time, product_code=product_code, side=constants.SELL, price=price, units=units)
         if save:
             signal_event.save()
 
@@ -147,7 +137,4 @@ class SignalEvents(object):
         if not self.profit:
             profit = None
 
-        return {
-            'signals': signals,
-            'profit': profit
-        }
+        return {"signals": signals, "profit": profit}

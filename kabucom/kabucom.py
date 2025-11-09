@@ -1,19 +1,22 @@
-import requests
 import logging
 import math
 import time
 from datetime import datetime
 
+import requests
+
 import constants
 import settings
 
-ORDER_FILLED = '2'  # kabusapi: 2=約定済
+ORDER_FILLED = "2"  # kabusapi: 2=約定済
 
 logger = logging.getLogger(__name__)
+
 
 class Balance(object):
     def __init__(self, available):
         self.available = available
+
 
 class Ticker(object):
     def __init__(self, symbol, timestamp, bid, ask, volume):
@@ -36,19 +39,20 @@ class Ticker(object):
         if duration == constants.DURATION_5S:
             new_sec = math.floor(self.time.second / 5) * 5
             ticker_time = datetime(
-                self.time.year, self.time.month, self.time.day,
-                self.time.hour, self.time.minute, new_sec)
-            time_format = '%Y-%m-%d %H:%M:%S'
+                self.time.year, self.time.month, self.time.day, self.time.hour, self.time.minute, new_sec
+            )
+            time_format = "%Y-%m-%d %H:%M:%S"
         elif duration == constants.DURATION_1M:
-            time_format = '%Y-%m-%d %H:%M'
+            time_format = "%Y-%m-%d %H:%M"
         elif duration == constants.DURATION_1H:
-            time_format = '%Y-%m-%d %H'
+            time_format = "%Y-%m-%d %H"
         else:
-            logger.warning('action=truncate_date_time error=no_datetime_format')
+            logger.warning("action=truncate_date_time error=no_datetime_format")
             return None
 
         str_date = datetime.strftime(ticker_time, time_format)
         return datetime.strptime(str_date, time_format)
+
 
 class Order(object):
     def __init__(self, symbol, side, qty, price=None, order_state=None, order_id=None):
@@ -59,8 +63,10 @@ class Order(object):
         self.order_state = order_state
         self.order_id = order_id
 
+
 class OrderTimeoutError(Exception):
     """Order timeout error"""
+
 
 class Trade(object):
     def __init__(self, trade_id, side, price, qty):
@@ -68,6 +74,7 @@ class Trade(object):
         self.side = side
         self.price = price
         self.qty = qty
+
 
 class KabusApiClient(object):
     def __init__(self, token, url):
@@ -79,7 +86,7 @@ class KabusApiClient(object):
         headers = {"X-API-KEY": self.token}
         resp = requests.get(endpoint, headers=headers, verify=False)
         resp.raise_for_status()
-        available = resp.json()[0]['Cash']
+        available = resp.json()[0]["Cash"]
         return Balance(available)
 
     def get_ticker(self, symbol, exchange=1) -> Ticker:
@@ -89,10 +96,10 @@ class KabusApiClient(object):
         resp = requests.get(endpoint, headers=headers, params=params, verify=False)
         resp.raise_for_status()
         data = resp.json()
-        timestamp = int(datetime.strptime(data['CurrentPriceTime'], "%Y-%m-%dT%H:%M:%S.%f").timestamp())
-        bid = data['BidPrice']
-        ask = data['AskPrice']
-        volume = data.get('TradingVolume', 0)
+        timestamp = int(datetime.strptime(data["CurrentPriceTime"], "%Y-%m-%dT%H:%M:%S.%f").timestamp())
+        bid = data["BidPrice"]
+        ask = data["AskPrice"]
+        volume = data.get("TradingVolume", 0)
         return Ticker(symbol, timestamp, bid, ask, volume)
 
     def send_order(self, order: Order) -> Trade:
@@ -110,14 +117,14 @@ class KabusApiClient(object):
             "Qty": order.qty,
             "Price": order.price if order.price else 0,
             "ExpireDay": 0,
-            "FrontOrderType": 20 if order.price else 10
+            "FrontOrderType": 20 if order.price else 10,
         }
         resp = requests.post(endpoint, headers=headers, json=data, verify=False)
         resp.raise_for_status()
-        order_id = resp.json()['OrderId']
+        order_id = resp.json()["OrderId"]
         order = self.wait_order_complete(order_id)
         if not order:
-            logger.error('action=send_order error=timeout')
+            logger.error("action=send_order error=timeout")
             raise OrderTimeoutError
         return self.trade_details(order.order_id)
 
@@ -141,12 +148,12 @@ class KabusApiClient(object):
         resp.raise_for_status()
         data = resp.json()
         order = Order(
-            symbol=data['Symbol'],
-            side=data['Side'],
-            qty=data['Qty'],
-            price=data['Price'],
-            order_state=data['State'],
-            order_id=order_id
+            symbol=data["Symbol"],
+            side=data["Side"],
+            qty=data["Qty"],
+            price=data["Price"],
+            order_state=data["State"],
+            order_id=order_id,
         )
         return order
 
@@ -156,13 +163,8 @@ class KabusApiClient(object):
         resp = requests.get(endpoint, headers=headers, verify=False)
         resp.raise_for_status()
         for t in resp.json():
-            if t['OrderId'] == order_id:
-                return Trade(
-                    trade_id=t['OrderId'],
-                    side=t['Side'],
-                    price=t['Price'],
-                    qty=t['Qty']
-                )
+            if t["OrderId"] == order_id:
+                return Trade(trade_id=t["OrderId"], side=t["Side"], price=t["Price"], qty=t["Qty"])
         return None
 
     def get_open_trade(self) -> list:
@@ -172,13 +174,8 @@ class KabusApiClient(object):
         resp.raise_for_status()
         trades_list = []
         for t in resp.json():
-            if t['State'] == ORDER_FILLED:
-                trades_list.append(Trade(
-                    trade_id=t['OrderId'],
-                    side=t['Side'],
-                    price=t['Price'],
-                    qty=t['Qty']
-                ))
+            if t["State"] == ORDER_FILLED:
+                trades_list.append(Trade(trade_id=t["OrderId"], side=t["Side"], price=t["Price"], qty=t["Qty"]))
         return trades_list
 
     def trade_close(self, order_id) -> Trade:
@@ -186,10 +183,7 @@ class KabusApiClient(object):
         # ここでは例として注文取消APIを使用
         endpoint = f"{self.url}/cancelorder"
         headers = {"X-API-KEY": self.token}
-        data = {
-            "Password": settings.password,
-            "OrderId": order_id
-        }
+        data = {"Password": settings.password, "OrderId": order_id}
         resp = requests.post(endpoint, headers=headers, json=data, verify=False)
         resp.raise_for_status()
         # 取消後の状態取得

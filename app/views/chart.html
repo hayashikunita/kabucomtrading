@@ -160,27 +160,27 @@
 
         function changeDataSource(source) {
             config.dataSource = source;
-            
+
             // ボタンのアクティブ状態を更新
             $('.data-source-btn').removeClass('active');
             $('#btn-' + source).addClass('active');
-            
+
             // ステータス更新
             updateStatus('データソースを ' + (source === 'yahoo' ? 'Yahoo Finance' : 'kabusapi') + ' に変更しました');
-            
+
             // データを再取得
             fetchAndDrawChart();
         }
 
         function changeDuration(duration) {
             config.candlestick.duration = duration;
-            
+
             // ボタンのアクティブ状態を更新
             $('.duration-btn').removeClass('active');
             $('#btn-duration-' + duration).addClass('active');
-            
+
             updateStatus('時間軸を ' + duration + ' に変更しました');
-            
+
             // データを再取得
             fetchAndDrawChart();
         }
@@ -204,7 +204,7 @@
             var newHeight = parseInt($('#chart-height-slider').val());
             config.chart.height = newHeight;
             $('#chart-height-value').text(newHeight + 'px');
-            
+
             if (chart) {
                 chart.applyOptions({ height: newHeight });
                 updateStatus('チャートサイズを変更しました: ' + newHeight + 'px');
@@ -213,7 +213,7 @@
 
         function loadBacktestResults() {
             updateStatus('バックテスト結果を読み込み中...');
-            
+
             $.get('/api/backtest/results/')
                 .done(function(data) {
                     displayBacktestResults(data);
@@ -228,23 +228,23 @@
         function displayBacktestResults(data) {
             var resultsDiv = $('#backtest_results');
             var html = '<h3>バックテスト結果</h3>';
-            
+
             html += '<div class="result-item">';
             html += '<strong>銘柄:</strong> ' + data.product_code + ' | ';
             html += '<strong>期間:</strong> ' + data.period_days + '日 | ';
             html += '<strong>時間軸:</strong> ' + data.duration + ' | ';
             html += '<strong>実行日時:</strong> ' + new Date(data.timestamp).toLocaleString('ja-JP');
             html += '</div>';
-            
+
             if (data.results) {
                 var results = data.results;
-                
+
                 // 最適化されたパラメータ
                 if (results.optimized_params) {
                     html += '<div class="result-item">';
                     html += '<strong>最適化パラメータ:</strong>';
                     html += '<div class="param-grid">';
-                    
+
                     var params = results.optimized_params;
                     if (params.ema_enable) {
                         html += '<div class="param-item">✓ EMA: ' + params.ema_period_1 + ', ' + params.ema_period_2 + '</div>';
@@ -261,15 +261,15 @@
                     if (params.macd_enable) {
                         html += '<div class="param-item">✓ MACD: Fast=' + params.macd_fast_period + ', Slow=' + params.macd_slow_period + ', Signal=' + params.macd_signal_period + '</div>';
                     }
-                    
+
                     html += '</div></div>';
                 }
-                
+
                 // 各指標のパフォーマンス
                 html += '<div class="result-item">';
                 html += '<strong>指標別パフォーマンス:</strong>';
                 html += '<div class="param-grid">';
-                
+
                 if (results.ema) {
                     html += '<div class="param-item"><strong>EMA:</strong> ' + results.ema.performance + '%</div>';
                 }
@@ -285,10 +285,10 @@
                 if (results.macd) {
                     html += '<div class="param-item"><strong>MACD:</strong> ' + results.macd.performance + '%</div>';
                 }
-                
+
                 html += '</div></div>';
             }
-            
+
             resultsDiv.html(html);
             resultsDiv.show();
         }
@@ -297,9 +297,9 @@
             if (!config.api.enable) {
                 return;
             }
-            
+
             var apiEndpoint = config.dataSource === 'yahoo' ? '/api/yahoo/candle/' : '/api/candle/';
-            
+
             var params = {
                 "product_code": config.candlestick.product_code,
                 "limit": config.candlestick.limit,
@@ -319,7 +319,7 @@
                         updateStatus('エラー: データがありません');
                         return;
                     }
-                    
+
                     updateStatus('データ取得成功: ' + data.candles.length + '件のローソク足データ');
                     drawChart(data);
                 })
@@ -332,24 +332,24 @@
         function initChart() {
             try {
                 console.log('initChart called');
-                
+
                 if (chart) {
                     console.log('Removing existing chart');
                     chart.remove();
                     chart = null;
                     candlestickSeries = null;
                 }
-                
+
                 const chartElement = document.getElementById('chart_div');
                 if (!chartElement) {
                     console.error('Chart element not found');
                     updateStatus('エラー: チャート要素が見つかりません');
                     return;
                 }
-                
+
                 console.log('Creating chart with width:', chartElement.clientWidth);
                 console.log('LightweightCharts object:', LightweightCharts);
-                
+
                 chart = LightweightCharts.createChart(chartElement, {
                     width: chartElement.clientWidth,
                     height: config.chart.height,
@@ -377,7 +377,7 @@
                 console.log('Chart created:', chart);
                 console.log('Chart methods:', Object.keys(chart));
                 console.log('Adding candlestick series...');
-                
+
                 // addCandlestickSeries または addSeries を試す
                 if (typeof chart.addCandlestickSeries === 'function') {
                     candlestickSeries = chart.addCandlestickSeries({
@@ -416,12 +416,12 @@
 
         function drawChart(data) {
             console.log('Drawing chart with data:', data);
-            
+
             try {
                 if (!chart || !candlestickSeries) {
                     console.log('Initializing chart...');
                     initChart();
-                    
+
                     // 初期化後、再度nullチェック
                     if (!candlestickSeries) {
                         console.error('Failed to initialize candlestickSeries');
@@ -445,13 +445,13 @@
                 candleData.sort((a, b) => a.time - b.time);
 
                 console.log('Setting data to chart, items:', candleData.length);
-                
+
                 // チャートにデータをセット
                 candlestickSeries.setData(candleData);
-                
+
                 // チャートを自動フィット
                 chart.timeScale().fitContent();
-                
+
                 console.log('Chart drawn successfully with', candleData.length, 'candles');
             } catch (e) {
                 console.error('Error drawing chart:', e);
@@ -464,20 +464,20 @@
             // 初期状態のボタンをアクティブに
             $('#btn-' + config.dataSource).addClass('active');
             $('#btn-duration-' + config.candlestick.duration).addClass('active');
-            
+
             // Enterキーでも銘柄更新できるようにする
             $('#product-code-input').on('keypress', function(e) {
                 if (e.key === 'Enter') {
                     updateProductCode();
                 }
             });
-            
+
             // チャート初期化
             initChart();
-            
+
             // 初回データ取得
             fetchAndDrawChart();
-            
+
             // 定期的にデータを更新（Yahoo Financeの場合は無効化推奨）
             if (config.dataSource === 'kabusapi') {
                 setInterval(fetchAndDrawChart, config.api.interval);
@@ -496,7 +496,7 @@
         <button id="btn-yahoo" class="data-source-btn" onclick="changeDataSource('yahoo')">Yahoo Finance</button>
         <button id="btn-kabusapi" class="data-source-btn" onclick="changeDataSource('kabusapi')">kabusapi</button>
     </div>
-    
+
     <div class="product-code-group">
         <strong>銘柄コード:</strong>
         <input type="text" id="product-code-input" value="1459">
@@ -504,14 +504,14 @@
         <button onclick="updateProductCode()" class="update-btn">チャート更新</button>
         <button onclick="loadBacktestResults()" class="backtest-btn">バックテスト結果表示</button>
     </div>
-    
+
     <div class="duration-group">
         <strong>時間軸:</strong>
         <button id="btn-duration-5s" class="duration-btn" onclick="changeDuration('5s')">5秒足</button>
         <button id="btn-duration-1m" class="duration-btn" onclick="changeDuration('1m')">1分足</button>
         <button id="btn-duration-1h" class="duration-btn" onclick="changeDuration('1h')">1時間足</button>
     </div>
-    
+
     <div class="size-group">
         <strong>チャート高さ:</strong>
         <input type="range" id="chart-height-slider" min="300" max="1200" step="50" value="600" oninput="changeChartSize()">
@@ -528,4 +528,4 @@
 <div id="chart_div"></div>
 
 </body>
-</html>
+</html> 

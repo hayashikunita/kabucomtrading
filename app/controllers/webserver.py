@@ -1,35 +1,35 @@
-from flask import Flask
-from flask import jsonify
-from flask import render_template
-from flask import request
+import os
+from pathlib import Path
 
-from app.models.dfcandle import DataFrameCandle
-from app.data.yahoo import fetch_yahoo_data, save_yahoo_data_to_db
+from flask import Flask, jsonify, render_template, request
 
 import constants
 import settings
+from app.data.yahoo import fetch_yahoo_data, save_yahoo_data_to_db
+from app.models.dfcandle import DataFrameCandle
 
-app = Flask(__name__, template_folder='../views')
+app = Flask(__name__, template_folder="../views")
 
 
 @app.teardown_appcontext
 def remove_session(ex=None):
     from app.models.base import Session
+
     Session.remove()
 
 
-@app.route('/')
+@app.route("/")
 def index():
-    return render_template('./chart.html')
+    return render_template("./chart.html")
 
 
-@app.route('/api/candle/', methods=['GET'])
+@app.route("/api/candle/", methods=["GET"])
 def api_make_handler():
-    product_code = request.args.get('product_code')
+    product_code = request.args.get("product_code")
     if not product_code:
-        return jsonify({'error': 'No product_code params'}), 400
+        return jsonify({"error": "No product_code params"}), 400
 
-    limit_str = request.args.get('limit')
+    limit_str = request.args.get("limit")
     limit = 1000
     if limit_str:
         limit = int(limit_str)
@@ -37,18 +37,18 @@ def api_make_handler():
     if limit < 0 or limit > 1000:
         limit = 1000
 
-    duration = request.args.get('duration')
+    duration = request.args.get("duration")
     if not duration:
         duration = constants.DURATION_1M
-    duration_time = constants.TRADE_MAP[duration]['duration']
+    duration_time = constants.TRADE_MAP[duration]["duration"]
     df = DataFrameCandle(product_code, duration_time)
     df.set_all_candles(limit)
 
-    sma = request.args.get('sma')
+    sma = request.args.get("sma")
     if sma:
-        str_sma_period_1 = request.args.get('smaPeriod1')
-        str_sma_period_2 = request.args.get('smaPeriod2')
-        str_sma_period_3 = request.args.get('smaPeriod3')
+        str_sma_period_1 = request.args.get("smaPeriod1")
+        str_sma_period_2 = request.args.get("smaPeriod2")
+        str_sma_period_3 = request.args.get("smaPeriod3")
         if str_sma_period_1:
             period_1 = int(str_sma_period_1)
         if str_sma_period_2:
@@ -65,11 +65,11 @@ def api_make_handler():
         df.add_sma(period_2)
         df.add_sma(period_3)
 
-    ema = request.args.get('ema')
+    ema = request.args.get("ema")
     if ema:
-        str_ema_period_1 = request.args.get('emaPeriod1')
-        str_ema_period_2 = request.args.get('emaPeriod2')
-        str_ema_period_3 = request.args.get('emaPeriod3')
+        str_ema_period_1 = request.args.get("emaPeriod1")
+        str_ema_period_2 = request.args.get("emaPeriod2")
+        str_ema_period_3 = request.args.get("emaPeriod3")
         if str_ema_period_1:
             period_1 = int(str_ema_period_1)
         if str_ema_period_2:
@@ -86,10 +86,10 @@ def api_make_handler():
         df.add_ema(period_2)
         df.add_ema(period_3)
 
-    bbands = request.args.get('bbands')
+    bbands = request.args.get("bbands")
     if bbands:
-        str_n = request.args.get('bbandsN')
-        str_k = request.args.get('bbandsK')
+        str_n = request.args.get("bbandsN")
+        str_k = request.args.get("bbandsK")
         if str_n:
             n = int(str_n)
         if str_k:
@@ -100,24 +100,21 @@ def api_make_handler():
             k = 2.0
         df.add_bbands(n, k)
 
-    ichimoku = request.args.get('ichimoku')
+    ichimoku = request.args.get("ichimoku")
     if ichimoku:
         df.add_ichimoku()
 
-    rsi = request.args.get('rsi')
+    rsi = request.args.get("rsi")
     if rsi:
-        str_period = request.args.get('rsiPeriod')
-        if str_period:
-            period = int(str_period)
-        else:
-            period = 14
+        str_period = request.args.get("rsiPeriod")
+        period = int(str_period) if str_period else 14
         df.add_rsi(period)
 
-    macd = request.args.get('macd')
+    macd = request.args.get("macd")
     if macd:
-        str_macd_period_1 = request.args.get('macdPeriod1')
-        str_macd_period_2 = request.args.get('macdPeriod2')
-        str_macd_period_3 = request.args.get('macdPeriod3')
+        str_macd_period_1 = request.args.get("macdPeriod1")
+        str_macd_period_2 = request.args.get("macdPeriod2")
+        str_macd_period_3 = request.args.get("macdPeriod3")
         if str_macd_period_1:
             period_1 = int(str_macd_period_1)
         if str_macd_period_2:
@@ -132,24 +129,25 @@ def api_make_handler():
             period_3 = 9
         df.add_macd(period_1, period_2, period_3)
 
-    events = request.args.get('events')
+    events = request.args.get("events")
     if events:
         if settings.back_test:
             from app.controllers.streamdata import stream
+
             df.events = stream.ai.signal_events
         else:
             df.add_events(df.candles[0].time)
     return jsonify(df.value), 200
 
 
-@app.route('/api/yahoo/candle/', methods=['GET'])
+@app.route("/api/yahoo/candle/", methods=["GET"])
 def api_yahoo_handler():
     """Yahoo Financeからデータを取得するエンドポイント"""
-    product_code = request.args.get('product_code')
+    product_code = request.args.get("product_code")
     if not product_code:
-        return jsonify({'error': 'No product_code params'}), 400
+        return jsonify({"error": "No product_code params"}), 400
 
-    limit_str = request.args.get('limit')
+    limit_str = request.args.get("limit")
     limit = 365
     if limit_str:
         limit = int(limit_str)
@@ -157,26 +155,21 @@ def api_yahoo_handler():
     if limit < 0 or limit > 1000:
         limit = 365
 
-    duration = request.args.get('duration')
+    duration = request.args.get("duration")
     if not duration:
         duration = constants.DURATION_1M
-    duration_time = constants.TRADE_MAP.get(duration, {}).get('duration', constants.DURATION_1M)
+    duration_time = constants.TRADE_MAP.get(duration, {}).get("duration", constants.DURATION_1M)
 
     # Yahoo Financeからデータ取得
-    yahoo_candles = fetch_yahoo_data(
-        product_code=product_code,
-        period_days=limit,
-        duration=duration_time,
-        market='T'
-    )
+    yahoo_candles = fetch_yahoo_data(product_code=product_code, period_days=limit, duration=duration_time, market="T")
 
     if not yahoo_candles:
-        return jsonify({'error': 'No data from Yahoo Finance'}), 404
+        return jsonify({"error": "No data from Yahoo Finance"}), 404
 
-    # DataFrameCandleオブジェクトを作成（バックテスト用と同じ形式）
+    # Create DataFrameCandle object (same format as backtest)
     df = DataFrameCandle(product_code, duration_time)
-    
-    # Yahoo Financeのデータをローソク足リストに変換
+
+    # Convert Yahoo Finance data to candle list
     class SimpleCandle:
         def __init__(self, candle_data):
             self.time = candle_data.time
@@ -185,26 +178,26 @@ def api_yahoo_handler():
             self.low = candle_data.low
             self.close = candle_data.close
             self.volume = candle_data.volume
-        
+
         @property
         def value(self):
             return {
-                'time': self.time,
-                'open': self.open,
-                'high': self.high,
-                'low': self.low,
-                'close': self.close,
-                'volume': self.volume,
+                "time": self.time,
+                "open": self.open,
+                "high": self.high,
+                "low": self.low,
+                "close": self.close,
+                "volume": self.volume,
             }
-    
+
     df.candles = [SimpleCandle(c) for c in yahoo_candles]
 
-    # テクニカル指標の追加（既存のロジックと同じ）
-    sma = request.args.get('sma')
+    # Add technical indicators (same logic as existing code)
+    sma = request.args.get("sma")
     if sma:
-        str_sma_period_1 = request.args.get('smaPeriod1')
-        str_sma_period_2 = request.args.get('smaPeriod2')
-        str_sma_period_3 = request.args.get('smaPeriod3')
+        str_sma_period_1 = request.args.get("smaPeriod1")
+        str_sma_period_2 = request.args.get("smaPeriod2")
+        str_sma_period_3 = request.args.get("smaPeriod3")
         period_1 = int(str_sma_period_1) if str_sma_period_1 else 7
         period_2 = int(str_sma_period_2) if str_sma_period_2 else 14
         period_3 = int(str_sma_period_3) if str_sma_period_3 else 50
@@ -212,11 +205,11 @@ def api_yahoo_handler():
         df.add_sma(period_2)
         df.add_sma(period_3)
 
-    ema = request.args.get('ema')
+    ema = request.args.get("ema")
     if ema:
-        str_ema_period_1 = request.args.get('emaPeriod1')
-        str_ema_period_2 = request.args.get('emaPeriod2')
-        str_ema_period_3 = request.args.get('emaPeriod3')
+        str_ema_period_1 = request.args.get("emaPeriod1")
+        str_ema_period_2 = request.args.get("emaPeriod2")
+        str_ema_period_3 = request.args.get("emaPeriod3")
         period_1 = int(str_ema_period_1) if str_ema_period_1 else 7
         period_2 = int(str_ema_period_2) if str_ema_period_2 else 14
         period_3 = int(str_ema_period_3) if str_ema_period_3 else 50
@@ -224,29 +217,29 @@ def api_yahoo_handler():
         df.add_ema(period_2)
         df.add_ema(period_3)
 
-    bbands = request.args.get('bbands')
+    bbands = request.args.get("bbands")
     if bbands:
-        str_n = request.args.get('bbandsN')
-        str_k = request.args.get('bbandsK')
+        str_n = request.args.get("bbandsN")
+        str_k = request.args.get("bbandsK")
         n = int(str_n) if str_n else 20
         k = float(str_k) if str_k else 2.0
         df.add_bbands(n, k)
 
-    ichimoku = request.args.get('ichimoku')
+    ichimoku = request.args.get("ichimoku")
     if ichimoku:
         df.add_ichimoku()
 
-    rsi = request.args.get('rsi')
+    rsi = request.args.get("rsi")
     if rsi:
-        str_period = request.args.get('rsiPeriod')
+        str_period = request.args.get("rsiPeriod")
         period = int(str_period) if str_period else 14
         df.add_rsi(period)
 
-    macd = request.args.get('macd')
+    macd = request.args.get("macd")
     if macd:
-        str_macd_period_1 = request.args.get('macdPeriod1')
-        str_macd_period_2 = request.args.get('macdPeriod2')
-        str_macd_period_3 = request.args.get('macdPeriod3')
+        str_macd_period_1 = request.args.get("macdPeriod1")
+        str_macd_period_2 = request.args.get("macdPeriod2")
+        str_macd_period_3 = request.args.get("macdPeriod3")
         period_1 = int(str_macd_period_1) if str_macd_period_1 else 12
         period_2 = int(str_macd_period_2) if str_macd_period_2 else 26
         period_3 = int(str_macd_period_3) if str_macd_period_3 else 9
@@ -255,25 +248,24 @@ def api_yahoo_handler():
     return jsonify(df.value), 200
 
 
-@app.route('/api/backtest/results/', methods=['GET'])
+@app.route("/api/backtest/results/", methods=["GET"])
 def api_backtest_results():
     """バックテスト結果を取得するエンドポイント"""
     import json
-    import os
-    
-    results_file = 'backtest_results.json'
-    
-    if not os.path.exists(results_file):
-        return jsonify({'error': 'No backtest results found'}), 404
-    
+
+    results_file = Path("backtest_results.json")
+
+    if not results_file.exists():
+        return jsonify({"error": "No backtest results found"}), 404
+
     try:
-        with open(results_file, 'r', encoding='utf-8') as f:
+        with results_file.open("r", encoding="utf-8") as f:
             results = json.load(f)
         return jsonify(results), 200
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify({"error": str(e)}), 500
 
 
 def start():
     # app.run(host='127.0.0.1', port=settings.web_port, threaded=True)
-    app.run(host='0.0.0.0', port=settings.web_port, threaded=True)
+    app.run(host="0.0.0.0", port=settings.web_port, threaded=True)

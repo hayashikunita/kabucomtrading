@@ -1,9 +1,10 @@
 def bool_from_str(text: str) -> bool:
-    if text.lower() == 'true':
+    if text.lower() == "true":
         return True
-    if text.lower() == 'false':
+    if text.lower() == "false":
         return False
     return False
+
 
 class Serializer(object):
     @property

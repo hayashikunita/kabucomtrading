@@ -8,7 +8,7 @@ from app.controllers.webserver import start
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 
 if __name__ == "__main__":
-    # kabusapiのストリームデータ取得・Webサーバ起動
+    # kabusapi縺ｮ繧ｹ繝医Μ繝ｼ繝繝・・繧ｿ蜿門ｾ励・Web繧ｵ繝ｼ繝占ｵｷ蜍・
     streamThread = Thread(target=stream.stream_ingestion_data)
     serverThread = Thread(target=start)
 
