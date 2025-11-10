@@ -672,7 +672,7 @@ kabucomtrading/
 
 ```powershell
 # 仮想環境のPythonでStreamlitアプリを起動
-python.exe -m streamlit run streamlit_app.py
+C:/Users/toush/Desktop/works/hayashi_work/program/kabucomtrading/.venv/Scripts/python.exe -m streamlit run streamlit_app.py
 ```
 
 **ブラウザで操作**:
@@ -691,12 +691,12 @@ python.exe -m streamlit run streamlit_app.py
 
 **標準モード（最適パラメータのみ）**:
 ```powershell
-python.exe backtest_yahoo.py --product-code 1459 --period 90 --duration 1d
+C:/Users/toush/Desktop/works/hayashi_work/program/kabucomtrading/.venv/Scripts/python.exe backtest_yahoo.py --product-code 1459 --period 90 --duration 1d
 ```
 
 **詳細モード（全パラメータ組み合わせ）**:
 ```powershell
-python.exe backtest_yahoo.py --detailed --product-code 1459 --period 90 --duration 1d
+C:/Users/toush/Desktop/works/hayashi_work/program/kabucomtrading/.venv/Scripts/python.exe backtest_yahoo.py --detailed --product-code 1459 --period 90 --duration 1d
 ```
 
 **出力ファイル**:
