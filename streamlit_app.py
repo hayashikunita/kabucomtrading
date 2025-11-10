@@ -748,6 +748,408 @@ def get_cache_filename(product_code, period_days, duration):
     return os.path.join(CACHE_DIR, f"{product_code}_{duration}_{period_days}days.csv")
 
 
+# 業界平均データの読み込み
+@st.cache_data
+def load_industry_averages():
+    """業界平均PER/PBRデータをExcelファイルから読み込み"""
+    try:
+        excel_path = "data/perpbr/perpbr202510.xlsx"
+        if not os.path.exists(excel_path):
+            return None
+
+        # skiprows=2でヘッダーを正しく読み込む
+        df = pd.read_excel(excel_path, sheet_name="規模別・業種別（連結）", skiprows=2)
+
+        # プライム市場のデータのみ抽出
+        prime_df = df[df["市場区分名"] == "プライム市場"].copy()
+
+        # 業種マッピング辞書を作成
+        industry_dict = {}
+        for _, row in prime_df.iterrows():
+            industry_name = str(row.get("種別", ""))
+            if not industry_name or industry_name == "nan" or "総合" in industry_name or "製造業" in industry_name:
+                continue
+
+            # 業種名から番号と日本語名を抽出
+            industry_key = industry_name.strip()
+
+            industry_dict[industry_key] = {
+                "per": row.get("単純＿PER（倍）", None),
+                "pbr": row.get("単純＿PBR（倍）", None),
+                "companies": row.get("会社数", 0),
+            }
+
+        return industry_dict
+    except Exception as e:
+        st.warning(f"業界平均データ読み込みエラー: {e!s}")
+        return None
+
+
+@st.cache_data
+def load_market_cap_by_sector():
+    """業種別時価総額データをPDFから読み込み"""
+    try:
+        import pdfplumber
+
+        pdf_path = "data/marketcapitalizationbyindustrysector/202510.pdf"
+        if not os.path.exists(pdf_path):
+            return None
+
+        sector_market_cap = {}
+
+        with pdfplumber.open(pdf_path) as pdf:
+            text = pdf.pages[0].extract_text()
+
+            # テキストを行ごとに分割
+            lines = text.split("\n")
+
+            # データ行を探す（日本語業種名を含む行）
+            sector_names = [
+                "水産・農林業",
+                "鉱業",
+                "建設業",
+                "食料品",
+                "繊維製品",
+                "パルプ・紙",
+                "化学",
+                "医薬品",
+                "石油・石炭製品",
+                "ゴム製品",
+                "ガラス・土石製品",
+                "鉄鋼",
+                "非鉄金属",
+                "金属製品",
+                "機械",
+                "電気機器",
+                "輸送用機器",
+                "精密機器",
+                "その他製品",
+                "電気・ガス業",
+                "陸運業",
+                "海運業",
+                "空運業",
+                "倉庫・運輸関連業",
+                "情報・通信業",
+                "卸売業",
+                "小売業",
+                "銀行業",
+                "証券、商品先物取引業",
+                "保険業",
+                "その他金融業",
+                "不動産業",
+                "サービス業",
+            ]
+
+            for line in lines:
+                for sector in sector_names:
+                    if sector in line:
+                        # 数字を抽出（時価総額は百万円単位）
+                        parts = line.split()
+                        for i, part in enumerate(parts):
+                            if sector in part and i + 2 < len(parts):
+                                try:
+                                    # 会社数
+                                    companies = int(parts[i + 1].replace(",", ""))
+                                    # 時価総額（百万円）
+                                    market_cap = int(parts[i + 2].replace(",", ""))
+
+                                    sector_market_cap[sector] = {
+                                        "companies": companies,
+                                        "market_cap_million": market_cap,
+                                        "market_cap_billion": market_cap / 1000,  # 億円
+                                        "market_cap_trillion": market_cap / 1000000,  # 兆円
+                                    }
+                                    break
+                                except (ValueError, IndexError):
+                                    continue
+
+        return sector_market_cap if sector_market_cap else None
+    except Exception as e:
+        st.warning(f"時価総額データ読み込みエラー: {e!s}")
+        return None
+
+
+@st.cache_data
+def load_top_companies_by_market_cap():
+    """時価総額上位企業データをPDFから読み込み"""
+    try:
+        import pdfplumber
+
+        pdf_path = "data/stocksbymarketcapitalization/202510_r.pdf"
+        if not os.path.exists(pdf_path):
+            return None
+
+        companies = []
+
+        with pdfplumber.open(pdf_path) as pdf:
+            for page in pdf.pages:
+                text = page.extract_text()
+                lines = text.split("\n")
+
+                for line in lines:
+                    # ランキング行を探す（数字で始まる行）
+                    parts = line.split()
+                    if len(parts) >= 4 and parts[0].isdigit():
+                        try:
+                            rank = int(parts[0])
+                            code = parts[1]
+
+                            # 銘柄名を抽出（日本語部分）
+                            # 時価額は最後の数字
+                            market_cap_str = parts[-1].replace(",", "")
+                            market_cap = int(market_cap_str)  # 億円
+
+                            # 銘柄名は2番目から最後の数字の前まで
+                            name_parts = []
+                            for i in range(2, len(parts) - 1):
+                                # 英語名は除外（全て大文字またはCapitalized）
+                                if not parts[i].isupper() and not all(
+                                    c.isupper() or c in ".,()-" for c in parts[i]
+                                ):
+                                    name_parts.append(parts[i])
+
+                            name = " ".join(name_parts) if name_parts else parts[2]
+
+                            companies.append(
+                                {
+                                    "rank": rank,
+                                    "code": code,
+                                    "name": name,
+                                    "market_cap_billion": market_cap,
+                                    "market_cap_trillion": market_cap / 10000,
+                                }
+                            )
+                        except (ValueError, IndexError):
+                            continue
+
+        return companies if companies else None
+    except Exception as e:
+        st.warning(f"時価総額ランキングデータ読み込みエラー: {e!s}")
+        return None
+
+
+# yfinanceのsector/industryから日本の業種区分へのマッピング
+SECTOR_TO_INDUSTRY_MAP = {
+    # Consumer Cyclical
+    "Consumer Cyclical": "15 機械",  # デフォルト
+    "Auto Manufacturers": "16 電気機器",
+    "Auto Parts": "17 輸送用機器",
+    "Furnishings, Fixtures & Appliances": "15 機械",
+    "Residential Construction": "3 建設業",
+    "Textile Manufacturing": "5 繊維製品",
+    "Apparel Manufacturing": "5 繊維製品",
+    "Footwear & Accessories": "5 繊維製品",
+    "Packaging & Containers": "6 パルプ・紙",
+    "Personal Services": "28 サービス業",
+    "Restaurants": "28 サービス業",
+    "Apparel Retail": "27 小売業",
+    "Department Stores": "27 小売業",
+    "Home Improvement Retail": "27 小売業",
+    "Luxury Goods": "27 小売業",
+    "Internet Retail": "26 情報・通信業",
+    "Specialty Retail": "27 小売業",
+    "Gambling": "28 サービス業",
+    "Leisure": "28 サービス業",
+    "Lodging": "28 サービス業",
+    "Resorts & Casinos": "28 サービス業",
+    "Travel Services": "28 サービス業",
+    # Technology
+    "Technology": "26 情報・通信業",
+    "Consumer Electronics": "16 電気機器",
+    "Computer Hardware": "16 電気機器",
+    "Electronic Components": "16 電気機器",
+    "Electronics & Computer Distribution": "27 小売業",
+    "Information Technology Services": "26 情報・通信業",
+    "Software—Application": "26 情報・通信業",
+    "Software—Infrastructure": "26 情報・通信業",
+    "Communication Equipment": "16 電気機器",
+    "Semiconductors": "16 電気機器",
+    "Semiconductor Equipment & Materials": "16 電気機器",
+    "Scientific & Technical Instruments": "15 機械",
+    "Solar": "16 電気機器",
+    # Financial Services
+    "Financial Services": "25 銀行業",
+    "Banks—Regional": "25 銀行業",
+    "Banks—Diversified": "25 銀行業",
+    "Mortgage Finance": "25 銀行業",
+    "Capital Markets": "24 証券、商品先物取引業",
+    "Financial Data & Stock Exchanges": "24 証券、商品先物取引業",
+    "Insurance—Life": "23 保険業",
+    "Insurance—Property & Casualty": "23 保険業",
+    "Insurance—Diversified": "23 保険業",
+    "Insurance—Specialty": "23 保険業",
+    "Insurance Brokers": "23 保険業",
+    "Asset Management": "24 証券、商品先物取引業",
+    "Credit Services": "25 銀行業",
+    "Shell Companies": "28 サービス業",
+    # Healthcare
+    "Healthcare": "8 医薬品",
+    "Biotechnology": "8 医薬品",
+    "Drug Manufacturers—General": "8 医薬品",
+    "Drug Manufacturers—Specialty & Generic": "8 医薬品",
+    "Healthcare Plans": "23 保険業",
+    "Medical Care Facilities": "28 サービス業",
+    "Pharmaceutical Retailers": "27 小売業",
+    "Health Information Services": "26 情報・通信業",
+    "Medical Devices": "15 機械",
+    "Medical Instruments & Supplies": "15 機械",
+    "Diagnostics & Research": "8 医薬品",
+    "Medical Distribution": "27 小売業",
+    # Communication Services
+    "Communication Services": "26 情報・通信業",
+    "Advertising Agencies": "28 サービス業",
+    "Publishing": "26 情報・通信業",
+    "Broadcasting": "26 情報・通信業",
+    "Entertainment": "26 情報・通信業",
+    "Internet Content & Information": "26 情報・通信業",
+    "Electronic Gaming & Multimedia": "26 情報・通信業",
+    "Telecom Services": "26 情報・通信業",
+    # Energy
+    "Energy": "9 石油・石炭製品",
+    "Oil & Gas E&P": "2 鉱業",
+    "Oil & Gas Equipment & Services": "15 機械",
+    "Oil & Gas Integrated": "9 石油・石炭製品",
+    "Oil & Gas Midstream": "9 石油・石炭製品",
+    "Oil & Gas Refining & Marketing": "9 石油・石炭製品",
+    "Thermal Coal": "2 鉱業",
+    "Uranium": "2 鉱業",
+    # Industrials
+    "Industrials": "15 機械",
+    "Aerospace & Defense": "17 輸送用機器",
+    "Airlines": "21 空運業",
+    "Airports & Air Services": "21 空運業",
+    "Building Products & Equipment": "11 ガラス・土石製品",
+    "Farm & Heavy Construction Machinery": "15 機械",
+    "Industrial Distribution": "27 小売業",
+    "Business Equipment & Supplies": "27 小売業",
+    "Conglomerates": "28 サービス業",
+    "Consulting Services": "28 サービス業",
+    "Electrical Equipment & Parts": "16 電気機器",
+    "Engineering & Construction": "3 建設業",
+    "Farm Products": "1 水産・農林業",
+    "Industrial Products": "15 機械",
+    "Metal Fabrication": "14 金属製品",
+    "Pollution & Treatment Controls": "15 機械",
+    "Railroads": "19 陸運業",
+    "Rental & Leasing Services": "28 サービス業",
+    "Security & Protection Services": "28 サービス業",
+    "Specialty Business Services": "28 サービス業",
+    "Specialty Industrial Machinery": "15 機械",
+    "Staffing & Employment Services": "28 サービス業",
+    "Tools & Accessories": "14 金属製品",
+    "Trucking": "19 陸運業",
+    "Waste Management": "28 サービス業",
+    "Marine Shipping": "20 海運業",
+    "Integrated Freight & Logistics": "22 倉庫・運輸関連業",
+    # Basic Materials
+    "Basic Materials": "7 化学",
+    "Aluminum": "13 非鉄金属",
+    "Building Materials": "11 ガラス・土石製品",
+    "Chemicals": "7 化学",
+    "Specialty Chemicals": "7 化学",
+    "Coking Coal": "2 鉱業",
+    "Copper": "13 非鉄金属",
+    "Gold": "2 鉱業",
+    "Lumber & Wood Production": "6 パルプ・紙",
+    "Paper & Paper Products": "6 パルプ・紙",
+    "Silver": "2 鉱業",
+    "Steel": "12 鉄鋼",
+    "Other Industrial Metals & Mining": "13 非鉄金属",
+    "Other Precious Metals & Mining": "2 鉱業",
+    # Real Estate
+    "Real Estate": "29 不動産業",
+    "REIT—Diversified": "29 不動産業",
+    "REIT—Healthcare Facilities": "29 不動産業",
+    "REIT—Hotel & Motel": "29 不動産業",
+    "REIT—Industrial": "29 不動産業",
+    "REIT—Office": "29 不動産業",
+    "REIT—Residential": "29 不動産業",
+    "REIT—Retail": "29 不動産業",
+    "REIT—Specialty": "29 不動産業",
+    "Real Estate—Development": "29 不動産業",
+    "Real Estate—Diversified": "29 不動産業",
+    "Real Estate Services": "29 不動産業",
+    # Consumer Defensive
+    "Consumer Defensive": "4 食料品",
+    "Beverages—Brewers": "4 食料品",
+    "Beverages—Non-Alcoholic": "4 食料品",
+    "Beverages—Wineries & Distilleries": "4 食料品",
+    "Confectioners": "4 食料品",
+    "Discount Stores": "27 小売業",
+    "Education & Training Services": "28 サービス業",
+    "Farm Products": "1 水産・農林業",
+    "Food Distribution": "27 小売業",
+    "Grocery Stores": "27 小売業",
+    "Household & Personal Products": "7 化学",
+    "Packaged Foods": "4 食料品",
+    "Tobacco": "4 食料品",
+    # Utilities
+    "Utilities": "18 電気・ガス業",
+    "Utilities—Diversified": "18 電気・ガス業",
+    "Utilities—Independent Power Producers": "18 電気・ガス業",
+    "Utilities—Regulated Electric": "18 電気・ガス業",
+    "Utilities—Regulated Gas": "18 電気・ガス業",
+    "Utilities—Regulated Water": "18 電気・ガス業",
+    "Utilities—Renewable": "18 電気・ガス業",
+}
+
+
+def get_industry_data(sector, industry):
+    """企業のセクター・業種から日本の業界平均データを取得"""
+    industry_averages = load_industry_averages()
+    if not industry_averages:
+        return None
+
+    mapped_industry_key = None
+
+    # まず詳細な業種でマッピング
+    if industry and industry in SECTOR_TO_INDUSTRY_MAP:
+        mapped_industry_key = SECTOR_TO_INDUSTRY_MAP[industry]
+        if mapped_industry_key in industry_averages:
+            result = industry_averages[mapped_industry_key].copy()
+            result["industry_name"] = mapped_industry_key
+            return result
+
+    # 次にセクターでマッピング
+    if sector and sector in SECTOR_TO_INDUSTRY_MAP:
+        mapped_industry_key = SECTOR_TO_INDUSTRY_MAP[sector]
+        if mapped_industry_key in industry_averages:
+            result = industry_averages[mapped_industry_key].copy()
+            result["industry_name"] = mapped_industry_key
+            return result
+
+    return None
+
+
+def get_sector_market_cap(industry_name):
+    """業種名から時価総額データを取得"""
+    market_cap_data = load_market_cap_by_sector()
+    if not market_cap_data:
+        return None
+
+    # 業種名から日本語部分を抽出（"17 輸送用機器" -> "輸送用機器"）
+    if industry_name:
+        # 数字とスペースを除去
+        sector_name = industry_name.split()[-1] if " " in industry_name else industry_name
+        return market_cap_data.get(sector_name, None)
+
+    return None
+
+
+def get_company_rank(product_code):
+    """企業コードから時価総額ランキングを取得"""
+    ranking_data = load_top_companies_by_market_cap()
+    if not ranking_data:
+        return None
+
+    # コードでマッチング
+    for company in ranking_data:
+        if company["code"] == str(product_code):
+            return company
+
+    return None
+
+
 def get_financial_cache_filename(product_code):
     """財務情報キャッシュのファイル名を生成"""
     return os.path.join(CACHE_DIR, f"{product_code}_financial.json")
@@ -1539,11 +1941,45 @@ if data_source == "Yahoo Finance":
             sector = info.get("sector", None)
             industry = info.get("industry", None)
 
+            # 業界平均データを取得
+            industry_data = get_industry_data(sector, industry)
+
+            # 追加データを取得
+            sector_market_cap = None
+            company_rank = None
+
+            if industry_data and "industry_name" in industry_data:
+                sector_market_cap = get_sector_market_cap(industry_data["industry_name"])
+
+            company_rank = get_company_rank(product_code)
+
             if sector or industry:
-                st.write(f"**セクター:** {sector or 'N/A'} | **業種:** {industry or 'N/A'}")
+                # 業界情報の表示
+                info_parts = [f"**セクター:** {sector or 'N/A'}", f"**業種:** {industry or 'N/A'}"]
+
+                if industry_data:
+                    info_parts.append(
+                        f"**業界:** {industry_data.get('industry_name', 'N/A')} "
+                        f"({industry_data.get('companies', 0)}社)"
+                    )
+
+                if sector_market_cap:
+                    market_cap_trillion = sector_market_cap.get("market_cap_trillion", 0)
+                    info_parts.append(f"**業界時価総額:** {market_cap_trillion:.2f}兆円")
+
+                if company_rank:
+                    info_parts.append(
+                        f"**市場ランキング:** 第{company_rank['rank']}位 "
+                        f"(時価総額: {company_rank['market_cap_trillion']:.2f}兆円)"
+                    )
+
+                st.write(" | ".join(info_parts))
+
+                if not industry_data:
+                    st.info("💡 業界平均データが見つかりません。参考値を表示します。")
 
                 # 比較指標の表示
-                comp_tab1, comp_tab2 = st.tabs(["📈 主要指標比較", "🏆 業界内ランキング"])
+                comp_tab1, comp_tab2, comp_tab3 = st.tabs(["📈 主要指標比較", "🏆 業界内ランキング", "📊 業界詳細"])
 
                 with comp_tab1:
                     st.write("#### 主要財務指標の比較")
@@ -1553,38 +1989,41 @@ if data_source == "Yahoo Finance":
 
                     # PER比較
                     company_pe = info.get("trailingPE", None)
-                    industry_pe = info.get("industryPE", None)
-                    sector_pe = info.get("sectorPE", None)
+                    industry_pe_jp = industry_data.get("per") if industry_data else None
 
                     if company_pe:
                         comparison_data.append(
                             {
                                 "指標": "PER",
                                 "当社": f"{company_pe:.2f}x",
-                                "業界平均": f"{industry_pe:.2f}x" if industry_pe else "N/A",
-                                "セクター平均": f"{sector_pe:.2f}x" if sector_pe else "N/A",
-                                "日経平均": "15.5x (参考)",
+                                "業界平均": f"{industry_pe_jp:.2f}x" if industry_pe_jp else "N/A",
+                                "日経平均": "18.6x (プライム総合)",
                                 "判定": "割安"
-                                if company_pe and industry_pe and company_pe < industry_pe
+                                if industry_pe_jp and company_pe < industry_pe_jp
                                 else "割高"
-                                if company_pe and industry_pe and company_pe > industry_pe
+                                if industry_pe_jp and company_pe > industry_pe_jp
                                 else "-",
                             }
                         )
 
                     # PBR比較
                     company_pb = info.get("priceToBook", None)
-                    sector_pb = info.get("sectorPB", None)
+                    industry_pb_jp = industry_data.get("pbr") if industry_data else None
 
                     if company_pb:
                         comparison_data.append(
                             {
                                 "指標": "PBR",
                                 "当社": f"{company_pb:.2f}x",
-                                "業界平均": "N/A",
-                                "セクター平均": f"{sector_pb:.2f}x" if sector_pb else "N/A",
-                                "日経平均": "1.3x (参考)",
-                                "判定": "割安" if company_pb < 1.0 else "割高" if company_pb > 2.0 else "適正",
+                                "業界平均": f"{industry_pb_jp:.2f}x" if industry_pb_jp else "N/A",
+                                "日経平均": "1.6x (プライム総合)",
+                                "判定": "割安"
+                                if industry_pb_jp and company_pb < industry_pb_jp
+                                else "割高"
+                                if industry_pb_jp and company_pb > industry_pb_jp
+                                else "割安"
+                                if company_pb < 1.0
+                                else "適正",
                             }
                         )
 
@@ -1693,7 +2132,8 @@ if data_source == "Yahoo Finance":
                         )
 
                         st.caption(
-                            "📌 注: 業界平均データはyfinance APIから取得可能な場合のみ表示されます。日経平均は2024年の参考値です。"
+                            "📌 注: 業界平均データは東京証券取引所プライム市場の業種別データ（2025年10月版）を使用しています。"
+                            "日経平均はプライム市場総合の参考値です。"
                         )
                     else:
                         st.info("比較データが十分に取得できませんでした")
@@ -1720,10 +2160,12 @@ if data_source == "Yahoo Finance":
                         # レーダーチャート用データ準備
                         radar_indicators = []
                         radar_values = []
+                        radar_industry_values = []  # 業界平均用
 
                         for item in comparison_data[:6]:  # 最大6指標
                             indicator = item["指標"]
                             value_str = item["当社"]
+                            industry_str = item.get("業界平均", "N/A")
 
                             # 数値を抽出
                             try:
@@ -1736,12 +2178,29 @@ if data_source == "Yahoo Finance":
 
                                 radar_indicators.append(indicator)
                                 radar_values.append(normalize_value(value, indicator))
+
+                                # 業界平均の数値も抽出（可能な場合）
+                                if industry_str != "N/A":
+                                    if "x" in industry_str:
+                                        industry_value = float(industry_str.replace("x", ""))
+                                    elif "%" in industry_str:
+                                        industry_value = float(industry_str.replace("%", ""))
+                                    else:
+                                        industry_value = None
+                                    
+                                    if industry_value is not None:
+                                        radar_industry_values.append(normalize_value(industry_value, indicator))
+                                    else:
+                                        radar_industry_values.append(50)  # デフォルト値
+                                else:
+                                    radar_industry_values.append(50)  # デフォルト値（日経平均参考値として）
                             except:
                                 continue
 
                         if radar_indicators:
                             fig_radar = go.Figure()
 
+                            # 当社のデータ
                             fig_radar.add_trace(
                                 go.Scatterpolar(
                                     r=radar_values + [radar_values[0]],  # 閉じるために最初の値を追加
@@ -1753,11 +2212,26 @@ if data_source == "Yahoo Finance":
                                 )
                             )
 
+                            # 業界平均のデータ
+                            if len(radar_industry_values) == len(radar_indicators):
+                                legend_name = "業界平均" if industry_data else "日経平均 (参考)"
+                                fig_radar.add_trace(
+                                    go.Scatterpolar(
+                                        r=radar_industry_values + [radar_industry_values[0]],
+                                        theta=radar_indicators + [radar_indicators[0]],
+                                        fill="toself",
+                                        name=legend_name,
+                                        line=dict(color="#ff9800", width=2, dash="dash"),
+                                        fillcolor="rgba(255, 152, 0, 0.1)",
+                                    )
+                                )
+
                             fig_radar.update_layout(
                                 polar=dict(radialaxis=dict(visible=True, range=[0, 100])),
-                                showlegend=False,
-                                height=400,
-                                title="財務指標スコア (0-100)",
+                                showlegend=True,
+                                legend=dict(x=0.7, y=1.1, orientation="h"),
+                                height=450,
+                                title="財務指標スコア比較 (0-100)",
                             )
 
                             st.plotly_chart(fig_radar, width="stretch")
@@ -1791,6 +2265,87 @@ if data_source == "Yahoo Finance":
                             )
 
                     st.info("📊 より詳細な業界ランキング情報は、証券会社のレポートや専門サイトをご参照ください。")
+
+                with comp_tab3:
+                    st.write("#### 業界詳細情報")
+
+                    if industry_data and sector_market_cap:
+                        detail_col1, detail_col2 = st.columns(2)
+
+                        with detail_col1:
+                            st.write("##### 📊 業界統計")
+                            st.metric(
+                                "業界名", industry_data.get("industry_name", "N/A"), help="東京証券取引所の業種区分"
+                            )
+                            st.metric(
+                                "上場企業数",
+                                f"{industry_data.get('companies', 0)}社",
+                                help="プライム市場の企業数",
+                            )
+                            st.metric(
+                                "業界時価総額",
+                                f"{sector_market_cap.get('market_cap_trillion', 0):.2f}兆円",
+                                help="業界全体の時価総額",
+                            )
+
+                            # 1社あたりの平均時価総額
+                            if industry_data.get("companies", 0) > 0:
+                                avg_market_cap = sector_market_cap.get("market_cap_billion", 0) / industry_data.get(
+                                    "companies", 1
+                                )
+                                st.metric("1社あたり平均時価総額", f"{avg_market_cap:.1f}億円")
+
+                        with detail_col2:
+                            st.write("##### 📈 バリュエーション")
+                            st.metric(
+                                "業界平均PER",
+                                f"{industry_data.get('per', 0):.2f}x" if industry_data.get("per") else "N/A",
+                                help="株価収益率の業界平均",
+                            )
+                            st.metric(
+                                "業界平均PBR",
+                                f"{industry_data.get('pbr', 0):.2f}x" if industry_data.get("pbr") else "N/A",
+                                help="株価純資産倍率の業界平均",
+                            )
+
+                            # 当社の業界内シェア
+                            company_market_cap = info.get("marketCap", 0)
+                            if company_market_cap and sector_market_cap:
+                                sector_total = sector_market_cap.get("market_cap_million", 1) * 1000000
+                                share = (company_market_cap / sector_total) * 100 if sector_total > 0 else 0
+                                st.metric(
+                                    "当社の業界シェア", f"{share:.2f}%", help="業界全体の時価総額に占める当社の割合"
+                                )
+
+                        # 時価総額ランキング情報
+                        if company_rank:
+                            st.write("##### 🏆 市場ランキング")
+                            rank_info_col1, rank_info_col2, rank_info_col3 = st.columns(3)
+
+                            with rank_info_col1:
+                                st.metric("プライム市場順位", f"第{company_rank['rank']}位")
+
+                            with rank_info_col2:
+                                st.metric("時価総額", f"{company_rank['market_cap_trillion']:.2f}兆円")
+
+                            with rank_info_col3:
+                                # トップ10以内かどうか
+                                if company_rank["rank"] <= 10:
+                                    st.success("🌟 トップ10企業")
+                                elif company_rank["rank"] <= 50:
+                                    st.info("⭐ トップ50企業")
+                                elif company_rank["rank"] <= 100:
+                                    st.info("📊 トップ100企業")
+
+                    elif industry_data:
+                        st.write("##### 📊 業界統計")
+                        st.write(f"**業界名:** {industry_data.get('industry_name', 'N/A')}")
+                        st.write(f"**上場企業数:** {industry_data.get('companies', 0)}社")
+                        st.write(f"**業界平均PER:** {industry_data.get('per', 0):.2f}x")
+                        st.write(f"**業界平均PBR:** {industry_data.get('pbr', 0):.2f}x")
+                    else:
+                        st.info("業界詳細データが取得できませんでした")
+
             else:
                 st.info("セクター情報が取得できませんでした")
 
@@ -1883,8 +2438,23 @@ if data_source == "Yahoo Finance":
                                             )
                                         )
 
+                                # 業界平均の参考線を追加
+                                if len(dates) > 0:
+                                    # 営業利益率の参考値: 業界データがあれば使用、なければ日経平均
+                                    ref_label = "営業利益率(業界平均)" if industry_data else "営業利益率(日経平均参考)"
+                                    fig_margin.add_trace(
+                                        go.Scatter(
+                                            x=[dates[0], dates[-1]],
+                                            y=[8.0, 8.0],
+                                            mode="lines",
+                                            name=ref_label,
+                                            line=dict(width=2, dash="dash", color="rgba(255, 152, 0, 0.7)"),
+                                            showlegend=True,
+                                        )
+                                    )
+
                                 fig_margin.update_layout(
-                                    title="利益率の推移",
+                                    title="利益率の推移（業界平均比較）" if industry_data else "利益率の推移（日経平均参考）",
                                     xaxis_title="年度",
                                     yaxis_title="利益率 (%)",
                                     height=400,
@@ -2006,8 +2576,22 @@ if data_source == "Yahoo Finance":
                                     )
                                 )
 
+                                # 参考線（45%）
+                                if len(dates) > 0:
+                                    ref_label = "参考値(業界平均)" if industry_data else "参考値(日経平均)"
+                                    fig_equity_ratio.add_trace(
+                                        go.Scatter(
+                                            x=[dates[0], dates[-1]],
+                                            y=[45.0, 45.0],
+                                            mode="lines",
+                                            name=ref_label,
+                                            line=dict(width=2, dash="dash", color="rgba(255, 152, 0, 0.7)"),
+                                            showlegend=True,
+                                        )
+                                    )
+
                                 fig_equity_ratio.update_layout(
-                                    title="自己資本比率の推移",
+                                    title="自己資本比率の推移（業界平均比較）" if industry_data else "自己資本比率の推移（日経平均参考）",
                                     xaxis_title="年度",
                                     yaxis_title="自己資本比率 (%)",
                                     height=400,
@@ -2175,8 +2759,37 @@ if data_source == "Yahoo Finance":
                                             )
                                         )
 
+                                    # 参考線を追加
+                                    if len(dates) > 0:
+                                        roe_ref_label = "ROE(業界平均)" if industry_data else "ROE(日経平均参考)"
+                                        roa_ref_label = "ROA(業界平均)" if industry_data else "ROA(日経平均参考)"
+                                        
+                                        fig_roe.add_trace(
+                                            go.Scatter(
+                                                x=[dates[0], dates[-1]],
+                                                y=[9.5, 9.5],
+                                                mode="lines",
+                                                name=roe_ref_label,
+                                                line=dict(width=2, dash="dash", color="rgba(255, 152, 0, 0.7)"),
+                                                showlegend=True,
+                                            )
+                                        )
+                                        fig_roe.add_trace(
+                                            go.Scatter(
+                                                x=[dates[0], dates[-1]],
+                                                y=[5.0, 5.0],
+                                                mode="lines",
+                                                name=roa_ref_label,
+                                                line=dict(width=2, dash="dot", color="rgba(255, 152, 0, 0.5)"),
+                                                showlegend=True,
+                                            )
+                                        )
+
                                     fig_roe.update_layout(
-                                        title="ROE・ROAの推移", xaxis_title="年度", yaxis_title="比率 (%)", height=400
+                                        title="ROE・ROAの推移（業界平均比較）" if industry_data else "ROE・ROAの推移（日経平均参考）",
+                                        xaxis_title="年度",
+                                        yaxis_title="比率 (%)",
+                                        height=400,
                                     )
                                     st.plotly_chart(fig_roe, width="stretch")
 
