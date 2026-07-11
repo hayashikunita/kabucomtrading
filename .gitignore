@@ -205,3 +205,24 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Project-specific generated outputs
+results/backtest_results.json
+results/multi_stock_backtest_results.json
+results/backtest_details/*.csv
+results/backtest_rankings/*.csv
+results/walkforward/*.json
+results/cache/*.json
+backtest_results.json
+multi_stock_backtest_results.json
+backtest_details/*.csv
+backtest_rankings/*.csv
+walkforward_*.json
+data_cache/
+
+# Local temporary files
+.tmp_*.py
+
+# Local backup artifacts
+archive/*.backup
+archive/*.corrupted
