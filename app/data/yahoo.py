@@ -74,6 +74,9 @@ class YahooFinanceClient:
             elif interval == "5m" and period_days > 60:
                 logger.warning(f"action=get_historical_data warning=5m_interval_max_60days adjusting_to_60days")
                 start_date = end_date - timedelta(days=60)
+            elif interval == "1h" and period_days > 725:
+                logger.warning(f"action=get_historical_data warning=1h_interval_max_725days adjusting_to_725days")
+                start_date = end_date - timedelta(days=725)
 
             # データ取得
             df = stock.history(
@@ -116,7 +119,15 @@ class YahooFinanceClient:
         Returns:
             Yahoo Financeティッカー(例: '1459.T')
         """
-        return f"{product_code}.{market}"
+        code = product_code.strip()
+
+        # 指数ティッカーや既にサフィックス付きのコードはそのまま使う
+        if code.startswith("^") or "." in code:
+            return code
+
+        if market:
+            return f"{code}.{market}"
+        return code
 
     @staticmethod
     def convert_duration_to_interval(duration: str) -> str:

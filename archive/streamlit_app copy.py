@@ -1,7 +1,6 @@
 """
 Streamlit Trading Dashboard
 Yahoo Financeから株価データを取得してチャート表示とバックテスト結果を表示
-拡張バックテスト機能付き
 """
 
 import json
@@ -13,26 +12,14 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 from plotly.subplots import make_subplots
-import numpy as np
 
 import constants
 import settings
 from app.data.yahoo import fetch_yahoo_data, save_yahoo_data_to_db
 from app.models.dfcandle import DataFrameCandle
 
-# 拡張バックテスト機能をインポート（オプション）
-try:
-    from backtest_metrics import BacktestMetrics
-    from backtest_visualizer import BacktestVisualizer
-    from trade_logger import TradeLogger
-    ENHANCED_BACKTEST_AVAILABLE = True
-except ImportError:
-    ENHANCED_BACKTEST_AVAILABLE = False
-
 # CSVキャッシュディレクトリ
-CACHE_DIR = settings.cache_dir
-BACKTEST_RESULTS_FILE = settings.backtest_results_file
-BACKTEST_DETAILS_DIR = settings.backtest_details_dir
+CACHE_DIR = "data_cache"
 os.makedirs(CACHE_DIR, exist_ok=True)
 
 # ページ設定
@@ -209,10 +196,6 @@ with st.sidebar:
 
         if st.button("📋 結果表示"):
             st.session_state.show_backtest = True
-        
-        # 拡張分析ボタン（新機能）
-        if ENHANCED_BACKTEST_AVAILABLE and st.button("📈 詳細分析表示"):
-            st.session_state.show_enhanced = True
 
     with tab3:
         st.subheader("銘柄比較")
@@ -757,8 +740,6 @@ if "run_backtest" not in st.session_state:
     st.session_state.run_backtest = False
 if "run_compare" not in st.session_state:
     st.session_state.run_compare = False
-if "show_enhanced" not in st.session_state:
-    st.session_state.show_enhanced = False
 
 
 # CSVキャッシュ関連の関数
@@ -1389,201 +1370,26 @@ def calculate_bollinger_bands(df, period=20, std=2):
 
 # バックテスト実行関数
 def run_backtest_analysis(product_code, period_days, duration, indicators, detailed=False):
-    """バックテストを実行して結果を保存"""
-    from itertools import product
+    """バックテストを実行"""
+    from backtest_yahoo import YahooBacktest
 
-    from app.strategy.engine import StrategyEngine, compile_strategy
-    from enhanced_backtest import RiskManagement
+    duration_time = constants.TRADE_MAP.get(duration, {}).get("duration", constants.DURATION_1M)
 
-    timestamp = datetime.now()
-    timestamp_iso = timestamp.isoformat()
-    timestamp_label = timestamp.strftime("%Y%m%d_%H%M%S")
+    backtest = YahooBacktest(product_code=product_code, period_days=period_days, duration=duration_time)
 
-    risk = RiskManagement(
-        initial_capital=1_000_000,
-        transaction_cost_percent=0.1,
-        slippage_percent=0.02,
-    )
-
-    engine = StrategyEngine.from_yahoo(
-        product_code=product_code,
-        period_days=period_days,
-        duration=duration,
-        market="T",
-        risk_management=risk,
-    )
-
-    strategy_specs = {
-        "ema": {
-            "code": """
-def strategy(ctx, params):
-    ta = ctx.ta
-    fast_n = int(params.get('period1', 12))
-    slow_n = int(params.get('period2', 26))
-    fast = ta.ema(ctx.close, fast_n)
-    slow = ta.ema(ctx.close, slow_n)
-    if ta.crossover(fast, slow) and ctx.position == 0:
-        ctx.strategy.entry('long', ctx.strategy.long)
-    elif ta.crossunder(fast, slow) and ctx.position == 1:
-        ctx.strategy.close('long')
-""",
-            "params": [
-                {"period1": p1, "period2": p2}
-                for p1, p2 in product([5, 7, 10, 12, 14, 20], [20, 26, 30, 50, 75])
-                if p1 < p2
-            ],
-        },
-        "bollinger_bands": {
-            "code": """
-def strategy(ctx, params):
-    ta = ctx.ta
-    n = int(params.get('n', 20))
-    k = float(params.get('k', 2.0))
-    upper, middle, lower = ta.bbands(ctx.close, n, k)
-    price = ctx.close[ctx.index]
-    if price != price:
-        return
-    if price < lower[ctx.index] and ctx.position == 0:
-        ctx.strategy.entry('long', ctx.strategy.long)
-    elif price > upper[ctx.index] and ctx.position == 1:
-        ctx.strategy.close('long')
-""",
-            "params": [{"n": n, "k": k} for n, k in product([10, 20, 30], [1.5, 2.0, 2.5])],
-        },
-        "ichimoku": {
-            "code": """
-def strategy(ctx, params):
-    ta = ctx.ta
-    conv = ta.sma((ctx.high + ctx.low) / 2.0, 9)
-    base = ta.sma((ctx.high + ctx.low) / 2.0, 26)
-    if ta.crossover(conv, base) and ctx.position == 0:
-        ctx.strategy.entry('long', ctx.strategy.long)
-    elif ta.crossunder(conv, base) and ctx.position == 1:
-        ctx.strategy.close('long')
-""",
-            "params": [{}],
-        },
-        "rsi": {
-            "code": """
-def strategy(ctx, params):
-    ta = ctx.ta
-    period = int(params.get('period', 14))
-    buy_thr = float(params.get('buy_threshold', 30))
-    sell_thr = float(params.get('sell_threshold', 70))
-    rsi = ta.rsi(ctx.close, period)
-    value = rsi[ctx.index]
-    if value != value:
-        return
-    if value < buy_thr and ctx.position == 0:
-        ctx.strategy.entry('long', ctx.strategy.long)
-    elif value > sell_thr and ctx.position == 1:
-        ctx.strategy.close('long')
-""",
-            "params": [
-                {"period": period, "buy_threshold": buy_thr, "sell_threshold": sell_thr}
-                for period, buy_thr, sell_thr in product([8, 14, 21], [20, 25, 30], [65, 70, 75])
-                if buy_thr < sell_thr
-            ],
-        },
-        "macd": {
-            "code": """
-def strategy(ctx, params):
-    ta = ctx.ta
-    fast = int(params.get('fast_period', 12))
-    slow = int(params.get('slow_period', 26))
-    signal = int(params.get('signal_period', 9))
-    macd_line, signal_line, _ = ta.macd(ctx.close, fast, slow, signal)
-    if ta.crossover(macd_line, signal_line) and ctx.position == 0:
-        ctx.strategy.entry('long', ctx.strategy.long)
-    elif ta.crossunder(macd_line, signal_line) and ctx.position == 1:
-        ctx.strategy.close('long')
-""",
-            "params": [
-                {"fast_period": fast, "slow_period": slow, "signal_period": signal}
-                for fast, slow, signal in product([8, 12], [17, 26], [5, 9])
-                if fast < slow
-            ],
-        },
-    }
-
-    enabled = {
-        "ema": bool(indicators.get("ema", False)),
-        "bollinger_bands": bool(indicators.get("bb", False)),
-        "ichimoku": bool(indicators.get("ichimoku", False)),
-        "rsi": bool(indicators.get("rsi", False)),
-        "macd": bool(indicators.get("macd", False)),
-    }
-
-    summary_results = {}
-    detailed_results = {}
-
-    for strategy_name, spec in strategy_specs.items():
-        if not enabled.get(strategy_name):
-            continue
-
-        strategy_fn = compile_strategy(spec["code"])
-        all_rows = []
-
-        for params in spec["params"]:
-            result = engine.run(strategy_fn, params)
-            perf = float(result.get("risk_management_stats", {}).get("return_percent", 0.0))
-
-            row = {**params}
-            row["performance"] = perf
-            row["total_trades"] = int(result.get("total_trades", 0))
-            row["win_rate"] = float(result.get("metrics", {}).get("win_rate", 0.0))
-            row["max_drawdown"] = float(result.get("metrics", {}).get("max_drawdown", 0.0))
-            row["sharpe_ratio"] = float(result.get("metrics", {}).get("sharpe_ratio", 0.0))
-            all_rows.append(row)
-
-        if not all_rows:
-            continue
-
-        best = max(all_rows, key=lambda x: x["performance"])
-
-        summary_entry = {k: v for k, v in best.items() if k not in ["total_trades", "win_rate", "max_drawdown", "sharpe_ratio"]}
-        summary_results[strategy_name] = summary_entry
-
-        if detailed:
-            best_params = {k: v for k, v in best.items() if k not in ["performance", "total_trades", "win_rate", "max_drawdown", "sharpe_ratio"]}
-            detailed_results[strategy_name] = {
-                "best_performance": float(best["performance"]),
-                "best_params": best_params,
-                "all_results": all_rows,
-            }
-
-            detail_df = pd.DataFrame(all_rows).sort_values("performance", ascending=False)
-            detail_path = os.path.join(BACKTEST_DETAILS_DIR, f"{product_code}_{strategy_name}_{timestamp_label}.csv")
-            detail_df.to_csv(detail_path, index=False, encoding="utf-8-sig")
-
-    output = {
-        "product_code": product_code,
-        "period_days": period_days,
-        "duration": duration,
-        "timestamp": timestamp_iso,
-        "results": summary_results,
-    }
+    backtest.run_backtest(detailed=detailed)
+    backtest.save_results()
 
     if detailed:
-        output["detailed_results"] = detailed_results
+        backtest.save_detailed_csv()
 
-    result_dir = os.path.dirname(BACKTEST_RESULTS_FILE)
-    if result_dir:
-        os.makedirs(result_dir, exist_ok=True)
-
-    with open(BACKTEST_RESULTS_FILE, "w", encoding="utf-8") as f:
-        json.dump(output, f, ensure_ascii=False, indent=2, default=str)
-
-    return summary_results, detailed_results if detailed else None
+    return backtest.results, backtest.detailed_results if detailed else None
 
 
 # バックテスト結果読み込み
 def load_backtest_results():
     """backtest_results.jsonを読み込み"""
-    results_file = BACKTEST_RESULTS_FILE
-
-    if not os.path.exists(results_file) and os.path.exists("backtest_results.json"):
-        results_file = "backtest_results.json"
+    results_file = "backtest_results.json"
 
     if not os.path.exists(results_file):
         return None
@@ -3054,7 +2860,7 @@ elif st.session_state.run_backtest:
             st.success("✅ バックテスト完了！")
 
             if detailed_mode and detailed_results:
-                st.success(f"📁 詳細結果がCSVファイルとして保存されました: {BACKTEST_DETAILS_DIR} フォルダ")
+                st.success(f"📁 詳細結果がCSVファイルとして保存されました: backtest_details/ フォルダ")
 
             st.session_state.show_backtest = True
             st.session_state.run_backtest = False
@@ -3392,270 +3198,6 @@ if st.session_state.show_backtest:
 
     if st.button("結果を非表示"):
         st.session_state.show_backtest = False
-        st.rerun()
-
-# 詳細分析表示（新機能）
-if st.session_state.show_enhanced and ENHANCED_BACKTEST_AVAILABLE:
-    st.divider()
-    st.header("📈 詳細パフォーマンス分析")
-    
-    results = load_backtest_results()
-    
-    if results and 'detailed_results' in results:
-        tab1, tab2, tab3, tab4 = st.tabs(["📊 総合メトリクス", "📉 パラメータ分析", "🎯 戦略比較", "📋 詳細データ"])
-        
-        with tab1:
-            st.subheader("総合パフォーマンス指標")
-            
-            # 各戦略のベストパフォーマンスを収集
-            all_perfs = []
-            for strategy in ['ema', 'bollinger_bands', 'rsi', 'macd']:
-                if strategy in results.get('detailed_results', {}):
-                    perf = results['detailed_results'][strategy].get('best_performance', 0)
-                    all_perfs.append(perf)
-            
-            if all_perfs:
-                col1, col2, col3, col4 = st.columns(4)
-                
-                with col1:
-                    st.metric("最高パフォーマンス", f"{max(all_perfs):.2f}%")
-                with col2:
-                    st.metric("平均パフォーマンス", f"{np.mean(all_perfs):.2f}%")
-                with col3:
-                    st.metric("最低パフォーマンス", f"{min(all_perfs):.2f}%")
-                with col4:
-                    profitable = sum(1 for p in all_perfs if p > 0)
-                    st.metric("利益戦略数", f"{profitable}/{len(all_perfs)}")
-                
-                # 戦略別パフォーマンス比較
-                st.subheader("戦略別パフォーマンス")
-                strategy_names = {
-                    'ema': 'EMA',
-                    'bollinger_bands': 'Bollinger Bands',
-                    'rsi': 'RSI',
-                    'macd': 'MACD',
-                    'ichimoku': 'Ichimoku'
-                }
-                
-                strategy_data = []
-                for strategy, display_name in strategy_names.items():
-                    if strategy in results.get('results', {}):
-                        perf = results['results'][strategy].get('performance', 0)
-                        strategy_data.append({
-                            '戦略': display_name,
-                            'パフォーマンス': perf,
-                            '状態': '✅ 利益' if perf > 0 else '❌ 損失'
-                        })
-                
-                if strategy_data:
-                    df_strategies = pd.DataFrame(strategy_data)
-                    df_strategies = df_strategies.sort_values('パフォーマンス', ascending=False)
-                    
-                    fig_strategies = go.Figure(data=[
-                        go.Bar(
-                            x=df_strategies['戦略'],
-                            y=df_strategies['パフォーマンス'],
-                            marker_color=['green' if p > 0 else 'red' for p in df_strategies['パフォーマンス']],
-                            text=df_strategies['パフォーマンス'].apply(lambda x: f"{x:.2f}%"),
-                            textposition='auto',
-                        )
-                    ])
-                    
-                    fig_strategies.update_layout(
-                        title='戦略別パフォーマンス比較',
-                        xaxis_title='戦略',
-                        yaxis_title='パフォーマンス (%)',
-                        height=400,
-                        template='plotly_dark'
-                    )
-                    
-                    st.plotly_chart(fig_strategies, use_container_width=True)
-                    st.dataframe(df_strategies, use_container_width=True, hide_index=True)
-        
-        with tab2:
-            st.subheader("パラメータ最適化詳細")
-            
-            selected_strategy = st.selectbox(
-                "戦略を選択",
-                ['EMA', 'Bollinger Bands', 'RSI', 'MACD'],
-                key='param_strategy'
-            )
-            
-            strategy_map = {
-                'EMA': 'ema',
-                'Bollinger Bands': 'bollinger_bands',
-                'RSI': 'rsi',
-                'MACD': 'macd'
-            }
-            
-            strategy_key = strategy_map[selected_strategy]
-            
-            if strategy_key in results.get('detailed_results', {}):
-                detail = results['detailed_results'][strategy_key]
-                
-                # ベストパラメータ表示
-                st.info(f"**最高パフォーマンス: {detail.get('best_performance', 0):.2f}%**")
-                
-                if 'best_params' in detail:
-                    st.write("**最適パラメータ:**")
-                    params_df = pd.DataFrame([detail['best_params']])
-                    st.dataframe(params_df, use_container_width=True, hide_index=True)
-                
-                # パラメータ分布
-                if 'all_results' in detail and detail['all_results']:
-                    all_results = detail['all_results']
-                    perfs = [r['performance'] for r in all_results]
-                    
-                    col1, col2, col3 = st.columns(3)
-                    with col1:
-                        st.metric("テスト組み合わせ数", len(all_results))
-                    with col2:
-                        positive = sum(1 for p in perfs if p > 0)
-                        st.metric("利益パラメータ数", f"{positive} ({positive/len(perfs)*100:.1f}%)")
-                    with col3:
-                        st.metric("パフォーマンス範囲", f"{min(perfs):.1f}% ~ {max(perfs):.1f}%")
-                    
-                    # パフォーマンス分布ヒストグラム
-                    fig_dist = go.Figure(data=[
-                        go.Histogram(
-                            x=perfs,
-                            nbinsx=50,
-                            marker_color='#2962ff',
-                            opacity=0.7
-                        )
-                    ])
-                    
-                    fig_dist.update_layout(
-                        title='パフォーマンス分布',
-                        xaxis_title='パフォーマンス (%)',
-                        yaxis_title='頻度',
-                        height=400,
-                        template='plotly_dark'
-                    )
-                    
-                    st.plotly_chart(fig_dist, use_container_width=True)
-                    
-                    # トップ10とボトム10を表示
-                    df_all = pd.DataFrame(all_results)
-                    df_all = df_all.sort_values('performance', ascending=False)
-                    
-                    col1, col2 = st.columns(2)
-                    with col1:
-                        st.write("**トップ10パラメータ**")
-                        st.dataframe(df_all.head(10), use_container_width=True, hide_index=True)
-                    with col2:
-                        st.write("**ボトム10パラメータ**")
-                        st.dataframe(df_all.tail(10), use_container_width=True, hide_index=True)
-        
-        with tab3:
-            st.subheader("戦略比較分析")
-            
-            # 各戦略のパフォーマンス分布を比較
-            comparison_data = {}
-            
-            for strategy in ['ema', 'bollinger_bands', 'rsi', 'macd']:
-                if strategy in results.get('detailed_results', {}):
-                    detail = results['detailed_results'][strategy]
-                    if 'all_results' in detail and detail['all_results']:
-                        perfs = [r['performance'] for r in detail['all_results']]
-                        comparison_data[strategy] = perfs
-            
-            if comparison_data:
-                # ボックスプロット
-                fig_box = go.Figure()
-                
-                strategy_names = {
-                    'ema': 'EMA',
-                    'bollinger_bands': 'Bollinger Bands',
-                    'rsi': 'RSI',
-                    'macd': 'MACD'
-                }
-                
-                for strategy, perfs in comparison_data.items():
-                    fig_box.add_trace(go.Box(
-                        y=perfs,
-                        name=strategy_names.get(strategy, strategy),
-                        boxmean='sd'
-                    ))
-                
-                fig_box.update_layout(
-                    title='戦略別パフォーマンス分布（ボックスプロット）',
-                    yaxis_title='パフォーマンス (%)',
-                    height=500,
-                    template='plotly_dark'
-                )
-                
-                st.plotly_chart(fig_box, use_container_width=True)
-                
-                # 統計サマリー
-                st.subheader("統計サマリー")
-                summary_data = []
-                
-                for strategy, perfs in comparison_data.items():
-                    summary_data.append({
-                        '戦略': strategy_names.get(strategy, strategy),
-                        '平均': np.mean(perfs),
-                        '中央値': np.median(perfs),
-                        '最大': max(perfs),
-                        '最小': min(perfs),
-                        '標準偏差': np.std(perfs),
-                        '利益確率': f"{sum(1 for p in perfs if p > 0) / len(perfs) * 100:.1f}%"
-                    })
-                
-                df_summary = pd.DataFrame(summary_data)
-                df_summary = df_summary.sort_values('平均', ascending=False)
-                
-                # 数値列をフォーマット
-                for col in ['平均', '中央値', '最大', '最小', '標準偏差']:
-                    df_summary[col] = df_summary[col].apply(lambda x: f"{x:.2f}")
-                
-                st.dataframe(df_summary, use_container_width=True, hide_index=True)
-        
-        with tab4:
-            st.subheader("詳細データエクスポート")
-            
-            st.write("バックテスト結果の詳細データを確認できます。")
-            
-            # JSONデータを表示
-            with st.expander("📋 完全なJSONデータを表示"):
-                st.json(results)
-            
-            # CSVダウンロード
-            st.write("**パラメータ詳細のダウンロード**")
-            
-            csv_files = []
-            details_dir = BACKTEST_DETAILS_DIR if os.path.exists(BACKTEST_DETAILS_DIR) else 'backtest_details'
-            if os.path.exists(details_dir):
-                for file in os.listdir(details_dir):
-                    if file.endswith('.csv') and results['product_code'] in file:
-                        csv_files.append(file)
-            
-            if csv_files:
-                selected_csv = st.selectbox("CSVファイルを選択", csv_files)
-                
-                if selected_csv:
-                    csv_path = os.path.join(details_dir, selected_csv)
-                    df_csv = pd.read_csv(csv_path)
-                    
-                    st.write(f"**{selected_csv}** - {len(df_csv)} 件")
-                    st.dataframe(df_csv, use_container_width=True)
-                    
-                    # ダウンロードボタン
-                    csv_data = df_csv.to_csv(index=False).encode('utf-8-sig')
-                    st.download_button(
-                        label="📥 CSVをダウンロード",
-                        data=csv_data,
-                        file_name=selected_csv,
-                        mime='text/csv'
-                    )
-            else:
-                st.info("詳細CSVファイルが見つかりません。`--detailed`オプションでバックテストを実行してください。")
-    
-    else:
-        st.error("詳細バックテスト結果が見つかりません。`python backtest_yahoo.py --detailed`を実行してください。")
-    
-    if st.button("詳細分析を非表示"):
-        st.session_state.show_enhanced = False
         st.rerun()
 
 # フッター

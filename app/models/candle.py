@@ -1,10 +1,11 @@
 import logging
+import re
 
 from sqlalchemy import Column, DateTime, Float, Integer, desc
 from sqlalchemy.exc import IntegrityError
 
 import constants
-from app.models.base import Base, session_scope
+from app.models.base import Base, engine, session_scope
 
 logger = logging.getLogger(__name__)
 
@@ -91,7 +92,8 @@ def create_candle_class(product_code, duration):
         ローソク足テーブルクラス
     """
     # 銘柄コードをテーブル名に使える形式に変換（記号を_に置換）
-    safe_code = product_code.replace(".", "_").replace("-", "_").upper()
+    safe_code = product_code.replace(".", "_").replace("-", "_").replace("^", "IDX_").upper()
+    safe_code = re.sub(r"[^0-9A-Z_]", "_", safe_code)
     duration_suffix = duration.upper()
     cache_key = f"{safe_code}_{duration_suffix}"
 
@@ -104,6 +106,9 @@ def create_candle_class(product_code, duration):
     table_name = f"CANDLE_{cache_key}"
 
     new_class = type(class_name, (BaseCandleMixin, Base), {"__tablename__": table_name})
+
+    # 動的に作ったテーブルをDBへ反映
+    Base.metadata.create_all(bind=engine, tables=[new_class.__table__])
 
     _candle_class_cache[cache_key] = new_class
     return new_class

@@ -1,62 +1,22 @@
 # kabucomtrading
 
-kabu.com証券のAPI（kabusapi）とYahoo Financeを活用した株式・ETF自動売買システムです。
-テクニカル指標によるシグナル生成、バックテスト機能、**Streamlit**によるインタラクティブなデータ可視化を提供します。
+株式データの可視化とバックテスト検証を行う Python アプリです。
 
-## ⚠️ 注意事項
+- 主な用途: Yahoo Finance データを使ったチャート確認と戦略検証
+- 推奨 UI: Streamlit
+- 補助機能: 複数銘柄比較、ウォークフォワード分析、詳細メトリクス
 
-**本プロジェクトは現在開発中です。**
-仕様や構成は予告なく変更される可能性があります。
-実際の取引での使用は自己責任でお願いします。
+## このアプリを理解する最短ルート
 
-## 機能
+「何をするアプリか分からない」場合は、まず次の順で見るのが早いです。
 
-- **自動売買**: kabusapi経由での注文執行
-- **テクニカル指標**: SMA, EMA, Bollinger Bands, Ichimoku Cloud, RSI, MACD
-- **バックテスト**: 過去データを用いた戦略検証
-- **パラメータ最適化**: 複数のテクニカル指標パラメータを自動最適化
-  - **詳細モード**: 全パラメータ組み合わせの結果を出力・可視化
-  - **CSV出力**: 全結果をスプレッドシートで分析可能
-  - **ヒートマップ**: 2Dパラメータ空間での最適領域を視覚化
-- **Yahoo Finance連携**: kabusapi接続なしで過去データを取得・分析
-- **Streamlitダッシュボード**: インタラクティブなローソク足チャートとバックテスト結果の可視化
-  - パフォーマンス分布ヒストグラム
-  - パラメータヒートマップ
-  - Top 20ランキング表示
-  - CSVダウンロード機能
-- **データ永続化**: SQLiteによる時系列データ・シグナル管理
+1. Streamlit 画面を起動してチャートを触る
+2. 出力される JSON/CSV を確認する
+3. 必要になったらバックテスト系スクリプトを読む
 
-## 必要要件
+## 3分クイックスタート
 
-- Python 3.9以上（推奨: 3.12）
-- kabu.com証券のAPIトークン（kabusapi使用時のみ）
-- TA-Libライブラリ（事前にインストールが必要）
-
-## インストール
-
-### 1. リポジトリのクローン
-
-```bash
-git clone https://github.com/yourusername/kabucomtrading.git
-cd kabucomtrading
-```
-
-### 2. TA-Libのインストール
-
-#### Windows
-[TA-Lib公式サイト](https://www.ta-lib.org/)からインストーラーをダウンロードしてインストール
-
-#### macOS
-```bash
-brew install ta-lib
-```
-
-#### Linux
-```bash
-sudo apt-get install ta-lib
-```
-
-### 3. Pythonパッケージのインストール
+### 1) 依存インストール
 
 ```bash
 uv sync
@@ -68,792 +28,478 @@ uv sync
 pip install -e .
 ```
 
-## 設定
-
-`settings.ini`ファイルを編集してAPIトークンや取引パラメータを設定します。
-
-```ini
-[kabusapi]
-token = YOUR_API_TOKEN_HERE
-password = YOUR_PASSWORD_HERE
-url = https://localhost:18080/kabusapi
-product_code = 1459
-
-[db]
-name = stockdata.sql
-driver = sqlite3
-
-[web]
-port = 8080
-
-[pytrading]
-trade_duration = 1m
-back_test = False
-use_percent = 0.9
-past_period = 365
-stop_limit_percent = 0.9
-num_ranking = 3
-```
-
-### 設定項目の説明
-
-#### [kabusapi]
-- `token`: kabusapiのAPIトークン
-- `password`: 注文時のパスワード
-- `url`: kabusapiのエンドポイントURL
-- `product_code`: 取引対象の銘柄コード（例: 1459 = 楽天・全世界株式インデックス・ファンド）
-
-#### [pytrading]
-- `trade_duration`: ローソク足の時間軸（5s / 1m / 1h）
-- `back_test`: バックテストモード（True / False）
-- `use_percent`: 利用可能資金の使用割合（0.0～1.0）
-- `past_period`: 過去データ取得期間（日数）
-- `stop_limit_percent`: ストップロス割合（0.0～1.0）
-- `num_ranking`: 使用するテクニカル指標の上位件数
-
-## クイックスタート
-
-### 1. 環境構築
-```bash
-# リポジトリをクローン
-git clone https://github.com/yourusername/kabucomtrading.git
-cd kabucomtrading
-
-# 依存関係をインストール
-uv sync
-# または
-pip install -e .
-```
-
-### 2. 設定ファイルの編集
-`settings.ini`を編集して銘柄コードなどを設定
-
-### 3. Streamlitアプリで可視化（推奨）
-```bash
-# 仮想環境のPythonでStreamlitを起動
-.\.venv\Scripts\python.exe -m streamlit run streamlit_app.py
-```
-
-ブラウザで http://localhost:8501 にアクセス
-
-### 4. 詳細バックテストを実行
-1. サイドバーの「🎯 バックテスト」タブを選択
-2. 銘柄コード入力（例: 1459）
-3. ✅ **「詳細モード」にチェック**
-4. 「🚀 バックテスト実行」をクリック
-5. 結果を確認・CSVダウンロード
-
-## 使い方
-
-### Streamlitダッシュボードの起動（推奨）
+### 2) Streamlit 起動
 
 ```bash
 uv run streamlit run streamlit_app.py
 ```
 
-または
-
-```bash
-streamlit run streamlit_app.py
-```
-
-ブラウザで自動的に開きます（デフォルト: http://localhost:8501）
-
-#### Streamlitダッシュボードの機能
-
-**サイドバー - 📊 チャートタブ:**
-- **データソース選択**: Yahoo Finance / kabusapi
-- **銘柄コード入力**: 日本株の証券コードを入力（例: 1459, 7203, 9984）
-- **時間軸選択**: 1分足 / 1時間足 / 日足
-- **期間設定**: 7〜730日の範囲でデータ取得期間を指定
-- **テクニカル指標**: SMA, EMA, Bollinger Bands, 出来高表示
-- **チャート高さ調整**: 300〜1200pxの範囲でチャートサイズを変更
-- **チャート更新ボタン**: 設定を反映してチャートを再描画
-
-**サイドバー - 🎯 バックテストタブ:**
-- **銘柄・期間・時間軸設定**: バックテスト対象の指定
-- **✅ 詳細モード**: 全パラメータ組み合わせの結果を出力
-- **指標選択**: EMA, Bollinger Bands, 一目均衡表, RSI, MACD
-- **バックテスト実行ボタン**: 最適化を実行
-- **結果表示ボタン**: 保存済み結果を読み込み
-
-**サイドバー - 📉 比較タブ:**
-- **複数銘柄比較**: 最大10銘柄の価格推移を比較
-- **正規化表示**: 開始時点を100として正規化
-- **パフォーマンス統計**: 変化率などの比較表示
-
-**メインエリア:**
-- **統計情報カード**: データ数、最新価格、変化率、最高値を一目で確認
-- **Plotlyインタラクティブチャート**:
-  - ズーム・パン操作可能
-  - ホバーで詳細情報表示
-  - ダークテーマ対応
-  - 出来高サブプロット
-  - トレードシグナル表示（買い/売りマーカー）
-- **バックテスト結果（詳細モード対応）**:
-  - **指標別パフォーマンス比較**: 棒グラフで視覚化（緑=プラス、赤=マイナス）
-  - **詳細結果タブ**: 指標ごとにタブ表示
-    - 統計情報: テスト組み合わせ数、最高/平均/標準偏差
-    - パフォーマンス分布ヒストグラム
-    - パラメータヒートマップ（2Dパラメータ空間）
-    - Top 20ランキングテーブル
-    - 📥 CSVダウンロードボタン（全結果）
-
-### 従来のFlask Webサーバ（レガシー）
-
-```bash
-python main.py
-```
-
-これにより以下が起動します：
-- ストリーミングデータ取得スレッド
-- Webサーバ（デフォルト: http://localhost:8081）
-
-ブラウザで `http://localhost:8081` にアクセスすると、Lightweight Chartsを使用したチャートを確認できます。
-
-### バックテストモード
-
-`settings.ini` で `back_test = True` に設定すると、過去データでの戦略検証を行います。
-
-### Yahoo Financeを使ったバックテスト
-
-Yahoo Financeから過去の株価データを取得してバックテストを実行できます。
-kabusapiへの接続なしで、過去データでの戦略検証が可能です。
-
-#### 1. yfinanceのインストール
-
-```bash
-pip install yfinance
-```
-
-または、プロジェクト全体をインストール：
-
-```bash
-pip install -e .
-```
-
-#### 2. バックテスト実行
-
-**標準モード（最適パラメータのみ）:**
-```bash
-python backtest_yahoo.py
-```
-
-**詳細モード（全パラメータ組み合わせを出力）:**
-```bash
-python backtest_yahoo.py --detailed
-```
-
-このスクリプトは以下を実行します：
-1. Yahoo Financeから `settings.ini` で指定した銘柄の過去データを取得
-2. 複数のテクニカル指標（EMA, Bollinger Bands, Ichimoku, RSI, MACD）でバックテスト
-3. 各指標の最適パラメータを探索
-4. 結果をコンソールに表示し、`backtest_results.json` に保存
-5. **詳細モード**: 全パラメータの結果を `backtest_details/` フォルダにCSV形式で保存
-
-#### 3. 詳細モードの特徴
-
-詳細モードでは、すべてのパラメータ組み合わせの結果を出力します：
-
-- **EMA**: 期間1（5-29）× 期間2（10-48）の全組み合わせ（約200-400パターン）
-- **Bollinger Bands**: N（10-45）× K（1.0-3.0）の全組み合わせ（約40パターン）
-- **RSI**: 期間（7-29）× 買閾値（20-35）× 売閾値（60-80）の全組み合わせ（約500パターン）
-- **MACD**: Fast（8-14）× Slow（20-30）× Signal（5-11）の全組み合わせ（約100パターン）
-
-出力ファイル例：
-```
-backtest_details/
-  ├── 1459_ema_20240115_143022.csv
-  ├── 1459_bollinger_bands_20240115_143022.csv
-  ├── 1459_rsi_20240115_143022.csv
-  └── 1459_macd_20240115_143022.csv
-```
-
-各CSVファイルには以下の情報が含まれます：
-- パラメータ値（period1, period2, n, k, etc.）
-- パフォーマンス（%）
-- パフォーマンス順にソート済み
-
-#### 4. Streamlitでの詳細結果表示
-
-Streamlitダッシュボードで詳細モードのバックテストを実行すると：
-
-1. **詳細モードチェックボックス**: サイドバーのバックテスト設定で有効化
-2. **パフォーマンス分布ヒストグラム**: 全パラメータのパフォーマンス分布を可視化
-3. **パラメータヒートマップ**: 2Dパラメータ空間での最適領域を視覚化
-4. **Top 20ランキング**: 最高パフォーマンスのパラメータ組み合わせを表示
-5. **CSVダウンロード**: 全結果をダウンロードして詳細分析可能
-6. **統計情報**: テスト組み合わせ数、最高/平均/標準偏差
-
-#### 5. 出力例
-
-```
-バックテスト結果サマリー
-============================================================
-銘柄コード: 1459
-期間: 365日
-時間軸: 1m
-------------------------------------------------------------
-
-EMA:
-  パフォーマンス: 1250.50
-  期間1: 7
-  期間2: 14
-  テスト済み組み合わせ数: 287
-
-Bollinger Bands:
-  パフォーマンス: 980.30
-  N: 20
-  K: 2.00
-  テスト済み組み合わせ数: 40
-
-RSI:
-  パフォーマンス: 850.20
-  期間: 14
-  買いスレッド: 30.00
-  売りスレッド: 70.00
-  テスト済み組み合わせ数: 552
-
-MACD:
-  パフォーマンス: 1050.40
-  Fast期間: 12
-  Slow期間: 26
-  Signal期間: 9
-  テスト済み組み合わせ数: 96
-============================================================
-
-詳細結果は backtest_details/ フォルダに保存されました。
-```
-
-#### 6. Yahoo Financeデータの制限事項
-
-- **1分足**: 最大7日間のデータのみ取得可能
-- **5分足**: 最大60日間のデータのみ取得可能
-- **1時間足/日足**: 長期間のデータ取得可能
-- **5秒足**: Yahoo Financeは対応していないため、1分足で代用
-
-#### 7. カスタマイズ
-
-コマンドライン引数でカスタマイズできます：
-
-```bash
-# トヨタ自動車で詳細バックテスト実行
-python backtest_yahoo.py --detailed --product-code 7203 --period 180 --duration 1d
-
-# ソフトバンクグループで標準バックテスト
-python backtest_yahoo.py --product-code 9984 --period 90 --duration 1h
-```
-
-利用可能な引数：
-- `--detailed`: 詳細モードを有効化
-- `--product-code CODE`: 銘柄コード（デフォルト: settings.iniから）
-- `--period DAYS`: データ取得期間（日数）
-- `--duration TIMEFRAME`: 時間軸（1m, 1h, 1d）
-
-## アーキテクチャ
-
-このプロジェクトは、以下のレイヤーで構成されています：
-
-### システム構成図（Streamlit版）
-
-```
-┌─────────────────────────────────────────────────────────┐
-│                 streamlit_app.py                        │
-│           (Streamlitダッシュボード)                      │
-│  - インタラクティブUI                                    │
-│  - リアルタイムチャート更新                               │
-│  - バックテスト結果可視化                                 │
-└────────────┬────────────────────────────────────────────┘
-             │
-             ▼
-    ┌────────────────────┐
-    │  Yahoo Finance     │
-    │  Data Fetcher      │
-    │  (yahoo.py)        │
-    └────────┬───────────┘
-             │
-             ▼
-    ┌────────────────────┐        ┌────────────────────┐
-    │  DataFrameCandle   │        │  Backtest Results  │
-    │  (dfcandle.py)     │◄───────┤  (JSON)            │
-    │  - 指標計算         │        │  - パラメータ       │
-    │  - バックテスト     │        │  - パフォーマンス   │
-    └────────────────────┘        └────────────────────┘
-```
-
-### システム構成図（レガシーFlask版）
-
-```
-┌─────────────────────────────────────────────────────────┐
-│                     main.py                             │
-│              (エントリーポイント)                         │
-└────────────┬──────────────────────────┬─────────────────┘
-             │                          │
-             ▼                          ▼
-    ┌─────────────────┐        ┌─────────────────┐
-    │  StreamData     │        │  WebServer      │
-    │  (データ収集)    │        │  (Flask API)    │
-    └────────┬────────┘        └────────┬────────┘
-             │                          │
-             ▼                          ▼
-    ┌─────────────────┐        ┌─────────────────┐
-    │  AI Trading     │        │  Chart View     │
-    │  (売買判断)      │◄───────┤  (可視化)       │
-    └────────┬────────┘        └─────────────────┘
-             │
-             ▼
-    ┌─────────────────┐
-    │  KabusApiClient │
-    │  (API通信)       │
-    └────────┬────────┘
-             │
-             ▼
-    ┌─────────────────┐        ┌─────────────────┐
-    │  Candle Models  │        │  Signal Events  │
-    │  (データ永続化)  │        │  (シグナル記録)  │
-    └─────────────────┘        └─────────────────┘
-```
-
-### データフロー（Streamlit版）
-
-1. **ユーザー操作**: Streamlit UI → 銘柄コード・時間軸・期間を選択
-2. **データ取得**: `yahoo.py` → Yahoo Finance APIから過去データ取得
-3. **データ変換**: pandas DataFrame → OHLCV構造
-4. **可視化**: Plotly → インタラクティブローソク足チャート表示
-5. **バックテスト表示**: JSON読み込み → 最適化パラメータ・パフォーマンスグラフ表示
-
-### データフロー（レガシー版）
-
-1. **データ収集**: `streamdata.py` → kabusapi → リアルタイムティッカー取得
-2. **ローソク足生成**: `candle.py` → SQLiteに時系列データ保存
-3. **テクニカル分析**: `dfcandle.py` → 指標計算とバックテスト実行
-4. **売買判断**: `ai.py` → 複数指標のシグナル統合
-5. **注文執行**: `kabucom.py` → kabusapi経由で発注
-6. **可視化**: `webserver.py` → Flask API → `chart.html` → Google Charts
-
-## プロジェクト構成
-
-```
-kabucomtrading/
-├── .github/                    # GitHub設定
-│   ├── dependabot.yml         # 依存関係自動更新設定
-│   └── PULL_REQUEST_TEMPLATE.md
-├── app/                        # メインアプリケーション
-│   ├── controllers/           # コントローラー層
-│   │   ├── ai.py             # AIトレーディングロジック
-│   │   │                     # - 売買シグナル判定
-│   │   │                     # - パラメータ最適化
-│   │   │                     # - ストップリミット管理
-│   │   ├── streamdata.py     # リアルタイムデータ取得
-│   │   │                     # - ティッカーストリーム処理
-│   │   │                     # - ローソク足生成トリガー
-│   │   └── webserver.py      # Flask Webサーバ
-│   │                         # - REST API提供
-│   │                         # - テクニカル指標計算エンドポイント
-│   ├── data/                 # データ取得層
-│   │   ├── __init__.py
-│   │   └── yahoo.py          # Yahoo Financeデータ取得
-│   │                         # - 過去データ取得
-│   │                         # - ティッカー変換
-│   │                         # - 時間軸変換
-│   ├── models/               # データモデル層
-│   │   ├── __init__.py
-│   │   ├── base.py          # SQLAlchemy基底クラス
-│   │   │                    # - DB接続管理
-│   │   │                    # - セッション管理
-│   │   ├── candle.py        # ローソク足データモデル
-│   │   │                    # - OHLCV構造定義
-│   │   │                    # - 時間足別テーブル管理
-│   │   ├── dfcandle.py      # DataFrameベースのローソク足
-│   │   │                    # - テクニカル指標計算
-│   │   │                    # - バックテスト実行
-│   │   │                    # - パラメータ最適化
-│   │   └── events.py        # シグナルイベント管理
-│   │                        # - 売買シグナル記録
-│   │                        # - 損益計算
-│   └── views/               # ビュー層
-│       ├── chart.html       # チャート表示UI (Google Charts)
-│       └── google.html      # チャートサンプル
-├── kabucom/                  # kabusapi連携
-│   └── kabucom.py           # kabusapi クライアント
-│                            # - 認証・接続管理
-│                            # - 注文・約定処理
-│                            # - 残高・ポジション取得
-├── tradingalgo/              # アルゴリズム実装
-│   └── algo.py              # テクニカル指標計算
-│                            # - 一目均衡表
-│                            # - カスタム指標
-├── utils/                    # ユーティリティ
-│   └── utils.py             # 汎用関数
-│                            # - 型変換
-│                            # - シリアライザ
-├── constants.py              # 定数定義
-│                            # - 時間足定義
-│                            # - 売買区分
-│                            # - 銘柄コード
-├── settings.py               # 設定読み込み
-│                            # - INIファイルパース
-│                            # - 環境変数展開
-├── main.py                   # エントリーポイント
-│                            # - マルチスレッド起動
-│                            # - ロギング設定
-├── streamlit_app.py          # Streamlitダッシュボード（推奨）
-│                            # - インタラクティブUI
-│                            # - リアルタイムチャート
-│                            # - バックテスト結果表示
-├── backtest_yahoo.py         # Yahoo Financeバックテスト
-│                            # - 過去データ取得
-│                            # - 各指標の最適化
-│                            # - 結果レポート生成
-├── settings.ini              # 設定ファイル
-├── pyproject.toml            # プロジェクト定義・依存関係
-├── .pre-commit-config.yaml   # pre-commit設定
-├── .python-version           # Python バージョン指定
-└── README.md                 # このファイル
-```
-
-## 主要コンポーネント詳細
-
-### 1. AI Trading Engine (`app/controllers/ai.py`)
-
-**役割**: 売買判断とパラメータ最適化
-
-**主要クラス**:
-- `AI`: トレーディングエンジン本体
-
-**主要メソッド**:
-- `update_optimize_params()`: テクニカル指標パラメータの最適化
-- `buy()`: 買い注文実行
-- `sell()`: 売り注文実行
-- `trade()`: 売買シグナル判定と注文実行
-
-**アルゴリズム**:
-1. 過去データから複数のテクニカル指標パラメータを最適化
-2. 各指標のバックテスト結果から上位N個を選択
-3. リアルタイムで複数指標のシグナルを統合
-4. シグナル数が閾値を超えたら注文実行
-5. ストップリミットで損失を制限
-
-### 2. Data Models (`app/models/`)
-
-#### `candle.py`: ローソク足データ管理
-- 時間足別（5秒、1分、1時間）のテーブル定義
-- OHLCV（始値、高値、安値、終値、出来高）データ保存
-- ティッカーデータからローソク足を自動生成
-
-#### `dfcandle.py`: テクニカル分析
-- TA-Libを利用した各種指標計算
-- バックテスト機能（過去データでの戦略検証）
-- パラメータ最適化（グリッドサーチ）
-
-#### `events.py`: シグナル管理
-- 売買シグナルの記録
-- 損益計算
-- シグナル履歴の取得
-
-### 3. KabusAPI Client (`kabucom/kabucom.py`)
-
-**主要クラス**:
-- `KabusApiClient`: APIクライアント
-- `Balance`: 残高情報
-- `Ticker`: ティッカーデータ
-- `Order`: 注文情報
-- `Trade`: 約定情報
-
-**主要メソッド**:
-- `get_balance()`: 残高取得
-- `get_ticker()`: 現在値取得
-- `send_order()`: 注文送信
-- `get_order()`: 注文状態確認
-- `get_open_trade()`: 保有ポジション取得
-- `trade_close()`: ポジション決済
-
-### 4. Web API (`app/controllers/webserver.py`)
-
-**エンドポイント**:
-
-#### `GET /`
-チャート画面を表示
-
-#### `GET /api/candle/`
-ローソク足データとテクニカル指標を取得
-
-**パラメータ**:
-- `product_code`: 銘柄コード（必須）
-- `duration`: 時間足（5s/1m/1h）
-- `limit`: 取得件数（デフォルト: 1000）
-- テクニカル指標フラグ（sma, ema, bbands, ichimoku, rsi, macd）
-- 各指標のパラメータ（smaPeriod1, bbandsN等）
-
-**レスポンス例**:
-```json
-{
-  "product_code": "1459",
-  "duration": "1m",
-  "candles": [
-    {
-      "time": "2025-11-05T10:00:00",
-      "open": 1000.0,
-      "high": 1005.0,
-      "low": 998.0,
-      "close": 1003.0,
-      "volume": 1000
-    }
-  ],
-  "smas": [
-    {
-      "period": 7,
-      "values": [1000.5, 1001.2, ...]
-    }
-  ],
-  "events": {
-    "signals": [],
-    "profit": 0.0
-  }
-}
-```
-
-## 技術スタック
-
-### バックエンド
-- **Python 3.9+**: メインプログラミング言語
-- **Streamlit 1.28+**: インタラクティブWebアプリフレームワーク（推奨）
-- **Flask 2.0+**: RESTful APIフレームワーク（レガシー）
-- **SQLAlchemy 1.4+**: ORM
-- **SQLite**: データベース
-
-### データ分析・可視化
-- **NumPy 1.20+**: 数値計算
-- **pandas 1.3+**: データ操作・分析
-- **Plotly 5.17+**: インタラクティブチャート（Streamlit用）
-- **TA-Lib 0.4.17**: テクニカル指標計算
-- **yfinance 0.2.0+**: Yahoo Finance データ取得
-- **python-dateutil 2.8.0**: 日時処理
-
-### API通信
-- **requests 2.25.0+**: HTTP通信
-
-### フロントエンド（レガシー）
-- **Lightweight Charts 4.1.3**: TradingView製チャートライブラリ
-- **jQuery 3.4.1**: DOM操作
-
-### 開発ツール
-- **Ruff**: Linter & Formatter
-- **Pyright**: 型チェック
-- **Bandit**: セキュリティチェック
-- **pre-commit**: Git hooks管理
-
-## データベーススキーマ
-
-### ローソク足テーブル（例: `KABUS_1459_1M`）
-
-| カラム名 | 型 | 説明 |
-|---------|-----|------|
-| time | DateTime | 時刻（主キー） |
-| open | Float | 始値 |
-| close | Float | 終値 |
-| high | Float | 高値 |
-| low | Float | 安値 |
-| volume | Integer | 出来高 |
-
-### シグナルイベントテーブル（`signal_event`）
-
-| カラム名 | 型 | 説明 |
-|---------|-----|------|
-| time | DateTime | 時刻（主キー） |
-| product_code | String | 銘柄コード |
-| side | String | 売買区分（'1'=売, '2'=買） |
-| price | Float | 約定価格 |
-| units | Integer | 数量 |
-
-## 使用例
-
-### 1. Streamlitで詳細バックテストを実行
+Windows venv を直接使う場合:
 
 ```powershell
-# 仮想環境のPythonでStreamlitアプリを起動
- -m streamlit run streamlit_app.py
+.\.venv\Scripts\python.exe -m streamlit run streamlit_app.py
 ```
 
-**ブラウザで操作**:
-1. http://localhost:8501 にアクセス
-2. サイドバーの「🎯 バックテスト」タブを選択
-3. 銘柄コード入力（例: `1459`, `7203`, `9984`）
-4. ✅ **「詳細モード（全パラメータ結果出力）」にチェック**
-5. 「🚀 バックテスト実行」をクリック
-6. 結果を確認:
-   - パフォーマンス比較グラフ
-   - パラメータヒートマップ
-   - Top 20ランキング
-   - CSVダウンロード
+起動後にブラウザで http://localhost:8501 を開きます。
 
-### 2. コマンドラインでバックテスト実行
+## Streamlitの起動方法
 
-**標準モード（最適パラメータのみ）**:
-```powershell
- backtest_yahoo.py --product-code 1459 --period 90 --duration 1d
-```
-
-**詳細モード（全パラメータ組み合わせ）**:
-```powershell
- backtest_yahoo.py --detailed --product-code 1459 --period 90 --duration 1d
-```
-
-**出力ファイル**:
-- `backtest_results.json`: 最適パラメータのサマリー
-- `backtest_details/1459_ema_*.csv`: EMA全結果（390パターン）
-- `backtest_details/1459_bollinger_bands_*.csv`: BB全結果（40パターン）
-- `backtest_details/1459_rsi_*.csv`: RSI全結果（460パターン）
-- `backtest_details/1459_macd_*.csv`: MACD全結果（96パターン）
-
-**実行例**:
-```
-バックテスト結果サマリー
-============================================================
-銘柄コード: 1459
-期間: 90日
-時間軸: 1d
-------------------------------------------------------------
-
-EMA:
-  パフォーマンス: 27.00
-  期間1: 23
-  期間2: 48
-  テスト済み組み合わせ数: 390
-
-Bollinger Bands:
-  パフォーマンス: 18.00
-  N: 10
-  K: 3.00
-  テスト済み組み合わせ数: 40
-
-RSI:
-  パフォーマンス: 24.00
-  期間: 12
-  買いスレッド: 25.00
-  売りスレッド: 80.00
-  テスト済み組み合わせ数: 460
-
-MACD:
-  パフォーマンス: 3.00
-  Fast期間: 12
-  Slow期間: 24
-  Signal期間: 11
-  テスト済み組み合わせ数: 96
-============================================================
-
-詳細結果は backtest_details/ フォルダに保存されました。
-```
-
-### 3. 複数銘柄の比較
+プロジェクト直下で以下を実行します。
 
 ```powershell
-# Streamlitアプリで操作
-# 1. サイドバーの「📉 比較」タブを選択
-# 2. 比較する銘柄を改行区切りで入力:
-#    1459
-#    7203
-#    9984
-# 3. 「📊 比較実行」をクリック
+uv run streamlit run streamlit_app.py
 ```
 
-### 4. チャートに指標を追加
+venvのPythonを直接使う場合:
 
 ```powershell
-# Streamlitアプリで操作
-# 1. サイドバーの「📊 チャート」タブを選択
-# 2. テクニカル指標にチェック:
-#    ✅ SMA（単純移動平均）→ 期間選択（7, 14, 50など）
-#    ✅ EMA（指数移動平均）→ 期間選択（12, 26など）
-#    ✅ Bollinger Bands → 期間とK値を調整
-#    ✅ 出来高
-# 3. 「📊 チャート更新」をクリック
+.\.venv\Scripts\python.exe -m streamlit run streamlit_app.py
 ```
 
-## テクニカル指標
+起動後:
 
-以下のテクニカル指標をサポートしています：
+- URL: `http://localhost:8501`
+- 停止: ターミナルで `Ctrl + C`
 
-- **SMA (単純移動平均)**: 指定期間の平均価格
-- **EMA (指数移動平均)**: 直近の価格に重みを置いた移動平均
-- **Bollinger Bands**: 価格のボラティリティを表示
-- **Ichimoku Cloud (一目均衡表)**: 転換線、基準線、先行スパン、遅行スパン
-- **RSI (相対力指数)**: 買われすぎ・売られすぎの判定
-- **MACD**: トレンドの強さと方向を判定
+## 使い方（基本）
 
-## API仕様
+初めて使う場合は、次の手順で進めると全体像を把握しやすいです。
 
-### ローソク足データ取得
+1. Streamlitを起動する
+2. 「チャート」タブで対象銘柄の値動きを確認する
+3. 「バックテスト」タブで戦略・パラメータを設定して実行する
+4. 生成された評価指標と結果ファイルを確認する
 
+### 1) Streamlitを起動する
+
+```powershell
+uv run streamlit run streamlit_app.py
 ```
-GET /api/candle/?product_code=1459&duration=1m&limit=100
+
+起動後に `http://localhost:8501` を開きます。
+
+### 2) チャートを確認する
+
+- 銘柄コード（例: `7203`）を入力
+- 期間（例: `365`日）と時間軸（例: `1d`）を選択
+- ローソク足と指標を見て、相場の傾向を把握
+
+### 3) バックテストを実行する
+
+- 戦略を選択（EMA / RSI / MACD など）
+- 必要に応じてパラメータを調整
+- バックテストを実行し、結果を確認
+
+### 4) 結果を評価する
+
+特に次の3指標を優先して確認します。
+
+- `total_profit`（総損益）
+- `max_drawdown`（最大ドローダウン）
+- `robust_score`（リスク調整済み総合スコア）
+
+結果ファイルは主に次へ保存されます。
+
+- `results/backtest_results.json`
+- `results/backtest_details/`
+- `results/backtest_rankings/`
+
+### 5) さらに深掘りする（任意）
+
+- コードで戦略を試す: `uv run streamlit run strategy_lab.py`
+- 複数銘柄で比較検証: `uv run python multi_stock_backtest.py`
+- 将来データリークを避けた検証: `uv run python walkforward_analysis.py`
+
+## Strategy Lab（コードで戦略を書く）
+
+TradingView（PineScript）風にコードで戦略を書いてバックテストできる画面です。
+
+### 起動
+
+```powershell
+uv run streamlit run strategy_lab.py
 ```
 
-#### クエリパラメータ
+- URL: `http://localhost:8501`
+- 停止: ターミナルで `Ctrl + C`
+
+### 使い方
+
+1. サイドバーで銘柄・時間軸・期間を設定（例: 7203, 1d, 365）
+2. テンプレート（EMAクロス / RSI逆張り / ボリンジャーバンド）を読み込む
+3. エディタでコードを編集
+4. 「バックテスト実行」を押す
+5. チャート・ストラテジーテスター・エクイティカーブ・トレード一覧を確認
+
+### 最適化の使い方（グリッドサーチ）
+
+1. サイドバーの「最適化」で目的関数を選択
+2. 「パラメータ範囲」に探索範囲を記述
+3. 「最大試行数」を設定
+4. 「最適化を実行」を押す
+5. ベスト設定の結果チャートとランキング表を確認
+
+### ディレクトリごとの動作内容
+
+- app/backtest/: バックテストの中核処理です。シグナルを受けて売買シミュレーションを実行し、損益指標を計算し、結果可視化とトレードログ出力を行います。
+- app/controllers/: レガシー側の制御層です。Web API 応答、ストリーミング受信、AI 補助処理の入口を担います。
+- app/models/: データモデル層です。ローソク足テーブル操作、イベント記録、データ変換の基盤ロジックを提供します。
+- app/services/: リクエストに応じた指標設定など、コントローラから切り出した共通処理を担います。
+- app/strategy/: Strategy Lab と CLI 実行で使う戦略実行基盤です。戦略コードの実行、指標計算、最適化ユーティリティを提供します。
+- app/views/: Flask 側で返却する HTML テンプレートを配置します。
+- data/: 入力データ群の保管領域です。市場別/業種別の補助データを置く用途です。
+- docs/: 運用ドキュメントです。バックテスト手順や DB セットアップ手順を参照します。
+- kabucom/: kabusapi 連携の実装です。実売買系・価格取得系の接続処理を持ちます。
+- oanda/: OANDA 連携の実装です。FX 系の接続・注文関連処理を持ちます。
+- results/: 実行結果の出力先です。詳細結果 CSV、ランキング CSV、ウォークフォワード結果 JSON、キャッシュを保存します。
+- scripts/: バッチ/CLI の実体です。銘柄データ取り込み、テーブル準備、戦略実行、複数銘柄検証、ウォークフォワード分析を行います。
+- strategies/: Strategy Lab や CLI から読み込む戦略サンプルです。関数定義ベースで売買ロジックを記述します。
+- templates/: 取り込みや初期化時に使うテンプレートファイルを配置します。
+- tests/: ユニットテスト群です。戦略実行、指標計算、最適化、リスク管理の回帰を検証します。
+- tradingalgo/: テクニカル計算の補助アルゴリズムを提供します。
+- utils/: 設定変換やシリアライズなど汎用ユーティリティです。
+
+### ルート主要ファイルの動作内容
+
+- streamlit_app.py: メイン UI です。チャート表示、バックテスト実行、結果表示の操作フローを提供します。
+- strategy_lab.py: コード戦略 UI です。戦略編集、バックテスト、パラメータ最適化を対話的に実行します。
+- enhanced_backtest.py / backtest_metrics.py / backtest_visualizer.py / trade_logger.py: 互換ラッパーです。既存 import を維持しつつ実体を app/backtest/ に委譲します。
+- multi_stock_backtest.py / walkforward_analysis.py / run_strategy.py / import_yahoo_to_db.py / prepare_candle_table.py: 互換ラッパーです。既存 CLI パスを維持しつつ実体を scripts/ に委譲します。
+- README.md: 利用手順、構成、運用上の参照情報をまとめたドキュメントです。
+
+
+パラメータ範囲の例:
+
+```text
+fast=5:30:5
+slow=20:80:10
+rsi_low=20,25,30
+```
+
+- `start:end:step` 形式または `a,b,c` 形式で指定できます。
+- 試行数が多いほど時間がかかるため、まずは `50~100` 程度がおすすめです。
+
+指数（日経平均）は銘柄コード `^N225`、市場サフィックスを空欄にします。
+
+### コードの書き方（PineScript風API）
+
+```python
+def strategy(ctx, params):
+    ta = ctx.ta
+    fast_len = int(params.get("fast", 12))
+    slow_len = int(params.get("slow", 26))
+
+    fast = ta.ema(ctx.close, fast_len)
+    slow = ta.ema(ctx.close, slow_len)
+
+    ctx.plot(fast, title="EMA12")
+    ctx.plot(slow, title="EMA26")
+
+    if ta.crossover(fast, slow):
+        ctx.strategy.entry("long", ctx.strategy.long)
+    elif ta.crossunder(fast, slow):
+        ctx.strategy.close("long")
+```
+
+`def strategy(ctx):` 形式も引き続き利用できます。
+
+利用できる主なAPI:
+
+- 価格系列: `ctx.close` / `ctx.open` / `ctx.high` / `ctx.low` / `ctx.volume`
+- 指標: `ctx.ta.ema` / `ta.sma` / `ta.rsi` / `ta.macd` / `ta.bbands` / `ta.atr`
+- TA-Lib全関数: `ctx.ta.EMA(...)` / `ctx.ta.ADX(...)` / `ctx.ta.ATR(...)` のように直接呼び出し可能
+- クロス: `ctx.ta.crossover(a, b)` / `ctx.ta.crossunder(a, b)`
+- 注文: `ctx.strategy.entry("id", ctx.strategy.long)` / `ctx.strategy.close("id")`
+- 描画: `ctx.plot(series, title="EMA12")`
+- 状態: `ctx.position`（0=無, 1=ロング, -1=ショート）
+
+補足:
+
+- 利用可能な TA-Lib 関数一覧は `ctx.ta.functions()` で取得できます。
+
+### コマンドラインで実行する
+
+```powershell
+uv run python run_strategy.py --file strategies/ema_cross.py --code 7203 --days 365 --duration 1d
+```
+
+日経平均の例:
+
+```powershell
+uv run python run_strategy.py --file strategies/rsi_reversal.py --code '^N225' --days 365 --duration 1d --market ""
+```
+
+### 3) まず触るべきタブ
+
+- チャート: 銘柄、期間、時間軸を変えて挙動確認
+- 比較: 複数銘柄を同期間で比較
+- バックテスト: 戦略の結果を確認
+
+## 主要ファイル早見表
+
+## ディレクトリ構成
+
+```text
+kabucomtrading/                                 # プロジェクトルート
+├── app/                                        # アプリ本体
+│   ├── backtest/                               # バックテスト実装本体
+│   │   ├── backtest_metrics.py                 # パフォーマンス指標の計算
+│   │   ├── backtest_visualizer.py              # バックテスト結果の可視化
+│   │   ├── trade_logger.py                     # 取引ログの記録・保存
+│   │   └── enhanced_backtest.py                # リスク管理付き売買シミュレーション
+│   ├── controllers/                            # レガシーWeb/配信の制御層
+│   │   ├── ai.py                               # AI補助ロジック
+│   │   ├── streamdata.py                       # ストリーミング受信処理
+│   │   └── webserver.py                        # Flask Webサーバ/API
+│   ├── models/                                 # データモデル層
+│   │   ├── base.py                             # DB接続/セッション基盤
+│   │   ├── candle.py                           # ローソク足ORMモデル
+│   │   ├── dfcandle.py                         # DataFrame変換と指標計算
+│   │   └── events.py                           # 売買イベントモデル
+│   ├── services/                               # 共通サービス層
+│   │   └── indicator_params.py                 # 指標パラメータの解釈・適用
+│   ├── strategy/                               # Strategy Lab実行基盤
+│   │   ├── context.py                          # 戦略APIコンテキスト
+│   │   ├── engine.py                           # 戦略コンパイル/実行エンジン
+│   │   ├── indicators.py                       # 指標ユーティリティ
+│   │   └── optimization_utils.py               # 最適化補助関数
+│   └── views/                                  # Flaskテンプレート
+│       ├── chart.html                          # チャート表示テンプレート
+│       └── google.html                         # 補助表示テンプレート
+├── data/                                       # 補助データ置き場
+├── docs/                                       # ドキュメント
+│   ├── BACKTEST_GUIDE.md                       # バックテスト手順書
+│   └── HEIDISQL_SETUP.md                       # HeidiSQL設定手順
+├── kabucom/                                    # kabusapi連携
+│   └── kabucom.py                              # kabusapiクライアント実装
+├── oanda/                                      # OANDA連携
+│   └── oanda.py                                # OANDAクライアント実装
+├── results/                                    # 実行結果出力
+│   ├── backtest_details/                       # 指標別の詳細CSV
+│   ├── backtest_rankings/                      # ランキングCSV
+│   ├── cache/                                  # 取得データキャッシュ
+│   └── walkforward/                            # ウォークフォワード結果JSON
+├── scripts/                                    # CLI/バッチ実体
+│   ├── run_strategy.py                         # 戦略ファイルをCLI実行
+│   ├── import_yahoo_to_db.py                   # YahooデータをDB投入
+│   ├── prepare_candle_table.py                 # ローソク足テーブル作成
+│   ├── multi_stock_backtest.py                 # 複数銘柄一括バックテスト
+│   └── walkforward_analysis.py                 # ウォークフォワード分析
+├── strategies/                                 # 戦略サンプル
+│   ├── ema_cross.py                            # EMAクロス戦略例
+│   └── rsi_reversal.py                         # RSI逆張り戦略例
+├── templates/                                  # CSV等テンプレート
+├── tests/                                      # テストコード
+├── tradingalgo/                                # テクニカル補助アルゴリズム
+│   └── algo.py                                 # 一目均衡表などの計算補助
+├── utils/                                      # 汎用ユーティリティ
+│   └── utils.py                                # 変換/シリアライズ補助
+├── streamlit_app.py                            # メインUI（チャート/バックテスト画面）
+├── strategy_lab.py                             # コード戦略UI（編集/実行/最適化）
+├── enhanced_backtest.py (互換ラッパー)         # app/backtest/enhanced_backtest.pyへ委譲
+├── backtest_metrics.py (互換ラッパー)          # app/backtest/backtest_metrics.pyへ委譲
+├── backtest_visualizer.py (互換ラッパー)       # app/backtest/backtest_visualizer.pyへ委譲
+├── trade_logger.py (互換ラッパー)              # app/backtest/trade_logger.pyへ委譲
+├── multi_stock_backtest.py (互換ラッパー)      # scripts/multi_stock_backtest.pyへ委譲
+├── walkforward_analysis.py (互換ラッパー)      # scripts/walkforward_analysis.pyへ委譲
+├── run_strategy.py (互換ラッパー)              # scripts/run_strategy.pyへ委譲
+├── import_yahoo_to_db.py (互換ラッパー)        # scripts/import_yahoo_to_db.pyへ委譲
+├── prepare_candle_table.py (互換ラッパー)      # scripts/prepare_candle_table.pyへ委譲
+└── README.md                                   # 利用手順と構成説明
+```
+
+### まずここだけ読めばOK
+
+- `streamlit_app.py`: 画面と操作フロー
+- `strategy_lab.py`: コードで戦略を書くTradingView風の画面
+- `docs/BACKTEST_GUIDE.md`: バックテスト系機能の説明
+- `settings.ini`: 初期設定
+
+### バックテスト関連
+
+- `backtest_metrics.py`: シャープレシオ、ドローダウンなど評価指標
+- `backtest_visualizer.py`: バックテスト結果の可視化
+- `trade_logger.py`: 取引ログ保存（CSV/JSON）
+- `enhanced_backtest.py`: リスク管理付きバックテスト
+- `walkforward_analysis.py`: ウォークフォワード分析
+- `multi_stock_backtest.py`: 複数銘柄をまとめて検証
+
+### Strategy Lab（コード戦略）
+
+- `run_strategy.py`: 戦略ファイルをバックテストするCLI
+- `strategies/`: 戦略サンプル（ema_cross.py, rsi_reversal.py）
+- `app/strategy/`: 戦略エンジン（context / engine / indicators）
+
+### 既存システム（レガシー/実売買側）
+
+- `main.py`: エントリーポイント
+- `app/controllers/`: Web/API/ストリーム処理
+- `app/services/`: 共通ロジック層（パラメータ解析など）
+- `app/models/`: Candle と指標計算
+- `kabucom/kabucom.py`: kabusapi クライアント
+
+## 何ができるか
+
+- Yahoo Finance データ取得
+- ローソク足とテクニカル指標の可視化
+- 戦略バックテスト結果の保存
+- リスク管理付きバックテスト（コスト・スリッページ対応）
+- 複数銘柄ランキング
+- ウォークフォワード分析
+
+## 全体フロー（ざっくり）
+
+```mermaid
+flowchart LR
+   A[Streamlit UI] --> B[Yahoo Finance Data Fetch]
+   B --> C[DataFrame and Indicator Calc]
+   C --> D[Backtest Execution]
+   D --> E[Metrics and Scoring]
+   E --> F[JSON/CSV Outputs]
+   E --> G[Charts and Visual Reports]
+```
+
+見方:
+
+1. 左から右に、操作から結果生成までの流れです
+2. 出力は JSON/CSV と可視化の2系統です
+3. 詳細分析はこの出力を使って行います
+
+## バックテスト結果の見方
+
+最低限、次の3つを見ると判断しやすくなります。
+
+1. `total_profit`（総損益）
+2. `max_drawdown`（最大ドローダウン）
+3. `robust_score`（リスク調整済み総合スコア）
+
+目安:
+
+- 総損益だけ高く、ドローダウンが大きい戦略は要注意
+- `robust_score` は「利益と安定性のバランス」を見るための補助指標
+
+## 推奨の使い方（実務的）
+
+1. Streamlit のチャートで対象銘柄の癖を掴む
+2. バックテストで候補パラメータを絞る
+3. ウォークフォワードで過学習を確認
+4. 複数銘柄で再検証し、特定銘柄依存を避ける
+
+## 現在のリポジトリ状態に関する注意
+
+このワークスペースでは `backtest_yahoo.py` が見当たりません。
+
+- `streamlit_app.py` のバックテスト実行処理
+- `multi_stock_backtest.py`
+
+は `backtest_yahoo` モジュールを参照しています。これらを使う場合は、`backtest_yahoo.py` を用意するか、参照先を既存実装に差し替えてください。
+
+## 設定
+
+`settings.ini` で主に以下を調整します。
+
 - `product_code`: 銘柄コード
-- `duration`: 時間軸（5s / 1m / 1h）
-- `limit`: 取得件数（最大1000）
-- `sma`: SMAを含める（true）
-- `ema`: EMAを含める（true）
-- `bbands`: Bollinger Bandsを含める（true）
-- `ichimoku`: Ichimoku Cloudを含める（true）
-- `rsi`: RSIを含める（true）
-- `macd`: MACDを含める（true）
+- `trade_duration`: 時間軸（例: 1m / 1h / 1d）
+- `past_period`: 取得期間（日数）
+- `back_test`: バックテストモード
 
-## 開発
+`[paths]` セクションで出力先を統一管理できます。
 
-### コード品質ツール
+- `results_dir`: 出力ルート
+- `backtest_results_file`: 単一バックテスト結果 JSON
+- `multi_stock_results_file`: 複数銘柄結果 JSON
+- `backtest_details_dir`: 詳細 CSV 保存先
+- `backtest_rankings_dir`: ランキング CSV 保存先
+- `walkforward_dir`: ウォークフォワード JSON 保存先
+- `cache_dir`: Streamlit キャッシュ保存先
 
-このプロジェクトでは以下のツールを使用しています：
+## DBへデータを入れる
 
-- **Ruff**: Linter & Formatter
-- **Pyright**: 型チェック
-- **Bandit**: セキュリティチェック
-- **pre-commit**: コミット前チェック
+Yahoo Finance の価格データを SQLite に保存できます。
 
-### コード整形
+### 1) インポート実行
 
 ```bash
-ruff format .
+uv run python import_yahoo_to_db.py --code 7203 --days 365 --duration 1d --market T
 ```
 
-### Lint実行
+### 2) 保存先DB
+
+- DBファイル: `stockdata.sql`（`settings.ini` の `db.name`）
+- テーブル名: `CANDLE_<銘柄コード>_<時間軸>`
+
+例:
+
+- `--code 7203 --duration 1d` の場合は `CANDLE_7203_1D`
+
+### 3) 補足
+
+- 既存時刻データは主キー制約で重複保存されません
+- `5s` 指定時は Yahoo 側制約により `1m` データで代用されます
+
+## HeidiSQLからデータ投入する
+
+HeidiSQLで直接DBへ入れる場合は、まず投入先テーブルを作成します。
 
 ```bash
-ruff check .
+uv run python prepare_candle_table.py --code 7203 --duration 1d
 ```
 
-### 型チェック
+その後、HeidiSQLで `stockdata.sql` に接続し、
+`CANDLE_7203_1D` のようなテーブルへ手入力またはCSVインポートで追加できます。
 
-```bash
-pyright
+詳しい手順は以下を参照してください。
+
+- `docs/HEIDISQL_SETUP.md`
+- `templates/heidisql_candle_template.csv`（CSV投入テンプレート）
+
+## よくあるハマりどころ
+
+### TA-Lib が入らない
+
+OS ごとの事前ライブラリ導入が必要です。
+
+- Windows: TA-Lib バイナリを導入後に Python パッケージをインストール
+- macOS: `brew install ta-lib`
+- Linux: `apt-get install ta-lib`
+
+### Streamlit は開くがバックテストが動かない
+
+`backtest_yahoo.py` の有無を確認してください。
+
+### データが想定より少ない
+
+Yahoo Finance の時間軸ごとの取得上限に依存します。
+
+## プロジェクト構成（概要）
+
+```text
+kabucomtrading/
+├─ streamlit_app.py
+├─ enhanced_backtest.py
+├─ backtest_metrics.py
+├─ backtest_visualizer.py
+├─ trade_logger.py
+├─ walkforward_analysis.py
+├─ multi_stock_backtest.py
+├─ docs/
+│  └─ BACKTEST_GUIDE.md
+├─ results/
+│  ├─ backtest_results.json
+│  ├─ multi_stock_backtest_results.json
+│  ├─ backtest_details/
+│  ├─ backtest_rankings/
+│  ├─ walkforward/
+│  └─ cache/
+├─ archive/
+├─ settings.ini
+└─ app/
+   ├─ controllers/
+   ├─ services/
+   ├─ models/
+   └─ data/
 ```
 
-## トラブルシューティング
+## 免責
 
-### TA-Libのインストールエラー
-
-TA-Libはネイティブライブラリのため、事前にシステムレベルでのインストールが必要です。
-公式サイトまたはパッケージマネージャーを利用してインストールしてください。
-
-### kabusapi接続エラー
-
-- `settings.ini`のトークンとURLが正しいか確認してください
-- kabu.com証券のAPIサービスが起動しているか確認してください
-- 証明書エラーが発生する場合は、`verify=False`が設定されているか確認してください（本番環境では非推奨）
-
-## ライセンス
-
-MIT License
-
-## 免責事項
-
-本ソフトウェアは教育・研究目的で提供されています。
-実際の取引での使用により生じたいかなる損失についても、作者は一切の責任を負いません。
-金融商品取引にはリスクが伴います。自己責任でご利用ください。
-
-## 参考リンク
-
-- [kabu.com証券API公式ドキュメント](https://kabucom.github.io/kabusapi/)
-- [kabusapi GitHub](https://github.com/kabucom/kabusapi)
-- [TA-Lib](https://www.ta-lib.org/)
+本プロジェクトは検証・学習用途を含みます。実運用での損益については自己責任で判断してください。
