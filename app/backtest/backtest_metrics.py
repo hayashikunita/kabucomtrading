@@ -28,6 +28,61 @@ class BacktestMetrics:
         """総利益"""
         return sum(self.profits)
 
+    def equity_curve(self, initial_capital: float = 1000000) -> np.ndarray:
+        """初期資金を含むエクイティカーブ。"""
+        if not self.profits:
+            return np.array([])
+        return initial_capital + np.cumsum(np.asarray(self.profits, dtype=float))
+
+    def equity_growth_metrics(self, initial_capital: float = 1000000) -> Dict:
+        """エクイティカーブの単調性・傾き・安定性を評価する。"""
+        if self.total_trades() == 0 or initial_capital <= 0:
+            return {
+                "equity_monotonicity_rate": 0.0,
+                "equity_slope_per_trade": 0.0,
+                "equity_residual_std": 0.0,
+                "equity_step_std": 0.0,
+                "equity_growth_score": 0.0,
+            }
+
+        equity = self.equity_curve(initial_capital)
+        trade_index = np.arange(1, len(equity) + 1, dtype=float)
+
+        if len(equity) >= 2:
+            slope, intercept = np.polyfit(trade_index, equity, 1)
+            trend = slope * trade_index + intercept
+        else:
+            slope = 0.0
+            trend = equity.copy()
+
+        step_changes = np.diff(np.concatenate(([initial_capital], equity)))
+        residuals = equity - trend
+
+        monotonicity_rate = float(np.mean(step_changes >= 0) * 100.0)
+        residual_std = float(np.std(residuals))
+        step_std = float(np.std(step_changes))
+
+        capital_scale = float(initial_capital)
+        slope_norm = float(np.clip(0.5 + 0.5 * np.tanh((slope / capital_scale) * 500.0), 0.0, 1.0))
+        monotonicity_norm = float(np.clip(monotonicity_rate / 100.0, 0.0, 1.0))
+        residual_std_norm = float(np.clip(1.0 - (residual_std / (capital_scale * 0.05)), 0.0, 1.0))
+        step_std_norm = float(np.clip(1.0 - (step_std / (capital_scale * 0.02)), 0.0, 1.0))
+
+        growth_score = (
+            0.35 * monotonicity_norm
+            + 0.30 * slope_norm
+            + 0.20 * residual_std_norm
+            + 0.15 * step_std_norm
+        ) * 100.0
+
+        return {
+            "equity_monotonicity_rate": monotonicity_rate,
+            "equity_slope_per_trade": float(slope),
+            "equity_residual_std": residual_std,
+            "equity_step_std": step_std,
+            "equity_growth_score": float(growth_score),
+        }
+
     def total_trades(self) -> int:
         """総取引数"""
         return len(self.trades)
@@ -209,6 +264,7 @@ class BacktestMetrics:
 
     def get_all_metrics(self, initial_capital: float = 1000000, years: float = 1.0) -> Dict:
         """すべての指標を辞書形式で取得"""
+        growth_metrics = self.equity_growth_metrics(initial_capital)
         return {
             "total_profit": self.total_profit(),
             "total_trades": self.total_trades(),
@@ -229,6 +285,7 @@ class BacktestMetrics:
             "recovery_factor": self.recovery_factor(),
             "calmar_ratio": self.calmar_ratio(years),
             "robust_score": self.robust_score(initial_capital),
+            **growth_metrics,
         }
 
     def print_summary(self):
@@ -257,4 +314,11 @@ class BacktestMetrics:
         print(f"リカバリーファクター:    {self.recovery_factor():.2f}")
         print(f"カルマーレシオ:          {self.calmar_ratio():.2f}")
         print(f"ロバストスコア:          {self.robust_score():.2f}")
+        growth = self.equity_growth_metrics()
+        print("-" * 70)
+        print(f"単調増加率:              {growth['equity_monotonicity_rate']:.2f}%")
+        print(f"傾き(1取引あたり):       {growth['equity_slope_per_trade']:,.2f}")
+        print(f"残差標準偏差:            {growth['equity_residual_std']:,.2f}")
+        print(f"エクイティ変化の標準偏差:{growth['equity_step_std']:,.2f}")
+        print(f"安定成長スコア:          {growth['equity_growth_score']:.2f}")
         print("=" * 70 + "\n")

@@ -59,3 +59,23 @@ def test_get_all_metrics_contains_robust_score():
     assert "robust_score" in metrics
     assert "sharpe_ratio" in metrics
     assert "max_drawdown" in metrics
+
+
+def test_equity_growth_metrics_reward_monotonic_stable_curve():
+    m = BacktestMetrics([_trade(100), _trade(120), _trade(140), _trade(160)])
+    metrics = m.equity_growth_metrics(initial_capital=1_000_000)
+
+    assert metrics["equity_monotonicity_rate"] == 100.0
+    assert metrics["equity_slope_per_trade"] > 0
+    assert metrics["equity_residual_std"] >= 0
+    assert metrics["equity_growth_score"] > 0
+
+
+def test_equity_growth_metrics_penalize_volatile_curve():
+    stable = BacktestMetrics([_trade(100), _trade(100), _trade(100), _trade(100)])
+    volatile = BacktestMetrics([_trade(400), _trade(-300), _trade(400), _trade(-300)])
+
+    stable_score = stable.equity_growth_metrics(initial_capital=1_000_000)["equity_growth_score"]
+    volatile_score = volatile.equity_growth_metrics(initial_capital=1_000_000)["equity_growth_score"]
+
+    assert stable_score > volatile_score
