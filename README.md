@@ -240,73 +240,43 @@ uv run python run_strategy.py --file strategies/rsi_reversal.py --code '^N225' -
 ## ディレクトリ構成
 
 ```text
-kabucomtrading/                                 # プロジェクトルート
-├── app/                                        # アプリ本体
-│   ├── backtest/                               # バックテスト実装本体
-│   │   ├── backtest_metrics.py                 # パフォーマンス指標の計算
-│   │   ├── backtest_visualizer.py              # バックテスト結果の可視化
-│   │   ├── trade_logger.py                     # 取引ログの記録・保存
-│   │   └── enhanced_backtest.py                # リスク管理付き売買シミュレーション
-│   ├── controllers/                            # レガシーWeb/配信の制御層
-│   │   ├── ai.py                               # AI補助ロジック
-│   │   ├── streamdata.py                       # ストリーミング受信処理
-│   │   └── webserver.py                        # Flask Webサーバ/API
-│   ├── models/                                 # データモデル層
-│   │   ├── base.py                             # DB接続/セッション基盤
-│   │   ├── candle.py                           # ローソク足ORMモデル
-│   │   ├── dfcandle.py                         # DataFrame変換と指標計算
-│   │   └── events.py                           # 売買イベントモデル
-│   ├── services/                               # 共通サービス層
-│   │   └── indicator_params.py                 # 指標パラメータの解釈・適用
-│   ├── strategy/                               # Strategy Lab実行基盤
-│   │   ├── context.py                          # 戦略APIコンテキスト
-│   │   ├── engine.py                           # 戦略コンパイル/実行エンジン
-│   │   ├── indicators.py                       # 指標ユーティリティ
-│   │   └── optimization_utils.py               # 最適化補助関数
-│   └── views/                                  # Flaskテンプレート
-│       ├── chart.html                          # チャート表示テンプレート
-│       └── google.html                         # 補助表示テンプレート
-├── data/                                       # 補助データ置き場
-├── docs/                                       # ドキュメント
-│   ├── BACKTEST_GUIDE.md                       # バックテスト手順書
-│   └── HEIDISQL_SETUP.md                       # HeidiSQL設定手順
-├── kabucom/                                    # kabusapi連携
-│   └── kabucom.py                              # kabusapiクライアント実装
-├── oanda/                                      # OANDA連携
-│   └── oanda.py                                # OANDAクライアント実装
-├── results/                                    # 実行結果出力
-│   ├── backtest_details/                       # 指標別の詳細CSV
-│   ├── backtest_rankings/                      # ランキングCSV
-│   ├── cache/                                  # 取得データキャッシュ
-│   └── walkforward/                            # ウォークフォワード結果JSON
-├── scripts/                                    # CLI/バッチ実体
-│   ├── run_strategy.py                         # 戦略ファイルをCLI実行
-│   ├── import_yahoo_to_db.py                   # YahooデータをDB投入
-│   ├── prepare_candle_table.py                 # ローソク足テーブル作成
-│   ├── multi_stock_backtest.py                 # 複数銘柄一括バックテスト
-│   └── walkforward_analysis.py                 # ウォークフォワード分析
-├── strategies/                                 # 戦略サンプル
-│   ├── ema_cross.py                            # EMAクロス戦略例
-│   └── rsi_reversal.py                         # RSI逆張り戦略例
-├── templates/                                  # CSV等テンプレート
-├── tests/                                      # テストコード
-├── tradingalgo/                                # テクニカル補助アルゴリズム
-│   └── algo.py                                 # 一目均衡表などの計算補助
-├── utils/                                      # 汎用ユーティリティ
-│   └── utils.py                                # 変換/シリアライズ補助
-├── streamlit_app.py                            # メインUI（チャート/バックテスト画面）
-├── strategy_lab.py                             # コード戦略UI（編集/実行/最適化）
-├── enhanced_backtest.py (互換ラッパー)         # app/backtest/enhanced_backtest.pyへ委譲
-├── backtest_metrics.py (互換ラッパー)          # app/backtest/backtest_metrics.pyへ委譲
-├── backtest_visualizer.py (互換ラッパー)       # app/backtest/backtest_visualizer.pyへ委譲
-├── trade_logger.py (互換ラッパー)              # app/backtest/trade_logger.pyへ委譲
-├── multi_stock_backtest.py (互換ラッパー)      # scripts/multi_stock_backtest.pyへ委譲
-├── walkforward_analysis.py (互換ラッパー)      # scripts/walkforward_analysis.pyへ委譲
-├── run_strategy.py (互換ラッパー)              # scripts/run_strategy.pyへ委譲
-├── import_yahoo_to_db.py (互換ラッパー)        # scripts/import_yahoo_to_db.pyへ委譲
-├── prepare_candle_table.py (互換ラッパー)      # scripts/prepare_candle_table.pyへ委譲
-└── README.md                                   # 利用手順と構成説明
+kabucomtrading/
+├── app/                        # アプリ実装本体
+│   ├── backtest/               # バックテスト実行・評価・可視化
+│   ├── strategy/               # Strategy Lab 実行基盤
+│   ├── models/                 # DB/データモデル
+│   ├── services/               # 共通サービス
+│   ├── controllers/            # レガシーWeb/API制御
+│   └── views/                  # Flaskテンプレート
+├── scripts/                    # CLI/バッチ実体
+├── strategies/                 # 戦略サンプル
+├── tests/                      # ユニットテスト
+├── docs/                       # 運用ドキュメント
+├── results/                    # 実行結果（JSON/CSV/キャッシュ）
+├── data/                       # 補助データ
+├── templates/                  # 取り込みテンプレート
+├── kabucom/                    # kabusapi連携
+├── oanda/                      # OANDA連携
+├── tradingalgo/                # テクニカル補助アルゴリズム
+├── utils/                      # 汎用ユーティリティ
+├── streamlit_app.py            # メインUI
+├── strategy_lab.py             # コード戦略UI
+└── README.md
 ```
+
+### 互換ラッパー（ルート直下）
+
+既存の import/CLI パスを壊さないため、以下は実装本体へ委譲する薄いラッパーです。
+
+- `enhanced_backtest.py` -> `app/backtest/enhanced_backtest.py`
+- `backtest_metrics.py` -> `app/backtest/backtest_metrics.py`
+- `backtest_visualizer.py` -> `app/backtest/backtest_visualizer.py`
+- `trade_logger.py` -> `app/backtest/trade_logger.py`
+- `multi_stock_backtest.py` -> `scripts/multi_stock_backtest.py`
+- `walkforward_analysis.py` -> `scripts/walkforward_analysis.py`
+- `run_strategy.py` -> `scripts/run_strategy.py`
+- `import_yahoo_to_db.py` -> `scripts/import_yahoo_to_db.py`
+- `prepare_candle_table.py` -> `scripts/prepare_candle_table.py`
 
 ### まずここだけ読めばOK
 
