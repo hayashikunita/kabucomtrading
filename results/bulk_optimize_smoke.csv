@@ -1,0 +1,4 @@
+﻿symbol,status,data_source,best_params,objective,total_trades,valid_trials,executed_trials,total_profit,win_rate,max_drawdown,sharpe_ratio,robust_score
+1301,no_valid_trial,db,{},,0,0,4,,,,,
+1305,ok,db,"{""fast"": 8, ""slow"": 20}",70529.55904967514,1,4,4,70529.55904967514,100.0,0.0,0.0,68.91059118099349
+1306,ok,db,"{""fast"": 8, ""slow"": 20}",80445.11735762801,1,4,4,80445.11735762801,100.0,0.0,0.0,69.10890234715255

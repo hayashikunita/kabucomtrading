@@ -226,3 +226,7 @@ data_cache/
 # Local backup artifacts
 archive/*.backup
 archive/*.corrupted
+
+
+
+README.md
