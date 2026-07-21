@@ -4,18 +4,176 @@
 
 import json
 import logging
+import os
 import sys
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
+from itertools import product
+from pathlib import Path
 from typing import Dict, List, Optional
 
 import pandas as pd
 
+if __package__ is None or __package__ == "":
+    repo_root = Path(__file__).resolve().parent.parent
+    if str(repo_root) not in sys.path:
+        sys.path.insert(0, str(repo_root))
+
 import settings
-from backtest_yahoo import YahooBacktest
+from app.strategy.engine import StrategyEngine, compile_strategy
+from enhanced_backtest import RiskManagement
 
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 logger = logging.getLogger(__name__)
+
+
+def run_backtest_analysis(product_code: str, period_days: int, duration: str, detailed: bool = False):
+    """銘柄1つ分の戦略最適化バックテストを実行する。"""
+    risk = RiskManagement(
+        initial_capital=1_000_000,
+        transaction_cost_percent=0.1,
+        slippage_percent=0.02,
+    )
+
+    engine = StrategyEngine.from_yahoo(
+        product_code=product_code,
+        period_days=period_days,
+        duration=duration,
+        market="T",
+        risk_management=risk,
+    )
+
+    strategy_specs = {
+        "ema": {
+            "code": """
+def strategy(ctx, params):
+    ta = ctx.ta
+    fast_n = int(params.get('period1', 12))
+    slow_n = int(params.get('period2', 26))
+    fast = ta.ema(ctx.close, fast_n)
+    slow = ta.ema(ctx.close, slow_n)
+    if ta.crossover(fast, slow) and ctx.position == 0:
+        ctx.strategy.entry('long', ctx.strategy.long)
+    elif ta.crossunder(fast, slow) and ctx.position == 1:
+        ctx.strategy.close('long')
+""",
+            "params": [
+                {"period1": p1, "period2": p2}
+                for p1, p2 in product([5, 7, 10, 12, 14, 20], [20, 26, 30, 50, 75])
+                if p1 < p2
+            ],
+        },
+        "bollinger_bands": {
+            "code": """
+def strategy(ctx, params):
+    ta = ctx.ta
+    n = int(params.get('n', 20))
+    k = float(params.get('k', 2.0))
+    upper, middle, lower = ta.bbands(ctx.close, n, k)
+    price = ctx.close[ctx.index]
+    if price != price:
+        return
+    if price < lower[ctx.index] and ctx.position == 0:
+        ctx.strategy.entry('long', ctx.strategy.long)
+    elif price > upper[ctx.index] and ctx.position == 1:
+        ctx.strategy.close('long')
+""",
+            "params": [{"n": n, "k": k} for n, k in product([10, 20, 30], [1.5, 2.0, 2.5])],
+        },
+        "ichimoku": {
+            "code": """
+def strategy(ctx, params):
+    ta = ctx.ta
+    conv = ta.sma((ctx.high + ctx.low) / 2.0, 9)
+    base = ta.sma((ctx.high + ctx.low) / 2.0, 26)
+    if ta.crossover(conv, base) and ctx.position == 0:
+        ctx.strategy.entry('long', ctx.strategy.long)
+    elif ta.crossunder(conv, base) and ctx.position == 1:
+        ctx.strategy.close('long')
+""",
+            "params": [{}],
+        },
+        "rsi": {
+            "code": """
+def strategy(ctx, params):
+    ta = ctx.ta
+    period = int(params.get('period', 14))
+    buy_thr = float(params.get('buy_threshold', 30))
+    sell_thr = float(params.get('sell_threshold', 70))
+    rsi = ta.rsi(ctx.close, period)
+    value = rsi[ctx.index]
+    if value != value:
+        return
+    if value < buy_thr and ctx.position == 0:
+        ctx.strategy.entry('long', ctx.strategy.long)
+    elif value > sell_thr and ctx.position == 1:
+        ctx.strategy.close('long')
+""",
+            "params": [
+                {"period": period, "buy_threshold": buy_thr, "sell_threshold": sell_thr}
+                for period, buy_thr, sell_thr in product([8, 14, 21], [20, 25, 30], [65, 70, 75])
+                if buy_thr < sell_thr
+            ],
+        },
+        "macd": {
+            "code": """
+def strategy(ctx, params):
+    ta = ctx.ta
+    fast = int(params.get('fast_period', 12))
+    slow = int(params.get('slow_period', 26))
+    signal = int(params.get('signal_period', 9))
+    macd_line, signal_line, _ = ta.macd(ctx.close, fast, slow, signal)
+    if ta.crossover(macd_line, signal_line) and ctx.position == 0:
+        ctx.strategy.entry('long', ctx.strategy.long)
+    elif ta.crossunder(macd_line, signal_line) and ctx.position == 1:
+        ctx.strategy.close('long')
+""",
+            "params": [
+                {"fast_period": fast, "slow_period": slow, "signal_period": signal}
+                for fast, slow, signal in product([8, 12], [17, 26], [5, 9])
+                if fast < slow
+            ],
+        },
+    }
+
+    summary_results: Dict = {}
+    detailed_results: Dict = {}
+
+    for strategy_name, spec in strategy_specs.items():
+        strategy_fn = compile_strategy(spec["code"])
+        all_rows = []
+
+        for params in spec["params"]:
+            result = engine.run(strategy_fn, params)
+            perf = float(result.get("risk_management_stats", {}).get("return_percent", 0.0))
+
+            row = {**params}
+            row["performance"] = perf
+            row["total_trades"] = int(result.get("total_trades", 0))
+            row["win_rate"] = float(result.get("metrics", {}).get("win_rate", 0.0))
+            row["max_drawdown"] = float(result.get("metrics", {}).get("max_drawdown", 0.0))
+            row["sharpe_ratio"] = float(result.get("metrics", {}).get("sharpe_ratio", 0.0))
+            all_rows.append(row)
+
+        if not all_rows:
+            continue
+
+        best = max(all_rows, key=lambda x: x["performance"])
+        summary_results[strategy_name] = {
+            k: v for k, v in best.items() if k not in ["total_trades", "win_rate", "max_drawdown", "sharpe_ratio"]
+        }
+
+        if detailed:
+            best_params = {
+                k: v for k, v in best.items() if k not in ["performance", "total_trades", "win_rate", "max_drawdown", "sharpe_ratio"]
+            }
+            detailed_results[strategy_name] = {
+                "best_performance": float(best["performance"]),
+                "best_params": best_params,
+                "all_results": all_rows,
+            }
+
+    return summary_results, detailed_results if detailed else None
 
 
 class MultiStockBacktest:
@@ -40,14 +198,21 @@ class MultiStockBacktest:
         logger.info(f"action=run_single_backtest product_code={product_code} status=start")
 
         try:
-            backtest = YahooBacktest(product_code, self.period_days, self.duration)
-            backtest.run_backtest(detailed=detailed)
+            results, detailed_results = run_backtest_analysis(
+                product_code=product_code,
+                period_days=self.period_days,
+                duration=self.duration,
+                detailed=detailed,
+            )
+
+            if not results:
+                raise RuntimeError("no_backtest_results")
 
             result = {
                 "product_code": product_code,
                 "success": True,
-                "results": backtest.results,
-                "detailed_results": backtest.detailed_results if detailed else None,
+                "results": results,
+                "detailed_results": detailed_results if detailed else None,
             }
 
             logger.info(f"action=run_single_backtest product_code={product_code} status=success")
@@ -133,8 +298,6 @@ class MultiStockBacktest:
 
     def save_ranking_csv(self, output_dir: Optional[str] = None):
         """各戦略のランキングをCSVに保存"""
-        import os
-
         output_dir = output_dir or settings.backtest_rankings_dir
 
         os.makedirs(output_dir, exist_ok=True)
