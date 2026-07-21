@@ -232,6 +232,11 @@ strategy_lab.py
 strategies/
 app/strategy/
 
+# Local data and machine-specific settings
+stockdata.sql
+settings.ini
+results/cache/*.csv
+
 
 
 README.md
