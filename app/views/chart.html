@@ -87,6 +87,16 @@
         .backtest-btn:hover {
             background-color: #e68900;
         }
+        .terminal-link {
+            display: inline-block;
+            margin-left: 10px;
+            color: #7bb3ff;
+            text-decoration: none;
+            font-size: 0.95em;
+        }
+        .terminal-link:hover {
+            text-decoration: underline;
+        }
         #chart_div {
             width: 100%;
             max-width: 1200px;
@@ -503,6 +513,7 @@
         <span>(例: 1459, 7203, 9984)</span>
         <button onclick="updateProductCode()" class="update-btn">チャート更新</button>
         <button onclick="loadBacktestResults()" class="backtest-btn">バックテスト結果表示</button>
+        <a href="/terminal" class="terminal-link">ターミナル出力モニター</a>
     </div>
 
     <div class="duration-group">

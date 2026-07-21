@@ -227,6 +227,11 @@ data_cache/
 archive/*.backup
 archive/*.corrupted
 
+# Strategy core (local/private)
+strategy_lab.py
+strategies/
+app/strategy/
+
 
 
 README.md
