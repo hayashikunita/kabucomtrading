@@ -136,6 +136,13 @@ celerybeat.pid
 
 # Environments
 .env
+.env.*
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+!.env.example
+!.env.sample
 .envrc
 .venv
 env/
@@ -194,6 +201,35 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 
+# Secrets / credentials / private keys
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+*.jks
+*.keystore
+id_rsa
+id_rsa.pub
+id_ed25519
+id_ed25519.pub
+credentials.json
+credentials-*.json
+client_secret*.json
+service-account*.json
+token.json
+tokens.json
+oauth*.json
+
+# Local DB / data dumps
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.sql.gz
+*.dump
+
 # Cursor
 #  Cursor is an AI-powered code editor. `.cursorignore` specifies files/directories to
 #  exclude from AI features like autocomplete and code analysis. Recommended for sensitive data
@@ -226,17 +262,35 @@ data_cache/
 # Local backup artifacts
 archive/*.backup
 archive/*.corrupted
+*.bak
+*.tmp
+*.temp
 
 # Strategy core (local/private)
 strategy_lab.py
 strategies/
 app/strategy/
 
+# App core (local/private)
+app/backtest/
+app/controllers/
+app/models/
+app/services/
+tradingalgo/
+kabucom/
+oanda/
+
+# Core entry scripts (local/private)
+main.py
+run_strategy.py
+enhanced_backtest.py
+multi_stock_backtest.py
+walkforward_analysis.py
+
 # Local data and machine-specific settings
 stockdata.sql
 settings.ini
 results/cache/*.csv
 
-
-
+# Private documentation
 README.md

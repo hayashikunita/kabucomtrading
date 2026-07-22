@@ -1,7 +1,6 @@
 """
 Streamlit Trading Dashboard
-Yahoo Financeから株価データを取得してチャート表示とバックテスト結果を表示
-拡張バックテスト機能付き
+Yahoo Financeから株価データを取得してチャート表示・比較・財務情報を確認する
 """
 
 import json
@@ -34,6 +33,9 @@ CACHE_DIR = settings.cache_dir
 BACKTEST_RESULTS_FILE = settings.backtest_results_file
 BACKTEST_DETAILS_DIR = settings.backtest_details_dir
 os.makedirs(CACHE_DIR, exist_ok=True)
+
+# streamlit_appではバックテスト機能を無効化し、strategy_labへ統合する
+BACKTEST_ENABLED = False
 
 # ページ設定
 st.set_page_config(
@@ -87,7 +89,7 @@ with st.sidebar:
     st.header("⚙️ 設定")
 
     # タブで機能を分ける
-    tab1, tab2, tab3, tab4 = st.tabs(["📊 チャート", "🎯 バックテスト", "📉 比較", "📋 財務情報"])
+    tab1, tab2, tab3, tab4 = st.tabs(["📊 チャート", "🧪 Strategy Lab", "📉 比較", "📋 財務情報"])
 
     with tab1:
         st.subheader("チャート設定")
@@ -163,56 +165,10 @@ with st.sidebar:
                     st.success("キャッシュを削除しました")
 
     with tab2:
-        st.subheader("バックテスト設定")
-
-        bt_product_code = st.text_input(
-            "バックテスト銘柄", value="7203", key="bt_product_code", help="バックテストする銘柄コード"
-        )
-
-        bt_period = st.slider(
-            "バックテスト期間（日）",
-            min_value=30,
-            max_value=3650,
-            value=3650,  # デフォルトを最大10年に設定
-            key="bt_period",
-            help="最大10年分のバックテスト可能（日足推奨）",
-        )
-
-        bt_duration = st.selectbox(
-            "バックテスト時間軸",
-            ["1m", "1h", "1d"],
-            index=2,  # デフォルトを1dに設定
-            key="bt_duration",
-        )
-
-        # 詳細モード選択
-        st.divider()
-        detailed_mode = st.checkbox(
-            "詳細モード（全パラメータ結果出力）",
-            value=False,
-            help="有効にすると全パラメータ組み合わせの結果を出力します（時間がかかります）",
-        )
-
-        # テクニカル指標選択
-        st.write("**最適化する指標:**")
-        optimize_ema = st.checkbox("EMA", value=True, key="opt_ema")
-        optimize_bb = st.checkbox("Bollinger Bands", value=True, key="opt_bb")
-        optimize_ichimoku = st.checkbox("一目均衡表", value=True, key="opt_ichimoku")
-        optimize_rsi = st.checkbox("RSI", value=True, key="opt_rsi")
-        optimize_macd = st.checkbox("MACD", value=True, key="opt_macd")
-
-        st.divider()
-
-        if st.button("🚀 バックテスト実行", type="primary"):
-            st.session_state.run_backtest = True
-            st.session_state.detailed_mode = detailed_mode
-
-        if st.button("📋 結果表示"):
-            st.session_state.show_backtest = True
-        
-        # 拡張分析ボタン（新機能）
-        if ENHANCED_BACKTEST_AVAILABLE and st.button("📈 詳細分析表示"):
-            st.session_state.show_enhanced = True
+        st.subheader("戦略検証は Strategy Lab へ統合")
+        st.info("この画面ではバックテストを提供しません。戦略作成・最適化は strategy_lab.py を使用してください。")
+        st.code("uv run streamlit run strategy_lab.py", language="bash")
+        st.caption("既存のチャート確認・比較・財務情報はこの streamlit_app.py で引き続き利用できます。")
 
     with tab3:
         st.subheader("銘柄比較")
@@ -758,6 +714,11 @@ if "run_backtest" not in st.session_state:
 if "run_compare" not in st.session_state:
     st.session_state.run_compare = False
 if "show_enhanced" not in st.session_state:
+    st.session_state.show_enhanced = False
+
+if not BACKTEST_ENABLED:
+    st.session_state.show_backtest = False
+    st.session_state.run_backtest = False
     st.session_state.show_enhanced = False
 
 
@@ -3029,7 +2990,7 @@ if data_source == "Yahoo Finance":
         st.info("👈 サイドバーの「チャート更新」ボタンをクリックしてデータを取得してください")
 
 # バックテスト実行
-elif st.session_state.run_backtest:
+elif BACKTEST_ENABLED and st.session_state.run_backtest:
     st.header("🚀 バックテスト実行中...")
 
     detailed_mode = st.session_state.get("detailed_mode", False)
@@ -3149,7 +3110,7 @@ else:
     st.warning("kabusapiは現在未実装です。Yahoo Financeをご利用ください。")
 
 # バックテスト結果表示
-if st.session_state.show_backtest:
+if BACKTEST_ENABLED and st.session_state.show_backtest:
     st.divider()
     st.header("🎯 バックテスト結果")
 
@@ -3395,7 +3356,7 @@ if st.session_state.show_backtest:
         st.rerun()
 
 # 詳細分析表示（新機能）
-if st.session_state.show_enhanced and ENHANCED_BACKTEST_AVAILABLE:
+if BACKTEST_ENABLED and st.session_state.show_enhanced and ENHANCED_BACKTEST_AVAILABLE:
     st.divider()
     st.header("📈 詳細パフォーマンス分析")
     
